@@ -7,9 +7,13 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 public class OpenGLRenderer implements GLSurfaceView.Renderer {
+
+    private double redValue = 1f;
+    private static final double FLASH_DURATION = 1000; // in ms
+
     @Override
     public void onSurfaceCreated(GL10 gl10, EGLConfig eglConfig) {
-        GLES20.glClearColor(1.0f, 0, 0, 1.0f);
+        GLES20.glClearColor((float) redValue, 0, 0, 1.0f);
     }
 
     @Override
@@ -19,6 +23,9 @@ public class OpenGLRenderer implements GLSurfaceView.Renderer {
 
     @Override
     public void onDrawFrame(GL10 gl10) {
+        GLES20.glClearColor((float) redValue, 0, 0, 1.0f);
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
+
+        redValue = Math.sin(System.currentTimeMillis() * 2 * Math.PI / FLASH_DURATION) * 0.5 + 0.5;
     }
 }
