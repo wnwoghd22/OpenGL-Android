@@ -92,14 +92,15 @@ public class RenderMiddleware {
         if (LoggerConfig.ON) {
             Log.v(TAG, "start draw quad");
         }
+        glUseProgram(shaderProgram.ID);
 
-        final int aPositionLocation = glGetAttribLocation(shaderProgram.ID, "aPosition");
+        final int aPositionLocation = glGetAttribLocation(shaderProgram.ID, "aPos");
         quad.position(0);
-        glVertexAttribPointer(aPositionLocation, 2, GL_FLOAT, false, 5, quad);
+        glVertexAttribPointer(aPositionLocation, 2, GL_FLOAT, false, 5 * 4, quad);
 
         final int aColorLocation = glGetAttribLocation(shaderProgram.ID, "aColor");
         quad.position(2);
-        glVertexAttribPointer(aColorLocation, 3, GL_FLOAT, false, 5, quad);
+        glVertexAttribPointer(aColorLocation, 3, GL_FLOAT, false, 5 * 4, quad);
 
         glEnableVertexAttribArray(aPositionLocation);
         glEnableVertexAttribArray(aColorLocation);

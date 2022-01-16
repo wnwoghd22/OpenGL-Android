@@ -28,31 +28,10 @@ public class OpenGLRenderer implements GLSurfaceView.Renderer {
     private Context context;
     private RenderMiddleware renderer;
     private ShaderProgram shader;
-    private float[] quadVertices = {
-            // pos      // color
-            // Triangle 1
-            -0.5f, -0.5f, 1.0f, 1.0f, 1.0f,
-            0.5f,  0.5f, 1.0f, 1.0f, 1.0f,
-            -0.5f,  0.5f, 1.0f, 1.0f, 1.0f,
-            // Triangle 2
-            -0.5f, -0.5f, 1.0f, 1.0f, 1.0f,
-            0.5f, -0.5f, 1.0f, 1.0f, 1.0f,
-            0.5f,  0.5f, 1.0f, 1.0f, 1.0f
-    };
-    private static FloatBuffer quad;
-
-    private int aPositionLocation;
-    private int aColorLocation;
-    private int uColorLocation;
 
     public OpenGLRenderer(Context context, RenderMiddleware renderer)  {
         this.context = context;
         this.renderer = renderer;
-
-        quad = ByteBuffer.allocateDirect(
-                quadVertices.length * 4
-        ).order(ByteOrder.nativeOrder()).asFloatBuffer();
-        quad.put(quadVertices);
     }
 
     @Override
@@ -62,26 +41,6 @@ public class OpenGLRenderer implements GLSurfaceView.Renderer {
         shader = new ShaderProgram(context, R.raw.sprite_vertex, R.raw.sprite_fragment);
         shader.validateProgram();
         renderer.SetShaderProgram(shader);
-
-        glUseProgram(shader.ID);
-        uColorLocation = glGetUniformLocation(shader.ID, "uColor");
-
-        aPositionLocation = glGetAttribLocation(shader.ID, "aPos");
-        quad.position(0);
-        glVertexAttribPointer(aPositionLocation, 2, GL_FLOAT, false, 5 * 4, quad);
-
-//        aColorLocation = glGetAttribLocation(shader.ID, "aColor");
-//        quad.position(2);
-//        glVertexAttribPointer(aColorLocation, 3, GL_FLOAT, false, 5, quad);
-
-        if (LoggerConfig.ON) {
-            Log.v(TAG, "position location : " + aPositionLocation +
-                    "\ncolor location : " + aColorLocation +
-                    "\nuniform color location : " + uColorLocation);
-        }
-
-        glEnableVertexAttribArray(aPositionLocation);
-        //glEnableVertexAttribArray(aColorLocation);
     }
 
     @Override
@@ -93,7 +52,6 @@ public class OpenGLRenderer implements GLSurfaceView.Renderer {
     public void onDrawFrame(GL10 gl10) {
         glClear(GL_COLOR_BUFFER_BIT);
 
-        glUniform4f(uColorLocation, 1.0f, 1.0f, 1.0f, 1.0f);
-        glDrawArrays(GL_TRIANGLES, 0, 6);
+        renderer.Render();
     }
 }

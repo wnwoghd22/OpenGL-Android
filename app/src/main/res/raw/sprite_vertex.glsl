@@ -3,12 +3,12 @@
 //uniform mat4 model;
 
 attribute vec4 aPos;
-//attribute vec4 aColor;
+attribute vec4 aColor;
 
-//varying vec4 vColor;
+varying vec4 vColor;
 
 void main()
 {
-    //vColor = aColor;
+    vColor = aColor;
     gl_Position = aPos;
 }
