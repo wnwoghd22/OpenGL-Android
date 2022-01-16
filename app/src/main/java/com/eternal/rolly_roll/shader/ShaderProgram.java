@@ -17,10 +17,15 @@ public class ShaderProgram {
         String vertSource = ResourceManager.readTextFileFromResource(context, vertexResourceId);
         String fragSource = ResourceManager.readTextFileFromResource(context, fragmentResourceId);
 
+        if(LoggerConfig.ON) {
+            Log.v(TAG, vertSource);
+            Log.v(TAG, fragSource);
+        }
+
         int vertShaderId = compileVertexShader(vertSource);
         int fragShaderId = compileFragmentShader(fragSource);
 
-        ID =  linkProgram(vertShaderId, fragShaderId);
+        ID = linkProgram(vertShaderId, fragShaderId);
     }
 
     private static int compileVertexShader(String shaderCode) {
@@ -97,13 +102,13 @@ public class ShaderProgram {
         return programObjectId;
     }
 
-    private static boolean validateProgram(int programObjectId) {
-        glValidateProgram(programObjectId);
+    public boolean validateProgram() {
+        glValidateProgram(ID);
 
         final int[] validateStatus = new int[1];
-        glGetProgramiv(programObjectId, GL_VALIDATE_STATUS, validateStatus, 0);
+        glGetProgramiv(ID, GL_VALIDATE_STATUS, validateStatus, 0);
         Log.v(TAG, "Results of validating program: " + validateStatus[0]
-                + "\nLog: " + glGetProgramInfoLog(programObjectId));
+                + "\nLog: " + glGetProgramInfoLog(ID));
 
         return validateStatus[0] != 0;
     }

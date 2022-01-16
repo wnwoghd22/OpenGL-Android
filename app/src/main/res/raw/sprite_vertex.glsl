@@ -1,5 +1,14 @@
-#version 120
+//uniform mat4 projection;
+//niform mat4 view;
+//uniform mat4 model;
 
-void main() {
+attribute vec4 aPos;
+//attribute vec4 aColor;
 
+//varying vec4 vColor;
+
+void main()
+{
+    //vColor = aColor;
+    gl_Position = aPos;
 }

@@ -4,6 +4,8 @@ import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
 
+import com.eternal.rolly_roll.game.Game;
+
 public class OpenGLView extends GLSurfaceView {
     public OpenGLView(Context context) {
         super(context);
@@ -18,6 +20,5 @@ public class OpenGLView extends GLSurfaceView {
     private void init() {
         setEGLContextClientVersion(2);
         setPreserveEGLContextOnPause(true);
-        setRenderer(new OpenGLRenderer());
     }
 }
