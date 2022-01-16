@@ -68,7 +68,7 @@ public class OpenGLRenderer implements GLSurfaceView.Renderer {
 
         aPositionLocation = glGetAttribLocation(shader.ID, "aPos");
         quad.position(0);
-        glVertexAttribPointer(aPositionLocation, 2, GL_FLOAT, false, 5, quad);
+        glVertexAttribPointer(aPositionLocation, 2, GL_FLOAT, false, 5 * 4, quad);
 
 //        aColorLocation = glGetAttribLocation(shader.ID, "aColor");
 //        quad.position(2);
@@ -91,25 +91,7 @@ public class OpenGLRenderer implements GLSurfaceView.Renderer {
 
     @Override
     public void onDrawFrame(GL10 gl10) {
-        //GLES20.glClearColor((float) redValue, 0, 0, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
-
-        //redValue = Math.sin(System.currentTimeMillis() * 2 * Math.PI / FLASH_DURATION) * 0.5 + 0.5;
-
-        //renderer.Render();
-        /*
-        glUseProgram(shader.ID);
-        final int aPositionLocation = glGetAttribLocation(shader.ID, "aPos");
-        quad.position(0);
-        glVertexAttribPointer(aPositionLocation, 2, GL_FLOAT, false, 5, quad);
-
-        final int aColorLocation = glGetAttribLocation(shader.ID, "aColor");
-        quad.position(2);
-        glVertexAttribPointer(aColorLocation, 3, GL_FLOAT, false, 5, quad);
-
-        glEnableVertexAttribArray(aPositionLocation);
-        glEnableVertexAttribArray(aColorLocation);
-        */
 
         glUniform4f(uColorLocation, 1.0f, 1.0f, 1.0f, 1.0f);
         glDrawArrays(GL_TRIANGLES, 0, 6);
