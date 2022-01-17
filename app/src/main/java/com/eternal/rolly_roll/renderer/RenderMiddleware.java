@@ -1,17 +1,16 @@
 package com.eternal.rolly_roll.renderer;
 
 import android.content.Context;
-import android.graphics.Shader;
+
 import static android.opengl.GLES20.*;
 import android.opengl.Matrix;
 import android.util.Log;
 
-import com.eternal.rolly_roll.R;
 import com.eternal.rolly_roll.game.Game;
 import com.eternal.rolly_roll.shader.ShaderProgram;
+import com.eternal.rolly_roll.util.Data;
 import com.eternal.rolly_roll.util.LoggerConfig;
 
-import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;

@@ -3,6 +3,8 @@ package com.eternal.rolly_roll.game;
 import android.content.Context;
 import android.util.Log;
 
+import com.eternal.rolly_roll.game.object.GameObject;
+import com.eternal.rolly_roll.game.object.IRenderable;
 import com.eternal.rolly_roll.renderer.RenderMiddleware;
 import com.eternal.rolly_roll.util.LoggerConfig;
 
@@ -26,12 +28,13 @@ public class Game {
     private final Context context;
 
     private List<GameObject> objects;
+    private List<IRenderable> renderables;
 
     public Game(Context context) {
         this.context = context;
 
         objects = new ArrayList<GameObject>();
-        objects.add(new TestGameObject());
+        //objects.add(new TestGameObject());
     }
 
     public void Init() {
@@ -76,8 +79,8 @@ public class Game {
         if(LoggerConfig.ON) {
             Log.w(TAG, "Start Rendering each game object, size : " + objects.size());
         }
-        for (GameObject object : objects) {
-            object.Render(r);
+        for (IRenderable renderable : renderables) {
+            renderable.Render(r);
         }
     }
 }

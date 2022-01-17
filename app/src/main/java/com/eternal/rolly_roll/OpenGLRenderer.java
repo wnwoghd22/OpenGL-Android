@@ -2,17 +2,9 @@ package com.eternal.rolly_roll;
 
 import android.content.Context;
 import android.opengl.GLSurfaceView;
-import android.util.Log;
 
-import com.eternal.rolly_roll.game.Game;
-import com.eternal.rolly_roll.renderer.Data;
 import com.eternal.rolly_roll.renderer.RenderMiddleware;
 import com.eternal.rolly_roll.shader.ShaderProgram;
-import com.eternal.rolly_roll.util.LoggerConfig;
-
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.nio.FloatBuffer;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -39,7 +31,6 @@ public class OpenGLRenderer implements GLSurfaceView.Renderer {
         glClearColor((float) redValue, 0, 0, 0f);
 
         shader = new ShaderProgram(context, R.raw.sprite_vertex, R.raw.sprite_fragment);
-        shader.validateProgram();
         renderer.SetShaderProgram(shader);
     }
 

@@ -1,12 +1,11 @@
 package com.eternal.rolly_roll.game;
 
-import com.eternal.rolly_roll.renderer.RenderMiddleware;
+import com.eternal.rolly_roll.game.object.object3d.Cube;
 
-public class PlayerObject extends GameObject {
+public class PlayerObject extends Cube {
 
-    @Override
-    public void Render(RenderMiddleware r) {
-
+    public PlayerObject(float[] vertexData) {
+        super(vertexData);
     }
 
     @Override

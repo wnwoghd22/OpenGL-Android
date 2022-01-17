@@ -1,4 +1,4 @@
-package com.eternal.rolly_roll.game;
+package com.eternal.rolly_roll.game.object;
 
 import com.eternal.rolly_roll.renderer.RenderMiddleware;
 
