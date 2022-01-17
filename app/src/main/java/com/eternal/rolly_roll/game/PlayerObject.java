@@ -8,4 +8,9 @@ public class PlayerObject extends GameObject {
     public void Render(RenderMiddleware r) {
 
     }
+
+    @Override
+    public void Update() {
+
+    }
 }

@@ -107,6 +107,25 @@ public class RenderMiddleware {
 
         glDrawArrays(GL_TRIANGLES, 0, 6);
     }
+    public void RenderQuad(int i) {
+        if (LoggerConfig.ON) {
+            Log.w(TAG, "start draw quad : frame" + i);
+        }
+        glUseProgram(shaderProgram.ID);
+
+        final int aPositionLocation = glGetAttribLocation(shaderProgram.ID, "aPos");
+        quad.position(0);
+        glVertexAttribPointer(aPositionLocation, 2, GL_FLOAT, false, 5 * 4, quad);
+
+        final int aColorLocation = glGetAttribLocation(shaderProgram.ID, "aColor");
+        quad.position(2);
+        glVertexAttribPointer(aColorLocation, 3, GL_FLOAT, false, 5 * 4, quad);
+
+        glEnableVertexAttribArray(aPositionLocation);
+        glEnableVertexAttribArray(aColorLocation);
+
+        glDrawArrays(GL_TRIANGLES, 0, 6);
+    }
 
     public void RenderSquare() {
 

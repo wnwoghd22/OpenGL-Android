@@ -50,20 +50,31 @@ public class Game {
 
     // frame start
     public void Start() {
+        if (LoggerConfig.ON) {
+            Log.w(TAG, "game start");
+        }
+
         // set values
         updatePeriod = 30L; //about 30fps
 
         timer = new Timer();
-        timer.schedule(new UpdateTask(), updatePeriod);
+        timer.schedule(new UpdateTask(), 0, updatePeriod);
     }
 
     public void Update() {
+        if (LoggerConfig.ON) {
+            Log.w(TAG, "Game Update");
+        }
 
+        for (GameObject object : objects
+             ) {
+            object.Update();
+        }
     }
 
     public void Render(RenderMiddleware r) {
         if(LoggerConfig.ON) {
-            Log.v(TAG, "Start Rendering each game object, size : " + objects.size());
+            Log.w(TAG, "Start Rendering each game object, size : " + objects.size());
         }
         for (GameObject object : objects) {
             object.Render(r);
