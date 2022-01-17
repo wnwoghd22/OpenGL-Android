@@ -1,66 +1,31 @@
-package com.eternal.rolly_roll.renderer;
+package com.eternal.rolly_roll.game.view;
 
 import android.content.Context;
 
 import static android.opengl.GLES20.*;
-import android.opengl.Matrix;
+
+import android.graphics.Shader;
 import android.util.Log;
 
 import com.eternal.rolly_roll.game.Game;
-import com.eternal.rolly_roll.shader.ShaderProgram;
+import com.eternal.rolly_roll.game.view.shader.ShaderProgram;
+import com.eternal.rolly_roll.game.view.shader.SpriteShader;
 import com.eternal.rolly_roll.util.Data;
 import com.eternal.rolly_roll.util.LoggerConfig;
 
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.nio.FloatBuffer;
+import java.nio.*;
 
 public class RenderMiddleware {
-    public class Camera {
-        private float near;
-        private float far;
-        public final boolean isOrthogonal;
-        private float[] projectionM;
-        public float[] GetProjectionM() { return projectionM; }
-        private float[] viewM;
-        public float[] GetViewM() { return viewM; }
-
-        private float[] position;
-
-        //Orthogonal
-        public Camera(int width, int height, float near, float far) {
-            isOrthogonal = true;
-            this.near = near; this.far = far;
-            projectionM = new float[16];
-            viewM = new float[16];
-
-            if (height > width) { //portrait
-                final float aspectRatio = (float)height / (float)width;
-                Matrix.orthoM(projectionM, 0, -1f, 1f, -aspectRatio, aspectRatio, near, far);
-            } else { //landscape
-                final float aspectRatio = (float)width / (float)height;
-                Matrix.orthoM(projectionM, 0, -aspectRatio, aspectRatio, -1f, 1f, near, far);
-            }
-        }
-        //Perspective
-        public Camera(int width, int height, float near, float far, float fov) {
-            isOrthogonal = false;
-            this.near = near; this.far = far;
-            projectionM = new float[16];
-            viewM = new float[16];
-
-            final float aspectRatio = (float)width / (float)height;
-            Matrix.perspectiveM(projectionM, 0, fov, aspectRatio, near, far);
-        }
-
-    }
     private static final String TAG = "RenderMiddleware";
 
     private Context context;
     private Game game;
     private ShaderProgram shaderProgram;
+    private SpriteShader spriteShader;
     // call inside onDraw
     public void SetShaderProgram(ShaderProgram shader) { this.shaderProgram = shader; }
+    public void setSpriteShader(SpriteShader shader) { this.spriteShader = shader; }
+    public SpriteShader getSpriteShader() { return spriteShader; }
     public Camera camera;
     private FloatBuffer quad;
 
@@ -69,9 +34,9 @@ public class RenderMiddleware {
         this.game = game;
         //this.shaderProgram = new ShaderProgram(context, R.raw.sprite_vertex, R.raw.sprite_fragment);
         quad = ByteBuffer.allocateDirect(
-                Data.quadVertices.length * 4
+                Data.QUAD_VERTICES.length * 4
         ).order(ByteOrder.nativeOrder()).asFloatBuffer();
-        quad.put(Data.quadVertices);
+        quad.put(Data.QUAD_VERTICES);
 
         if(LoggerConfig.ON) {
             Log.v(TAG, "allocate buffer quad : " + quad.toString());

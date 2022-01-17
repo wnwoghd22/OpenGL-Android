@@ -1,16 +1,12 @@
 package com.eternal.rolly_roll;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
-import android.os.CancellationSignal;
 
 import com.eternal.rolly_roll.game.Game;
-import com.eternal.rolly_roll.renderer.RenderMiddleware;
-
-import java.util.TimerTask;
-import java.util.function.Consumer;
+import com.eternal.rolly_roll.game.view.Camera;
+import com.eternal.rolly_roll.game.view.RenderMiddleware;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -25,12 +21,13 @@ public class MainActivity extends AppCompatActivity {
         game.Init();
 
         RenderMiddleware r = new RenderMiddleware(this, game);
-        r.camera = r.new Camera(
+        Camera camera = new Camera(
                 this.getWindow().getAttributes().width,
                 this.getWindow().getAttributes().height,
                 1f,
                 10f
         );
+        r.camera = camera;
 
         openGLView = (OpenGLView) this.<android.view.View>findViewById(R.id.openGLView);
         openGLView.setRenderer(new OpenGLRenderer(this, r));

@@ -3,8 +3,9 @@ package com.eternal.rolly_roll;
 import android.content.Context;
 import android.opengl.GLSurfaceView;
 
-import com.eternal.rolly_roll.renderer.RenderMiddleware;
-import com.eternal.rolly_roll.shader.ShaderProgram;
+import com.eternal.rolly_roll.game.view.RenderMiddleware;
+import com.eternal.rolly_roll.game.view.shader.ShaderProgram;
+import com.eternal.rolly_roll.game.view.shader.SpriteShader;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -19,7 +20,6 @@ public class OpenGLRenderer implements GLSurfaceView.Renderer {
 
     private Context context;
     private RenderMiddleware renderer;
-    private ShaderProgram shader;
 
     public OpenGLRenderer(Context context, RenderMiddleware renderer)  {
         this.context = context;
@@ -30,8 +30,8 @@ public class OpenGLRenderer implements GLSurfaceView.Renderer {
     public void onSurfaceCreated(GL10 gl10, EGLConfig eglConfig) {
         glClearColor((float) redValue, 0, 0, 0f);
 
-        shader = new ShaderProgram(context, R.raw.sprite_vertex, R.raw.sprite_fragment);
-        renderer.SetShaderProgram(shader);
+        SpriteShader spriteShader = new SpriteShader(context);
+        renderer.setSpriteShader(spriteShader);
     }
 
     @Override

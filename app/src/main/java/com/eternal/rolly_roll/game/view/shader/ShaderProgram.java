@@ -1,4 +1,4 @@
-package com.eternal.rolly_roll.shader;
+package com.eternal.rolly_roll.game.view.shader;
 
 import android.content.Context;
 import android.util.Log;
@@ -13,7 +13,7 @@ public class ShaderProgram {
 
     public final int ID; // assign program location
 
-    public ShaderProgram(Context context, int vertexResourceId, int fragmentResourceId) {
+    protected ShaderProgram(Context context, int vertexResourceId, int fragmentResourceId) {
         String vertSource = ResourceManager.readTextFileFromResource(context, vertexResourceId);
         String fragSource = ResourceManager.readTextFileFromResource(context, fragmentResourceId);
 
@@ -94,7 +94,7 @@ public class ShaderProgram {
         return programObjectId;
     }
 
-    public boolean validateProgram(int i) {
+    private boolean validateProgram(int i) {
         glValidateProgram(i);
 
         final int[] validateStatus = new int[1];

@@ -3,15 +3,16 @@ package com.eternal.rolly_roll.game;
 import android.content.Context;
 import android.util.Log;
 
-import com.eternal.rolly_roll.game.object.GameObject;
-import com.eternal.rolly_roll.game.object.IRenderable;
-import com.eternal.rolly_roll.renderer.RenderMiddleware;
+import com.eternal.rolly_roll.game.model.object.GameObject;
+import com.eternal.rolly_roll.game.model.object.shape.IRenderable;
+import com.eternal.rolly_roll.game.view.RenderMiddleware;
 import com.eternal.rolly_roll.util.LoggerConfig;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.Vector;
 
 public class Game {
     private Timer timer;
@@ -27,14 +28,14 @@ public class Game {
 
     private final Context context;
 
+    // is it better using Vector in multi-thread environment?
+    //private Vector<GameObject> objectsSync;
     private List<GameObject> objects;
-    private List<IRenderable> renderables;
 
     public Game(Context context) {
         this.context = context;
 
         objects = new ArrayList<GameObject>();
-        //objects.add(new TestGameObject());
     }
 
     public void Init() {
@@ -79,8 +80,8 @@ public class Game {
         if(LoggerConfig.ON) {
             Log.w(TAG, "Start Rendering each game object, size : " + objects.size());
         }
-        for (IRenderable renderable : renderables) {
-            renderable.Render(r);
+        for (GameObject object : objects) {
+            object.Render(r);
         }
     }
 }
