@@ -12,15 +12,4 @@ public class Cube extends Shape {
         super(CUBE_VERTICES);
     }
 
-    @Override
-    public void Render(RenderMiddleware r) {
-
-    }
-
-    @Override
-    protected final void bindData(SpriteShader spriteShader) {
-        //setVertexAttribPointer(0, spriteShader.aPositionLocation, );
-    }
-
-
 }

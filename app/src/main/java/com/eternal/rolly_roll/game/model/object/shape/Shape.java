@@ -13,8 +13,13 @@ import static android.opengl.GLES20.*;
 import static com.eternal.rolly_roll.util.Data.BYTES_PER_FLOAT;
 
 public abstract class Shape implements IRenderable {
+    private static final int POSITION_COMPONENT_COUNT = 3;
+    private static final int TEXTURE_COORDINATES_COMPONENT_COUNT = 2;
+    private static final int STRIDE = (POSITION_COMPONENT_COUNT + TEXTURE_COORDINATES_COMPONENT_COUNT) * BYTES_PER_FLOAT;
+
     public Transform transform;
     protected float[] color;
+    protected int texture;
 
     private final FloatBuffer floatBuffer;
 
@@ -24,12 +29,33 @@ public abstract class Shape implements IRenderable {
     }
 
     @Override
-    public void Render(RenderMiddleware r) {
+    public final void Render(RenderMiddleware r) {
         bindData(r.getSpriteShader());
         glDrawArrays(GL_TRIANGLES, 0, 6);
     }
 
-    protected abstract void bindData(SpriteShader spriteShader);
+    protected void bindData(SpriteShader spriteShader) {
+        //set position
+        setVertexAttribPointer(
+                0,
+                POSITION_COMPONENT_COUNT,
+                spriteShader.aPositionLocation,
+                STRIDE
+        );
+
+        //set texture coordinates
+        setVertexAttribPointer(
+                POSITION_COMPONENT_COUNT,
+                spriteShader.aTexCoordLocation,
+                TEXTURE_COORDINATES_COMPONENT_COUNT,
+                STRIDE
+        );
+
+        setUniformVec4(
+                spriteShader.uColorLocation,
+                color
+        );
+    }
 
     protected void setVertexAttribPointer(int dataOffset, int attributeLocation, int componentCount, int stride) {
         floatBuffer.position(dataOffset);

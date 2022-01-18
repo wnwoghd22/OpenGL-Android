@@ -18,6 +18,7 @@ public class Transform {
         Matrix.setIdentityM(transformM, 0);
         Matrix.translateM(transformM, 0, position.x, position.y, position.z);
         //rotate?
+        Matrix.rotateM(transformM, 0, 90f, rotation.x, rotation.y, rotation.z);
 
         Matrix.scaleM(transformM, 0, scale.x, scale.y, scale.z);
 

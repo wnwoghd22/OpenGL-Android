@@ -31,6 +31,7 @@ public class Game {
     // is it better using Vector in multi-thread environment?
     //private Vector<GameObject> objectsSync;
     private List<GameObject> objects;
+    public List<GameObject> getObjects() { return objects; }
 
     public Game(Context context) {
         this.context = context;
@@ -73,15 +74,6 @@ public class Game {
         for (GameObject object : objects
              ) {
             object.Update();
-        }
-    }
-
-    public void Render(RenderMiddleware r) {
-        if(LoggerConfig.ON) {
-            Log.w(TAG, "Start Rendering each game object, size : " + objects.size());
-        }
-        for (GameObject object : objects) {
-            object.Render(r);
         }
     }
 }
