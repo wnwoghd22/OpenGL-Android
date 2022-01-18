@@ -15,6 +15,7 @@ public class Camera {
     private float near, far;
     private float fov = 45f;
     public boolean isOrthogonal;
+    private float orthoRange = 5f;
     private float[] projectionM;
     public float[] getProjectionM() { return projectionM; }
     private float[] viewM;
@@ -39,13 +40,8 @@ public class Camera {
         projectionM = new float[16];
         viewM = new float[16];
 
-        if (height > width) { //portrait
-            final float aspectRatio = (float)height / (float)width;
-            Matrix.orthoM(projectionM, 0, -1f, 1f, -aspectRatio, aspectRatio, near, far);
-        } else { //landscape
-            final float aspectRatio = (float)width / (float)height;
-            Matrix.orthoM(projectionM, 0, -aspectRatio, aspectRatio, -1f, 1f, near, far);
-        }
+        setAspect(width, height);
+        getViewM();
     }
     //Perspective
     public Camera(Vector3D eye, Vector3D center, int width, int height, float near, float far, float fov) {
@@ -58,7 +54,32 @@ public class Camera {
         projectionM = new float[16];
         viewM = new float[16];
 
-        final float aspectRatio = (float)width / (float)height;
-        Matrix.perspectiveM(projectionM, 0, fov, aspectRatio, near, far);
+        setAspect(width, height);
+        getViewM();
+    }
+
+    public void setAspect(float width, float height) {
+        if (isOrthogonal) {
+            if (height > width) { //portrait
+                final float aspectRatio = (float)height / (float)width;
+                Matrix.orthoM(
+                    projectionM, 0,
+                    -orthoRange, orthoRange,
+                    -aspectRatio * orthoRange, aspectRatio * orthoRange,
+                    near, far
+                );
+            } else { //landscape
+                final float aspectRatio = (float)width / (float)height;
+                Matrix.orthoM(
+                    projectionM, 0,
+                    -aspectRatio * orthoRange, aspectRatio * orthoRange,
+                    -orthoRange, orthoRange,
+                    near, far
+                );
+            }
+        } else {
+            final float aspectRatio = (float)width / (float)height;
+            Matrix.perspectiveM(projectionM, 0, fov, aspectRatio, near, far);
+        }
     }
 }

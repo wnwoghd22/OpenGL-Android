@@ -3,6 +3,7 @@ package com.eternal.rolly_roll;
 import android.content.Context;
 import android.opengl.GLSurfaceView;
 
+import com.eternal.rolly_roll.game.view.Camera;
 import com.eternal.rolly_roll.game.view.RenderMiddleware;
 import com.eternal.rolly_roll.game.view.shader.ShaderProgram;
 import com.eternal.rolly_roll.game.view.shader.SpriteShader;
@@ -17,10 +18,12 @@ public class OpenGLRenderer implements GLSurfaceView.Renderer {
 
     private Context context;
     private RenderMiddleware renderer;
+    private Camera camera;
 
-    public OpenGLRenderer(Context context, RenderMiddleware renderer)  {
+    public OpenGLRenderer(Context context, RenderMiddleware renderer, Camera camera)  {
         this.context = context;
         this.renderer = renderer;
+        this.camera = camera;
     }
 
     @Override
@@ -29,17 +32,19 @@ public class OpenGLRenderer implements GLSurfaceView.Renderer {
 
         SpriteShader spriteShader = new SpriteShader(context);
         renderer.setSpriteShader(spriteShader);
+
+
     }
 
     @Override
-    public void onSurfaceChanged(GL10 gl10, int i, int i1) {
-        glViewport(0, 0, i, i1);
+    public void onSurfaceChanged(GL10 gl10, int width, int height) {
+        glViewport(0, 0, width, height);
+        camera.setAspect(width, height);
     }
 
     @Override
     public void onDrawFrame(GL10 gl10) {
         glClear(GL_COLOR_BUFFER_BIT);
-
         renderer.Render();
     }
 }

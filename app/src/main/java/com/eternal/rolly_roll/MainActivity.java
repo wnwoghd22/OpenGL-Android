@@ -28,12 +28,12 @@ public class MainActivity extends AppCompatActivity {
                 this.getWindow().getAttributes().width,
                 this.getWindow().getAttributes().height,
                 1f,
-                30f
+                5000f
         );
         r.camera = camera;
 
         openGLView = (OpenGLView) this.<android.view.View>findViewById(R.id.openGLView);
-        openGLView.setRenderer(new OpenGLRenderer(this, r));
+        openGLView.setRenderer(new OpenGLRenderer(this, r, camera));
     }
 
     @Override
