@@ -3,7 +3,9 @@ package com.eternal.rolly_roll.game;
 import android.content.Context;
 import android.util.Log;
 
+import com.eternal.rolly_roll.game.model.TestGameObject;
 import com.eternal.rolly_roll.game.model.object.GameObject;
+import com.eternal.rolly_roll.game.model.object.physics.Vector3D;
 import com.eternal.rolly_roll.game.model.object.shape.IRenderable;
 import com.eternal.rolly_roll.game.view.RenderMiddleware;
 import com.eternal.rolly_roll.util.LoggerConfig;
@@ -40,6 +42,13 @@ public class Game {
     }
 
     public void Init() {
+
+        objects.add(new TestGameObject());
+        objects.add(new TestGameObject(new Vector3D(1.3f, 0f, 0f)));
+
+        objects.add(new TestGameObject(new Vector3D(0f, 0f, -1.3f)));
+
+        objects.add(new TestGameObject(new Vector3D(-1.3f, 0f, 0f)));
 
         Start();
     }

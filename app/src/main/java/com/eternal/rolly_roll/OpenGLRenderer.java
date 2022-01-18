@@ -15,9 +15,6 @@ import static android.opengl.GLES20.*;
 public class OpenGLRenderer implements GLSurfaceView.Renderer {
     private static String TAG = "OpenGL Renderer";
 
-    private double redValue = 1f;
-    private static final double FLASH_DURATION = 1000; // in ms
-
     private Context context;
     private RenderMiddleware renderer;
 
@@ -28,7 +25,7 @@ public class OpenGLRenderer implements GLSurfaceView.Renderer {
 
     @Override
     public void onSurfaceCreated(GL10 gl10, EGLConfig eglConfig) {
-        glClearColor((float) redValue, 0, 0, 0f);
+        glClearColor(0f, 0f, 0f, 0f);
 
         SpriteShader spriteShader = new SpriteShader(context);
         renderer.setSpriteShader(spriteShader);

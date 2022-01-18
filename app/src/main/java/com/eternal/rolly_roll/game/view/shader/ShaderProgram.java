@@ -20,6 +20,10 @@ public class ShaderProgram {
         ID = buildProgram(vertSource, fragSource);
     }
 
+    public void use() {
+        glUseProgram(ID);
+    }
+
     private static int compileVertexShader(String shaderCode) {
         return compileShader(GL_VERTEX_SHADER, shaderCode);
     }
@@ -94,13 +98,13 @@ public class ShaderProgram {
         return programObjectId;
     }
 
-    private boolean validateProgram(int i) {
+    private static boolean validateProgram(int i) {
         glValidateProgram(i);
 
         final int[] validateStatus = new int[1];
-        glGetProgramiv(ID, GL_VALIDATE_STATUS, validateStatus, 0);
+        glGetProgramiv(i, GL_VALIDATE_STATUS, validateStatus, 0);
         Log.v(TAG, "Results of validating program: " + validateStatus[0]
-                + "\nLog: " + glGetProgramInfoLog(ID));
+                + "\nLog: " + glGetProgramInfoLog(i));
 
         return validateStatus[0] != 0;
     }

@@ -14,10 +14,19 @@ public class TestGameObject extends GameObject {
     public TestGameObject() {
         this.shape = new Quad();
         shape.transform.rotation.x = -1f;
+        shape.color = new float[] { 0.5f, 0.5f, 0.5f, 1f };
+    }
+
+    public TestGameObject(Vector3D position) {
+        this.shape = new Quad();
+        shape.transform.position = position;
+        shape.transform.rotation.x = -1f;
+        shape.color = new float[] { 0.5f, 0.5f, 0.5f, 1f };
     }
 
     @Override
     public void Update() {
-
+        shape.color[0] += 0.03f;
+        if (shape.color[0] > 0.9f) shape.color[0] = 0f;
     }
 }

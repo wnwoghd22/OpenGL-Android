@@ -23,12 +23,12 @@ public class MainActivity extends AppCompatActivity {
 
         RenderMiddleware r = new RenderMiddleware(this, game);
         Camera camera = new Camera(
-                new Vector3D(10f, 5f, -10f),
+                new Vector3D(10f, 5f, 10f),
                 new Vector3D(0f, 0f, 0f),
                 this.getWindow().getAttributes().width,
                 this.getWindow().getAttributes().height,
                 1f,
-                10f
+                30f
         );
         r.camera = camera;
 

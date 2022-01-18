@@ -31,6 +31,9 @@ public class RenderMiddleware {
 
     public Camera camera;
     float[] viewProjectionMatrix = new float[16];
+    public float[] getVP() { return viewProjectionMatrix; }
+    float[] modelViewProjectionMatrix = new float[16];
+    public float[] getMVP() { return modelViewProjectionMatrix; }
 
     public RenderMiddleware(Context context, Game game) {
         this.context = context;
@@ -45,8 +48,12 @@ public class RenderMiddleware {
             Log.v(TAG, "onDraw Render(Game)");
         }
 
+        // sprite layer
+        spriteShader.use();
         for (GameObject object : game.getObjects()) {
             object.Render(this);
         }
+
+        //ui?
     }
 }
