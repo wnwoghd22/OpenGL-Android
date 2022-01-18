@@ -3,7 +3,11 @@ package com.eternal.rolly_roll.game;
 import android.content.Context;
 import android.util.Log;
 
+import com.eternal.rolly_roll.game.control.Level;
+import com.eternal.rolly_roll.game.model.PlayerObject;
+import com.eternal.rolly_roll.game.model.TestCube;
 import com.eternal.rolly_roll.game.model.TestGameObject;
+import com.eternal.rolly_roll.game.model.Tile;
 import com.eternal.rolly_roll.game.model.object.GameObject;
 import com.eternal.rolly_roll.game.model.object.physics.Vector3D;
 import com.eternal.rolly_roll.game.model.object.shape.IRenderable;
@@ -35,13 +39,23 @@ public class Game {
     private List<GameObject> objects;
     public List<GameObject> getObjects() { return objects; }
 
+    private Level level;
+
     public Game(Context context) {
         this.context = context;
 
+        level = new Level();
         objects = new ArrayList<GameObject>();
     }
 
     public void Init() {
+
+        objects.add(level);
+        for (Tile[] tiles : level.GenerateBoard(5)) {
+            for (Tile tile : tiles) {
+                objects.add(tile);
+            }
+        }
 
         objects.add(new TestGameObject());
         objects.add(new TestGameObject(new Vector3D(1.3f, 0f, 0f)));
@@ -50,6 +64,18 @@ public class Game {
 
         objects.add(new TestGameObject(new Vector3D(-1.3f, 0f, 0f)));
 
+        objects.add(new PlayerObject());
+
+        objects.add(new TestCube(
+                new Vector3D(1f, 2f, 3f),
+                new Vector3D(0.3f, 0.3f),
+                new Vector3D(1.5f, 1f, 1f)
+        ));
+        objects.add(new TestCube(
+                new Vector3D(-3f, 3f, -5f),
+                new Vector3D(0.3f, 0.7f),
+                new Vector3D(2f, 2f, 2f)
+        ));
         Start();
     }
 
@@ -70,6 +96,8 @@ public class Game {
 
         // set values
         updatePeriod = 30L; //about 30fps
+
+
 
         timer = new Timer();
         timer.schedule(new UpdateTask(), 0, updatePeriod);

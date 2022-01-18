@@ -3,6 +3,7 @@ package com.eternal.rolly_roll.game.model.object.shape;
 import android.opengl.Matrix;
 import android.util.Log;
 
+import com.eternal.rolly_roll.R;
 import com.eternal.rolly_roll.game.model.object.physics.Transform;
 import com.eternal.rolly_roll.game.view.RenderMiddleware;
 import com.eternal.rolly_roll.game.view.shader.ShaderProgram;
@@ -23,7 +24,7 @@ public abstract class Shape implements IRenderable {
 
     public Transform transform;
     public float[] color;
-    public int texture;
+    public int textureID;
 
     private final FloatBuffer floatBuffer;
 

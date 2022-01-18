@@ -9,6 +9,7 @@ public class PlayerObject extends GameObject {
 
     public PlayerObject() {
         this.shape = new Cube();
+        shape.color = new float[] { 1f, 1f, 1f, 1f };
     }
 
     @Override
