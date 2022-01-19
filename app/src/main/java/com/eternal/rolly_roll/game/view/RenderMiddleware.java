@@ -8,6 +8,9 @@ import static android.opengl.Matrix.multiplyMM;
 import android.graphics.Shader;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import com.eternal.rolly_roll.game.Game;
 import com.eternal.rolly_roll.game.model.object.GameObject;
 import com.eternal.rolly_roll.game.view.shader.ShaderProgram;
@@ -16,6 +19,8 @@ import com.eternal.rolly_roll.util.Data;
 import com.eternal.rolly_roll.util.LoggerConfig;
 
 import java.nio.*;
+import java.util.Collection;
+import java.util.HashMap;
 
 public class RenderMiddleware {
     private static final String TAG = "RenderMiddleware";
@@ -28,6 +33,8 @@ public class RenderMiddleware {
     public void SetShaderProgram(ShaderProgram shader) { this.shaderProgram = shader; }
     public void setSpriteShader(SpriteShader shader) { this.spriteShader = shader; }
     public SpriteShader getSpriteShader() { return spriteShader; }
+
+    public HashMap<Integer, Integer> textureMap = new HashMap<Integer, Integer>();
 
     public Camera camera;
     float[] viewProjectionMatrix = new float[16];

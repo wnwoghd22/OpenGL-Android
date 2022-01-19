@@ -1,5 +1,6 @@
 package com.eternal.rolly_roll.util;
 
 public class LoggerConfig {
-    public static final boolean ON = true;
+    public static final boolean ON = false;
+    public static final boolean TOUCHLOG = true;
 }

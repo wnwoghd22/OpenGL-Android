@@ -3,8 +3,11 @@ package com.eternal.rolly_roll;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.view.MotionEvent;
+import android.view.View;
 
 import com.eternal.rolly_roll.game.Game;
+import com.eternal.rolly_roll.game.control.TouchHandler;
 import com.eternal.rolly_roll.game.model.object.physics.Vector3D;
 import com.eternal.rolly_roll.game.view.Camera;
 import com.eternal.rolly_roll.game.view.RenderMiddleware;
@@ -13,6 +16,7 @@ public class MainActivity extends AppCompatActivity {
 
     private OpenGLView openGLView;
     private Game game;
+    private TouchHandler touchHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         game = new Game(this);
         game.Init();
+        touchHandler = new TouchHandler(this, game);
 
         RenderMiddleware r = new RenderMiddleware(this, game);
         Camera camera = new Camera(
@@ -34,6 +39,8 @@ public class MainActivity extends AppCompatActivity {
 
         openGLView = (OpenGLView) this.<android.view.View>findViewById(R.id.openGLView);
         openGLView.setRenderer(new OpenGLRenderer(this, r, camera));
+
+        openGLView.setOnTouchListener(touchHandler);
     }
 
     @Override

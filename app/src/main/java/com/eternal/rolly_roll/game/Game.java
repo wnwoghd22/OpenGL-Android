@@ -85,7 +85,7 @@ public class Game {
 
     public void onResume() {
         timer = new Timer();
-        timer.schedule(new UpdateTask(), updatePeriod);
+        timer.schedule(new UpdateTask(), 0, updatePeriod);
     }
 
     // frame start

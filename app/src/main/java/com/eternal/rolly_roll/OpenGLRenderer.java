@@ -7,6 +7,7 @@ import com.eternal.rolly_roll.game.view.Camera;
 import com.eternal.rolly_roll.game.view.RenderMiddleware;
 import com.eternal.rolly_roll.game.view.shader.ShaderProgram;
 import com.eternal.rolly_roll.game.view.shader.SpriteShader;
+import com.eternal.rolly_roll.util.ResourceManager;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -33,7 +34,7 @@ public class OpenGLRenderer implements GLSurfaceView.Renderer {
         SpriteShader spriteShader = new SpriteShader(context);
         renderer.setSpriteShader(spriteShader);
 
-
+        renderer.textureMap.put(R.drawable.square, ResourceManager.loadTexture(context, R.drawable.square));
     }
 
     @Override
