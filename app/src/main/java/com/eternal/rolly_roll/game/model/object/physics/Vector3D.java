@@ -1,5 +1,7 @@
 package com.eternal.rolly_roll.game.model.object.physics;
 
+import androidx.annotation.NonNull;
+
 public class Vector3D {
 
     public float x;
@@ -23,5 +25,11 @@ public class Vector3D {
         x /= magnitude();
         y /= magnitude();
         z /= magnitude();
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "Vector3D(" + x + ", " + y + ", " + z + ")";
     }
 }
