@@ -61,6 +61,8 @@ public class RenderMiddleware {
             object.Render(this);
         }
 
-        //ui?
+        // post processing layer
+
+        // ui layer
     }
 }

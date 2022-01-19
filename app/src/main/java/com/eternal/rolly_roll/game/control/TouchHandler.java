@@ -14,14 +14,15 @@ import com.eternal.rolly_roll.util.LoggerConfig;
 public class TouchHandler implements View.OnTouchListener {
     private static String TAG = "Touch handler";
     public static class Touch {
-        public final MotionEvent state;
+        public final int state;
         public final TouchPos pos;
-        public Touch() {
-
+        public Touch(int state, TouchPos pos) {
+            this.state = state;
+            this.pos = pos;
         }
     }
     public static class TouchPos {
-        final float x, y;
+        public final float x, y;
         public TouchPos(float x, float y) {
             this.x =x; this.y = y;
         }
@@ -42,12 +43,13 @@ public class TouchHandler implements View.OnTouchListener {
     private Game game;
     private static int screenWidth;
     private static int screenHeight;
-    public TouchPos touchPos;
+    public Touch touch;
     private boolean isTouching;
 
     public TouchHandler(Context context, Game game) {
         this.context = context;
         this.game = game;
+        touch = new Touch(MotionEvent.INVALID_POINTER_ID, new TouchPos(0f, 0f));
     }
 
     @Override
@@ -56,15 +58,41 @@ public class TouchHandler implements View.OnTouchListener {
             screenWidth = view.getWidth();
             screenHeight = view.getHeight();
 
-            touchPos = new TouchPos(motionEvent.getX(), motionEvent.getY());
-
             if (LoggerConfig.TOUCHLOG) {
-                Log.w(TAG, "" + touchPos);
+                Log.w(TAG, "" + touch.pos);
             }
 
-            switch(motionEvent.getAction()) {
+            int action = motionEvent.getAction();
 
+            switch(action) {
+                case MotionEvent.ACTION_DOWN:
+                    touch = new Touch(
+                            MotionEvent.ACTION_DOWN,
+                            new TouchPos(motionEvent.getX(), motionEvent.getY())
+                    );
+                    break;
+                case MotionEvent.ACTION_MOVE:
+                    touch = new Touch(
+                            MotionEvent.ACTION_MOVE,
+                            new TouchPos(motionEvent.getX(), motionEvent.getY())
+                    );
+                    break;
+                case MotionEvent.ACTION_UP:
+                    touch = new Touch(
+                            MotionEvent.ACTION_UP,
+                            new TouchPos(motionEvent.getX(), motionEvent.getY())
+                    );
+                    break;
+                default:
+                    touch = new Touch(
+                            action,
+                            new TouchPos(0f, 0f)
+                    );
+                    break;
             }
+            game.GetTouch(touch);
+
+            return true;
         }
 
         return false;

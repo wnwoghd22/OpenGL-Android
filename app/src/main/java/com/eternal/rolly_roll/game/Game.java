@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.eternal.rolly_roll.game.control.Level;
+import com.eternal.rolly_roll.game.control.TouchHandler;
 import com.eternal.rolly_roll.game.model.PlayerObject;
 import com.eternal.rolly_roll.game.model.TestCube;
 import com.eternal.rolly_roll.game.model.TestGameObject;
@@ -38,8 +39,10 @@ public class Game {
     //private Vector<GameObject> objectsSync;
     private List<GameObject> objects;
     public List<GameObject> getObjects() { return objects; }
+    private PlayerObject player;
 
     private Level level;
+    private int boardSize;
 
     public Game(Context context) {
         this.context = context;
@@ -49,33 +52,25 @@ public class Game {
     }
 
     public void Init() {
+        boardSize = 5;
 
         objects.add(level);
-        for (Tile[] tiles : level.GenerateBoard(5)) {
+        for (Tile[] tiles : level.GenerateBoard(boardSize)) {
             for (Tile tile : tiles) {
                 objects.add(tile);
             }
         }
 
-        objects.add(new TestGameObject());
-        objects.add(new TestGameObject(new Vector3D(1.3f, 0f, 0f)));
+        player = new PlayerObject(
+                new Vector3D(
+            -(float)(boardSize - 1) / 2.0f,
+            0.5f,
+            -(float)(boardSize - 1) / 2.0f
+            )
+        );
 
-        objects.add(new TestGameObject(new Vector3D(0f, 0f, -1.3f)));
+        objects.add(player);
 
-        objects.add(new TestGameObject(new Vector3D(-1.3f, 0f, 0f)));
-
-        objects.add(new PlayerObject());
-
-        objects.add(new TestCube(
-                new Vector3D(1f, 2f, 3f),
-                new Vector3D(0.3f, 0.3f),
-                new Vector3D(1.5f, 1f, 1f)
-        ));
-        objects.add(new TestCube(
-                new Vector3D(-3f, 3f, -5f),
-                new Vector3D(0.3f, 0.7f),
-                new Vector3D(2f, 2f, 2f)
-        ));
         Start();
     }
 
@@ -97,8 +92,6 @@ public class Game {
         // set values
         updatePeriod = 30L; //about 30fps
 
-
-
         timer = new Timer();
         timer.schedule(new UpdateTask(), 0, updatePeriod);
     }
@@ -112,5 +105,14 @@ public class Game {
              ) {
             object.Update();
         }
+    }
+
+    public void GetTouch(TouchHandler.Touch touch) {
+        if (LoggerConfig.TOUCHLOG) {
+            Log.w(TAG, "Game Touch : " + touch.state + ", " + touch.pos);
+        }
+        // UI layer
+
+        player.handleTouch(touch);
     }
 }
