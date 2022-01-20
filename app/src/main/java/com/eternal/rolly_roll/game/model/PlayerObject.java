@@ -8,6 +8,7 @@ import static com.eternal.rolly_roll.game.control.TouchHandler.*;
 
 import com.eternal.rolly_roll.R;
 import com.eternal.rolly_roll.game.model.object.GameObject;
+import com.eternal.rolly_roll.game.model.object.physics.Quaternion;
 import com.eternal.rolly_roll.game.model.object.physics.Vector3D;
 import com.eternal.rolly_roll.game.model.object.shape.shape3d.Cube;
 import com.eternal.rolly_roll.util.LoggerConfig;
@@ -188,6 +189,7 @@ public class PlayerObject extends GameObject {
             if (LoggerConfig.TOUCHLOG) {
                 float[] transformM = shape.transform.getTransformM();
                 Log.w(TAG, "roll direction : " + moveDirection + "player rotation : " + shape.transform.rotation +
+                        "\n" + new Quaternion(shape.transform.rotation) +
                         "\n rotation Axis : " + axisState[0] + ", " + axisState[1] + ", " + axisState[2] + " " + axisState[3] + " " + axisState[4] + " " + axisState[5]);
             }
         }
