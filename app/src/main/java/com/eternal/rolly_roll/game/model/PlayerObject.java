@@ -187,7 +187,7 @@ public class PlayerObject extends GameObject {
                 rotateAxis(moveDirection);
             if (LoggerConfig.TOUCHLOG) {
                 float[] transformM = shape.transform.getTransformM();
-                Log.w(TAG, "roll, frame: " + frameDelta + "player rotation : " + shape.transform.rotation +
+                Log.w(TAG, "roll direction : " + moveDirection + "player rotation : " + shape.transform.rotation +
                         "\n rotation Axis : " + axisState[0] + ", " + axisState[1] + ", " + axisState[2] + " " + axisState[3] + " " + axisState[4] + " " + axisState[5]);
             }
         }
@@ -247,7 +247,7 @@ public class PlayerObject extends GameObject {
                         shape.transform.rotation.x -= rotateDelta;
                         break;
                     case L: // -x
-                        shape.transform.rotation.x += rotateDelta;
+                        shape.transform.rotation.x -= rotateDelta; // ????
                         break;
                     case U: // +y
                         shape.transform.rotation.y -= rotateDelta;
@@ -263,18 +263,18 @@ public class PlayerObject extends GameObject {
                 );
                 break;
             case DOWN:
-                switch (axisState[4]) { // if left axis is...
+                switch (axisState[2]) { // if right axis is...
                     case F: // +z
-                        shape.transform.rotation.z -= rotateDelta;
-                        break;
-                    case B: // -z
                         shape.transform.rotation.z += rotateDelta;
                         break;
-                    case R: // +x
-                        shape.transform.rotation.x -= rotateDelta;
+                    case B: // -z
+                        shape.transform.rotation.z -= rotateDelta;
                         break;
-                    case L: // -x (base movement)
+                    case R: // +x (base movement)
                         shape.transform.rotation.x += rotateDelta;
+                        break;
+                    case L: // -x
+                        shape.transform.rotation.x += rotateDelta; // ???
                         break;
                     case U: // +y
                         shape.transform.rotation.y += rotateDelta;
@@ -317,24 +317,24 @@ public class PlayerObject extends GameObject {
                 );
                 break;
             case RIGHT:
-                switch (axisState[3]) { // if front axis is...
+                switch (axisState[1]) { // if front axis is...
                     case F: // +z (base movement)
-                        shape.transform.rotation.z += rotateDelta;
-                        break;
-                    case B: // -z
                         shape.transform.rotation.z -= rotateDelta;
                         break;
-                    case R: // +x
-                        shape.transform.rotation.x -= rotateDelta;
+                    case B: // -z
+                        shape.transform.rotation.z += rotateDelta;
                         break;
-                    case L: // -x
+                    case R: // +x
                         shape.transform.rotation.x += rotateDelta;
                         break;
+                    case L: // -x
+                        shape.transform.rotation.x -= rotateDelta;
+                        break;
                     case U: // +y
-                        shape.transform.rotation.y += rotateDelta;
+                        shape.transform.rotation.y -= rotateDelta;
                         break;
                     case D: // -y
-                        shape.transform.rotation.y -= rotateDelta;
+                        shape.transform.rotation.y += rotateDelta;
                         break;
                 }
                 shape.transform.position = new Vector3D(
