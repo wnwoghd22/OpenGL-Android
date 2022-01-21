@@ -11,12 +11,12 @@ public class Transform {
     private static String TAG = "Transform";
 
     public Vector3D position;
-    public Vector3D rotation;
+    public Quaternion rotation;
     public Vector3D scale;
 
     public Transform() {
         position = new Vector3D();
-        rotation = new Vector3D();
+        rotation = Quaternion.identity();
         scale = new Vector3D(1, 1, 1);
     }
 
@@ -26,7 +26,7 @@ public class Transform {
         Matrix.translateM(transformM, 0, position.x, position.y, position.z);
 
         //rotate
-        Quaternion.rotateM(transformM, 0, rotation.scale(90f));
+        Quaternion.rotateM(transformM, 0, rotation);
 
         Matrix.scaleM(transformM, 0, scale.x, scale.y, scale.z);
 

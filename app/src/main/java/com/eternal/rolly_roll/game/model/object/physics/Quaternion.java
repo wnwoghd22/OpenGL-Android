@@ -13,8 +13,13 @@ public class Quaternion {
         this.s = scalar; this.x = x; this.y = y; this.z = z;
     }
     // input rotation vector and rotation scalar
-    public Quaternion(float scalar, Vector3D vector) {
-        this.s = scalar; this.x = vector.x; this.y = vector.y; this.z = vector.z;
+    public Quaternion(float scalarInDegree, Vector3D vector) {
+        float alpha = (float)toRadians(scalarInDegree);
+        Vector3D projective = vector.normalize(); // cosine value
+        this.s = (float) cos(alpha/ 2f);
+        this.x = (float)(sin(alpha/ 2f) * projective.x);
+        this.y = (float)(sin(alpha/ 2f) * projective.y);
+        this.z = (float)(sin(alpha/ 2f) * projective.z);
     }
     // input euler angles in degree and then convert to quaternion
     public Quaternion(Vector3D eulerAnglesInDegree) {
@@ -34,6 +39,9 @@ public class Quaternion {
         this.y = cr * sp * cy + sr * cp * sy;
         this.z = cr * cp * sy - sr * sp * cy;
     }
+    public static Quaternion identity() {
+        return new Quaternion(1f, 0f, 0f, 0f);
+    }
 
     public float[] getRotateM() {
         return new float[] {
@@ -47,6 +55,13 @@ public class Quaternion {
     public static void rotateM(float[] matrix, int mOffset, Vector3D eulerAngleInDegree) {
         float[] result = new float[16];
         Matrix.multiplyMM(result, 0, matrix, mOffset, new Quaternion(eulerAngleInDegree).getRotateM(), 0);
+        for (int i = 0; i < 16; ++i) {
+            matrix[i + mOffset] = result[i];
+        }
+    }
+    public static void rotateM(float[] matrix, int mOffset, Quaternion q) {
+        float[] result = new float[16];
+        Matrix.multiplyMM(result, 0, matrix, mOffset, q.getRotateM(), 0);
         for (int i = 0; i < 16; ++i) {
             matrix[i + mOffset] = result[i];
         }

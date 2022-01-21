@@ -13,14 +13,12 @@ public class TestGameObject extends GameObject {
 
     public TestGameObject() {
         this.shape = new Quad();
-        shape.transform.rotation.x = -1f;
         shape.color = new float[] { 0.5f, 0.5f, 0.5f, 1f };
     }
 
     public TestGameObject(Vector3D position) {
         this.shape = new Quad();
         shape.transform.position = position;
-        shape.transform.rotation.x = -1f;
         shape.color = new float[] { 0.5f, 0.5f, 0.5f, 1f };
     }
 

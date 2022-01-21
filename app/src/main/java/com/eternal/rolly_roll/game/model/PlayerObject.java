@@ -138,9 +138,6 @@ public class PlayerObject extends GameObject {
         //ShiftGrid();
         if (!isShifting) {
             Vector3D currentPos = shape.transform.position;
-            int rotX = Math.round(shape.transform.rotation.x),
-                    rotY = Math.round(shape.transform.rotation.y),
-                    rotZ = Math.round(shape.transform.rotation.z);
             switch (moveDirection) {
                 case UP:
                     anchor = new Vector3D(
@@ -187,22 +184,7 @@ public class PlayerObject extends GameObject {
             isMoving = false;
             if (!isShifting)
                 rotateAxis(moveDirection);
-            if (LoggerConfig.TOUCHLOG) {
-                float[] transformM = shape.transform.getTransformM();
-                float[] rotateM = new Quaternion(shape.transform.rotation.scale(90f)).getRotateM();
-                Log.w(TAG, "roll direction : " + moveDirection + "player rotation : " + shape.transform.rotation +
-                        "\n" + "to radian : (" +
-                        StrictMath.toRadians(shape.transform.rotation.x * 90f) + ", " +
-                        StrictMath.toRadians(shape.transform.rotation.y * 90f) + ", " +
-                        StrictMath.toRadians(shape.transform.rotation.z * 90f) + ")" +
-                        "\n" + new Quaternion(shape.transform.rotation.scale(90f)) +
-                        "\nrotate matrix : " + "\n" +
-                        rotateM[0] + " " + rotateM[1] + " " + rotateM[2] + " " + rotateM[3] + "\n" +
-                        rotateM[4] + " " + rotateM[5] + " " + rotateM[6] + " " + rotateM[7] + "\n" +
-                        rotateM[8] + " " + rotateM[9] + " " + rotateM[10] + " " + rotateM[10] + "\n" +
-                        rotateM[12] + " " + rotateM[13] + " " + rotateM[14] + " " + rotateM[15] +
-                        "\n rotation Axis : " + axisState[0] + ", " + axisState[1] + ", " + axisState[2] + " " + axisState[3] + " " + axisState[4] + " " + axisState[5]);
-            }
+
         }
     }
 
@@ -249,26 +231,6 @@ public class PlayerObject extends GameObject {
 
         switch (moveDirection) {
             case UP:
-                switch (axisState[2]) { // if right axis is...
-                    case F: // +z
-                        shape.transform.rotation.z -= rotateDelta;
-                        break;
-                    case B: // -z
-                        shape.transform.rotation.z += rotateDelta;
-                        break;
-                    case R: // +x (base movement)
-                        shape.transform.rotation.x -= rotateDelta;
-                        break;
-                    case L: // -x
-                        shape.transform.rotation.x -= rotateDelta; // ????
-                        break;
-                    case U: // +y
-                        shape.transform.rotation.y -= rotateDelta;
-                        break;
-                    case D: // -y
-                        shape.transform.rotation.y += rotateDelta;
-                        break;
-                }
                 shape.transform.position = new Vector3D(
                         anchor.x,
                         (float)Math.sin(moveDelta) / (float)Math.sqrt(2f),
@@ -276,26 +238,6 @@ public class PlayerObject extends GameObject {
                 );
                 break;
             case DOWN:
-                switch (axisState[2]) { // if right axis is...
-                    case F: // +z
-                        shape.transform.rotation.z += rotateDelta;
-                        break;
-                    case B: // -z
-                        shape.transform.rotation.z -= rotateDelta;
-                        break;
-                    case R: // +x (base movement)
-                        shape.transform.rotation.x += rotateDelta;
-                        break;
-                    case L: // -x
-                        shape.transform.rotation.x += rotateDelta; // ???
-                        break;
-                    case U: // +y
-                        shape.transform.rotation.y += rotateDelta;
-                        break;
-                    case D: // -y
-                        shape.transform.rotation.y -= rotateDelta;
-                        break;
-                }
                 shape.transform.position = new Vector3D(
                         anchor.x,
                         (float)Math.sin(moveDelta) / (float)Math.sqrt(2f),
@@ -303,26 +245,6 @@ public class PlayerObject extends GameObject {
                 );
                 break;
             case LEFT:
-                switch (axisState[1]) { // if front axis is...
-                    case F: // +z (base movement)
-                        shape.transform.rotation.z += rotateDelta;
-                        break;
-                    case B: // -z
-                        shape.transform.rotation.z -= rotateDelta;
-                        break;
-                    case R: // +x
-                        shape.transform.rotation.x -= rotateDelta;
-                        break;
-                    case L: // -x
-                        shape.transform.rotation.x += rotateDelta;
-                        break;
-                    case U: // +y
-                        shape.transform.rotation.y += rotateDelta;
-                        break;
-                    case D: // -y
-                        shape.transform.rotation.y -= rotateDelta;
-                        break;
-                }
                 shape.transform.position = new Vector3D(
                         anchor.x + (float)Math.cos(moveDelta) / (float)Math.sqrt(2f),
                         (float)Math.sin(moveDelta) / (float)Math.sqrt(2f),
@@ -330,26 +252,6 @@ public class PlayerObject extends GameObject {
                 );
                 break;
             case RIGHT:
-                switch (axisState[1]) { // if front axis is...
-                    case F: // +z (base movement)
-                        shape.transform.rotation.z -= rotateDelta;
-                        break;
-                    case B: // -z
-                        shape.transform.rotation.z += rotateDelta;
-                        break;
-                    case R: // +x
-                        shape.transform.rotation.x += rotateDelta;
-                        break;
-                    case L: // -x
-                        shape.transform.rotation.x -= rotateDelta;
-                        break;
-                    case U: // +y
-                        shape.transform.rotation.y -= rotateDelta;
-                        break;
-                    case D: // -y
-                        shape.transform.rotation.y += rotateDelta;
-                        break;
-                }
                 shape.transform.position = new Vector3D(
                     anchor.x - (float)Math.cos(moveDelta) / (float)Math.sqrt(2f),
                     (float)Math.sin(moveDelta) / (float)Math.sqrt(2f),

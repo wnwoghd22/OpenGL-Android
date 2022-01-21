@@ -10,7 +10,6 @@ public class TestCube extends GameObject {
     public TestCube(Vector3D position, Vector3D rotation, Vector3D scale) {
         this.shape = new Cube();
         shape.transform.position = position;
-        shape.transform.rotation = rotation;
         shape.transform.scale = scale;
     }
 

@@ -22,11 +22,7 @@ public class Vector3D {
     }
 
     public Vector3D normalize() {
-        x /= magnitude();
-        y /= magnitude();
-        z /= magnitude();
-
-        return this;
+        return new Vector3D(x / magnitude(), y / magnitude(), z / magnitude());
     }
 
     public Vector3D scale(float scalar) {
