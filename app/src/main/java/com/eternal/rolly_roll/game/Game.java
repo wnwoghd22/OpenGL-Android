@@ -6,20 +6,15 @@ import android.util.Log;
 import com.eternal.rolly_roll.game.control.Level;
 import com.eternal.rolly_roll.game.control.TouchHandler;
 import com.eternal.rolly_roll.game.model.PlayerObject;
-import com.eternal.rolly_roll.game.model.TestCube;
-import com.eternal.rolly_roll.game.model.TestGameObject;
 import com.eternal.rolly_roll.game.model.Tile;
 import com.eternal.rolly_roll.game.model.object.GameObject;
 import com.eternal.rolly_roll.game.model.object.physics.Vector3D;
-import com.eternal.rolly_roll.game.model.object.shape.IRenderable;
-import com.eternal.rolly_roll.game.view.RenderMiddleware;
 import com.eternal.rolly_roll.util.LoggerConfig;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.Vector;
 
 public class Game {
     private Timer timer;
@@ -108,7 +103,7 @@ public class Game {
     }
 
     public void GetTouch(TouchHandler.Touch touch) {
-        if (LoggerConfig.TOUCHLOG) {
+        if (LoggerConfig.TOUCH_LOG) {
             Log.w(TAG, "Game Touch : " + touch.state + ", " + touch.pos);
         }
         // UI layer
