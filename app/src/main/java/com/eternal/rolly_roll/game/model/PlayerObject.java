@@ -84,6 +84,7 @@ public class PlayerObject extends GameObject {
     public PlayerObject(Vector3D position) {
         this.shape = new Cube();
         shape.transform.position = position;
+        shape.textureID = R.drawable.dice_texture;
         shape.color = new float[] { 1f, 1f, 1f, 1f };
         isMoving = false;
         isShifting = false;

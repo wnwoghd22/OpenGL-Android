@@ -48,10 +48,20 @@ public abstract class Shape implements IRenderable {
         );
 
         bindData(r.getSpriteShader());
+
+        //set texture
+        // set the active texture unit to texture unit 0
+        glActiveTexture(GL_TEXTURE0);
+        // bind the texture to this unit
+        glBindTexture(GL_TEXTURE_2D, r.textureMap.get(textureID));
+
+        glUniform1i(r.getSpriteShader().uTextureUnitLocation, 0);
         glUniformMatrix4fv(r.getSpriteShader().uMatrixLocation, 1, false, r.getMVP(), 0);
 
         //glUniformMatrix4fv(r.getSpriteShader().uMatrixLocation, 1, false, transform.getTransformM(), 0);
         glDrawArrays(GL_TRIANGLES, 0, 6);
+
+        glBindTexture(GL_TEXTURE_2D, 0);
     }
 
     protected void bindData(SpriteShader spriteShader) {

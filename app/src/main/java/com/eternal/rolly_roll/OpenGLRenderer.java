@@ -2,11 +2,13 @@ package com.eternal.rolly_roll;
 
 import android.content.Context;
 import android.opengl.GLSurfaceView;
+import android.util.Log;
 
 import com.eternal.rolly_roll.game.view.Camera;
 import com.eternal.rolly_roll.game.view.RenderMiddleware;
 import com.eternal.rolly_roll.game.view.shader.ShaderProgram;
 import com.eternal.rolly_roll.game.view.shader.SpriteShader;
+import com.eternal.rolly_roll.util.LoggerConfig;
 import com.eternal.rolly_roll.util.ResourceManager;
 
 import javax.microedition.khronos.egl.EGLConfig;
@@ -30,11 +32,18 @@ public class OpenGLRenderer implements GLSurfaceView.Renderer {
     @Override
     public void onSurfaceCreated(GL10 gl10, EGLConfig eglConfig) {
         glClearColor(0f, 0f, 0f, 0f);
+        glEnable(GL_DEPTH_TEST);
+        //glFrontFace(GL_CCW);
+        //glCullFace(GL_BACK);
 
         SpriteShader spriteShader = new SpriteShader(context);
         renderer.setSpriteShader(spriteShader);
 
         renderer.textureMap.put(R.drawable.square, ResourceManager.loadTexture(context, R.drawable.square));
+        renderer.textureMap.put(R.drawable.dice_texture, ResourceManager.loadTexture(context, R.drawable.dice_texture));
+        if (LoggerConfig.TEXTURE_LOG) {
+            Log.w(TAG, "quad texture : " + renderer.textureMap.get(R.drawable.square));
+        }
     }
 
     @Override
@@ -45,7 +54,7 @@ public class OpenGLRenderer implements GLSurfaceView.Renderer {
 
     @Override
     public void onDrawFrame(GL10 gl10) {
-        glClear(GL_COLOR_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         renderer.Render();
     }
 }

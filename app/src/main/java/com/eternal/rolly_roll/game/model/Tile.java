@@ -1,5 +1,6 @@
 package com.eternal.rolly_roll.game.model;
 
+import com.eternal.rolly_roll.R;
 import com.eternal.rolly_roll.game.model.object.GameObject;
 import com.eternal.rolly_roll.game.model.object.physics.Vector3D;
 import com.eternal.rolly_roll.game.model.object.shape.shape2d.Quad;
@@ -17,6 +18,7 @@ public class Tile extends GameObject {
 
     public Tile(Vector3D position) {
         this.shape = new Quad();
+
         shape.transform.position = position;
         shape.transform.rotation.x = -1f;
         shape.color = new float[] { 0.3f, 0.3f, 0.3f, 1f };
