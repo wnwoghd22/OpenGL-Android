@@ -60,6 +60,8 @@ public abstract class Shape implements IRenderable {
 
         //glUniformMatrix4fv(r.getSpriteShader().uMatrixLocation, 1, false, transform.getTransformM(), 0);
         glDrawArrays(GL_TRIANGLES, 0, 6);
+
+        glBindTexture(GL_TEXTURE_2D, 0);
     }
 
     protected void bindData(SpriteShader spriteShader) {

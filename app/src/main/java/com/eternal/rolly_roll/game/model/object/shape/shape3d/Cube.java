@@ -9,9 +9,7 @@ import com.eternal.rolly_roll.game.view.RenderMiddleware;
 import com.eternal.rolly_roll.game.view.shader.SpriteShader;
 import com.eternal.rolly_roll.util.LoggerConfig;
 
-import static android.opengl.GLES20.GL_TRIANGLES;
-import static android.opengl.GLES20.glDrawArrays;
-import static android.opengl.GLES20.glUniformMatrix4fv;
+import static android.opengl.GLES20.*;
 import static com.eternal.rolly_roll.util.Data.CUBE_VERTICES;
 
 public class Cube extends Shape {
@@ -35,11 +33,20 @@ public class Cube extends Shape {
                 transform.getTransformM(), 0
         );
 
+        //set texture
+        // set the active texture unit to texture unit 0
+        glActiveTexture(GL_TEXTURE0);
+        // bind the texture to this unit
+        glBindTexture(GL_TEXTURE_2D, r.textureMap.get(textureID));
+
+        glUniform1i(r.getSpriteShader().uTextureUnitLocation, 0);
         bindData(r.getSpriteShader());
         glUniformMatrix4fv(r.getSpriteShader().uMatrixLocation, 1, false, r.getMVP(), 0);
 
         //glUniformMatrix4fv(r.getSpriteShader().uMatrixLocation, 1, false, transform.getTransformM(), 0);
         glDrawArrays(GL_TRIANGLES, 0, 36);
+
+        glBindTexture(GL_TEXTURE_2D, 0);
     }
 
 }

@@ -18,8 +18,6 @@ public class Tile extends GameObject {
 
     public Tile(Vector3D position) {
         this.shape = new Quad();
-        // for test
-        shape.textureID = R.drawable.dice_texture;
 
         shape.transform.position = position;
         shape.transform.rotation.x = -1f;
