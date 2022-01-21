@@ -188,8 +188,18 @@ public class PlayerObject extends GameObject {
                 rotateAxis(moveDirection);
             if (LoggerConfig.TOUCHLOG) {
                 float[] transformM = shape.transform.getTransformM();
+                float[] rotateM = new Quaternion(shape.transform.rotation.scale(90f)).getRotateM();
                 Log.w(TAG, "roll direction : " + moveDirection + "player rotation : " + shape.transform.rotation +
-                        "\n" + new Quaternion(shape.transform.rotation) +
+                        "\n" + "to radian : (" +
+                        StrictMath.toRadians(shape.transform.rotation.x * 90f) + ", " +
+                        StrictMath.toRadians(shape.transform.rotation.y * 90f) + ", " +
+                        StrictMath.toRadians(shape.transform.rotation.z * 90f) + ")" +
+                        "\n" + new Quaternion(shape.transform.rotation.scale(90f)) +
+                        "\nrotate matrix : " + "\n" +
+                        rotateM[0] + " " + rotateM[1] + " " + rotateM[2] + " " + rotateM[3] + "\n" +
+                        rotateM[4] + " " + rotateM[5] + " " + rotateM[6] + " " + rotateM[7] + "\n" +
+                        rotateM[8] + " " + rotateM[9] + " " + rotateM[10] + " " + rotateM[10] + "\n" +
+                        rotateM[12] + " " + rotateM[13] + " " + rotateM[14] + " " + rotateM[15] +
                         "\n rotation Axis : " + axisState[0] + ", " + axisState[1] + ", " + axisState[2] + " " + axisState[3] + " " + axisState[4] + " " + axisState[5]);
             }
         }

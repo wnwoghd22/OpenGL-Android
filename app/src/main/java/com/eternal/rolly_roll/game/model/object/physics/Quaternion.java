@@ -18,8 +18,8 @@ public class Quaternion {
     }
     // input euler angles in degree and then convert to quaternion
     public Quaternion(Vector3D eulerAnglesInDegree) {
-        float yaw = (float) toRadians(eulerAnglesInDegree.x);
-        float pitch = (float) toRadians(eulerAnglesInDegree.y);
+        float yaw = (float) toRadians(eulerAnglesInDegree.y);
+        float pitch = (float) toRadians(eulerAnglesInDegree.x);
         float roll = (float) toRadians(eulerAnglesInDegree.z);
 
         float cy = (float) cos(yaw * 0.5);
@@ -46,9 +46,9 @@ public class Quaternion {
 
     public static void rotateM(float[] matrix, int mOffset, Vector3D eulerAngleInDegree) {
         float[] result = new float[16];
-        Matrix.multiplyMM(result, 0, matrix, 0, new Quaternion(eulerAngleInDegree).getRotateM(), 0);
+        Matrix.multiplyMM(result, 0, matrix, mOffset, new Quaternion(eulerAngleInDegree).getRotateM(), 0);
         for (int i = 0; i < 16; ++i) {
-            matrix[i] = result[i];
+            matrix[i + mOffset] = result[i];
         }
     }
 
