@@ -36,6 +36,7 @@ public class Quaternion {
     }
     // need to correct
     // input euler angles in degree and then convert to quaternion
+    // do not use this until correct it
     public Quaternion(Vector3D eulerAnglesInDegree) {
         float yaw = (float) toRadians(eulerAnglesInDegree.x);
         float pitch = (float) toRadians(eulerAnglesInDegree.y);
