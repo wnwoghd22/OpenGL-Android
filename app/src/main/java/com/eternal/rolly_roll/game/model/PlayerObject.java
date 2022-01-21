@@ -1,6 +1,5 @@
 package com.eternal.rolly_roll.game.model;
 
-import android.opengl.GLSurfaceView;
 import android.util.Log;
 import android.view.MotionEvent;
 
@@ -12,8 +11,6 @@ import com.eternal.rolly_roll.game.model.object.physics.Quaternion;
 import com.eternal.rolly_roll.game.model.object.physics.Vector3D;
 import com.eternal.rolly_roll.game.model.object.shape.shape3d.Cube;
 import com.eternal.rolly_roll.util.LoggerConfig;
-
-import java.util.concurrent.atomic.AtomicReferenceArray;
 
 enum Direction {
     UP,
@@ -141,33 +138,21 @@ public class PlayerObject extends GameObject {
             Vector3D currentPos = shape.transform.position;
             switch (moveDirection) {
                 case UP:
-                    shape.transform.rotation = shape.transform.rotation.rotate(new Quaternion(-90f, new Vector3D(1f, 0f, 0f)));
-                    anchor = new Vector3D(
-                        currentPos.x,
-                        0,
-                        currentPos.z - 0.5f
-                    );
+                    //shape.transform.rotation = shape.transform.rotation.rotate(new Quaternion(-90f, new Vector3D(1f, 0f, 0f)));
+                    shape.transform.rotation = shape.transform.rotation.product(new Quaternion(90f, new Vector3D(1f, 0f, 0f)));
+                    anchor = new Vector3D(currentPos.x, 0, currentPos.z - 0.5f);
                     break;
                 case DOWN:
-                    anchor = new Vector3D(
-                            currentPos.x,
-                            0,
-                            currentPos.z + 0.5f
-                    );
+                    shape.transform.rotation = shape.transform.rotation.product(new Quaternion(-90f, new Vector3D(1f, 0f, 0f)));
+                    anchor = new Vector3D(currentPos.x, 0, currentPos.z + 0.5f);
                     break;
                 case LEFT:
-                    anchor = new Vector3D(
-                            currentPos.x - 0.5f,
-                            0,
-                            currentPos.z
-                    );
+                    shape.transform.rotation = shape.transform.rotation.product(new Quaternion(-90f, new Vector3D(0f, 0f, 1f)));
+                    anchor = new Vector3D(currentPos.x - 0.5f, 0, currentPos.z);
                     break;
                 case RIGHT:
-                    anchor = new Vector3D(
-                            currentPos.x + 0.5f,
-                            0,
-                            currentPos.z
-                    );
+                    shape.transform.rotation = shape.transform.rotation.product(new Quaternion(90f, new Vector3D(0f, 0f, 1f)));
+                    anchor = new Vector3D(currentPos.x + 0.5f, 0, currentPos.z);
                     break;
             }
         }
@@ -223,7 +208,7 @@ public class PlayerObject extends GameObject {
                 shape.transform.position.x += moveDelta;
                 break;
         }
-        if (LoggerConfig.TOUCHLOG) {
+        if (LoggerConfig.TOUCH_LOG) {
             Log.w(TAG, "shift, frame: " + frameDelta + "player position : " + shape.transform.position);
         }
     }

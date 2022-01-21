@@ -97,7 +97,7 @@ public class Quaternion {
     // need to correct...? only euler to quaternion has problem, then...
     public float[] getRotateM() {
         return new float[] {
-            1f - 2f * (y * y - z * z), 2f * (x * y - s * z), 2f * (x * z + s * y), 0f,
+            1f - 2f * (y * y + z * z), 2f * (x * y - s * z), 2f * (x * z + s * y), 0f,
             2f * (x * y + s * z), 1f - 2f * (x * x + z * z), 2f * (y * z - s * x), 0f,
             2f * (x * z - s * y), 2f * (y * z + s * x), 1f - 2f * (x * x + y * y), 0f,
             0f, 0f, 0f, 1f
