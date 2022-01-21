@@ -47,7 +47,7 @@ public class ResourceManager {
         glGenTextures(1, textureObjectId, 0);
 
         if (textureObjectId[0] == 0) {
-            if (LoggerConfig.ON) {
+            if (LoggerConfig.TEXTURE_LOG) {
                 Log.w(TAG, "Could not create a new openGL texture object");
             }
             return 0;
@@ -59,7 +59,7 @@ public class ResourceManager {
         final Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), resourceId, options);
 
         if (bitmap == null) {
-            if (LoggerConfig.ON) {
+            if (LoggerConfig.TEXTURE_LOG) {
                 Log.w(TAG,  "Resource ID " + resourceId +  " Could not be decoded.");
             }
             return 0;
@@ -73,6 +73,10 @@ public class ResourceManager {
 
         glGenerateMipmap(GL_TEXTURE_2D);
         glBindTexture(GL_TEXTURE_2D,0);
+
+        if (LoggerConfig.TEXTURE_LOG) {
+            Log.w(TAG, "Texture load complete, textureId: " + textureObjectId[0]);
+        }
 
         return textureObjectId[0];
     }

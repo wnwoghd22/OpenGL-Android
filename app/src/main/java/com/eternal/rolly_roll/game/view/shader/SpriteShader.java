@@ -10,6 +10,7 @@ public class SpriteShader extends ShaderProgram {
     public final int aTexCoordLocation;
     public final int uColorLocation;
     public final int uMatrixLocation;
+    public final int uTextureUnitLocation;
 
     public SpriteShader(Context context) {
         super(context, R.raw.sprite_vertex, R.raw.sprite_fragment);
@@ -18,5 +19,6 @@ public class SpriteShader extends ShaderProgram {
         aTexCoordLocation = glGetAttribLocation(ID, "aTexCoord");
         uColorLocation = glGetUniformLocation(ID, "uColor");
         uMatrixLocation = glGetUniformLocation(ID, "uMat");
+        uTextureUnitLocation = glGetUniformLocation(ID, "uTextureUnit");
     }
 }
