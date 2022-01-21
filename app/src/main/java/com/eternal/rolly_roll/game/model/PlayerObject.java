@@ -141,6 +141,7 @@ public class PlayerObject extends GameObject {
             Vector3D currentPos = shape.transform.position;
             switch (moveDirection) {
                 case UP:
+                    shape.transform.rotation = shape.transform.rotation.rotate(new Quaternion(-90f, new Vector3D(1f, 0f, 0f)));
                     anchor = new Vector3D(
                         currentPos.x,
                         0,

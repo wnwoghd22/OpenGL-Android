@@ -16,6 +16,10 @@ public class Quaternion {
     // input four elements
     public Quaternion(float s, float x, float y, float z) {
         this.s = s; this.x = x; this.y = y; this.z = z;
+
+        if (LoggerConfig.QUATERNION_LOG) {
+            Log.w(TAG, "" + this);
+        }
     }
     // input rotation vector and rotation scalar
     public Quaternion(float scalarInDegree, Vector3D vector) {
@@ -63,9 +67,15 @@ public class Quaternion {
         return (float) sqrt(s * s + x * x + y * y + z * z);
     }
     public Quaternion scale(float scalar) {
+        if (LoggerConfig.QUATERNION_LOG) {
+            Log.w(TAG, "scale : ");
+        }
         return new Quaternion(scalar * s, scalar * x, scalar * y, scalar * z);
     }
     public Quaternion inverse() {
+        if (LoggerConfig.QUATERNION_LOG) {
+            Log.w(TAG, "inverse : ");
+        }
         return conjugate().scale(1f / norm() * norm());
     }
     public Quaternion product(Quaternion q) {
@@ -77,7 +87,11 @@ public class Quaternion {
         );
     }
     public Quaternion rotate(Quaternion q) {
-        return q.product(this).product(q.inverse());
+        Quaternion result =  q.product(this).product(q.inverse());
+        if (LoggerConfig.QUATERNION_LOG) {
+            Log.w(TAG, "\nrotate by : " + q + "\nresult : " + result);
+        }
+        return result;
     }
 
     // need to correct...? only euler to quaternion has problem, then...
