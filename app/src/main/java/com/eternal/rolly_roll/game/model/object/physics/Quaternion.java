@@ -87,7 +87,14 @@ public class Quaternion {
             s * q.z + x * q.y - y * q.x + z * q.s
         );
     }
-    public Quaternion rotate(Quaternion q) {
+    public Quaternion power(float alpha) {
+        return new VersorForm(this).power(alpha).toQuaternion();
+    }
+    public static Quaternion slerp(Quaternion origin, Quaternion target, float alpha) {
+        return target.product(origin.inverse()).power(alpha).product(origin);
+    }
+    // returns identity - just product Q to rotate
+    private Quaternion rotate(Quaternion q) {
         Quaternion result =  q.product(this).product(q.inverse());
         if (LoggerConfig.QUATERNION_LOG) {
             Log.w(TAG, "\nrotate by : " + q + "\nresult : " + result);
@@ -124,5 +131,23 @@ public class Quaternion {
     @Override
     public String toString() {
         return "Quaternion(" + s + ", " + x + ", " + y + ", " + z + ")";
+    }
+
+    public static class VersorForm {
+        private final float tensor;
+        private final Vector3D versor;
+        public VersorForm(float tensor, Vector3D versor) {
+            this.tensor = tensor; this.versor = versor;
+        }
+        public VersorForm(Quaternion q) {
+            this.tensor = (float) acos(q.s) * 2f;
+            this.versor = new Vector3D(q.x, q.y, q.z).scale(tensor / (float) sin(tensor / 2f));
+        }
+        public VersorForm power(float alpha) {
+            return new VersorForm(tensor * alpha, versor);
+        }
+        public Quaternion toQuaternion() {
+            return new Quaternion(tensor, versor);
+        }
     }
 }
