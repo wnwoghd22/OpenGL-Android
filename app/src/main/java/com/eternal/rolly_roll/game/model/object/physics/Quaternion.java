@@ -14,8 +14,8 @@ public class Quaternion {
 
     private final float s, x, y, z;
     // input four elements
-    public Quaternion(float scalar, float x, float y, float z) {
-        this.s = scalar; this.x = x; this.y = y; this.z = z;
+    public Quaternion(float s, float x, float y, float z) {
+        this.s = s; this.x = x; this.y = y; this.z = z;
     }
     // input rotation vector and rotation scalar
     public Quaternion(float scalarInDegree, Vector3D vector) {
@@ -55,6 +55,29 @@ public class Quaternion {
     }
     public static Quaternion identity() {
         return new Quaternion(1f, 0f, 0f, 0f);
+    }
+    public Quaternion conjugate() {
+        return new Quaternion(s, -x, -y, -z);
+    }
+    public float norm() {
+        return (float) sqrt(s * s + x * x + y * y + z * z);
+    }
+    public Quaternion scale(float scalar) {
+        return new Quaternion(scalar * s, scalar * x, scalar * y, scalar * z);
+    }
+    public Quaternion inverse() {
+        return conjugate().scale(1f / norm() * norm());
+    }
+    public Quaternion product(Quaternion q) {
+        return new Quaternion(
+            s * q.s - x * q.x - y * q.y - z * q.z,
+            s * q.x + x * q.s + y * q.z - z * q.y,
+            s * q.y - x * q.z + y * q.s + z * q.x,
+            s * q.z + x * q.y - y * q.x + z * q.s
+        );
+    }
+    public Quaternion rotate(Quaternion q) {
+        return q.product(this).product(q.inverse());
     }
 
     // need to correct...? only euler to quaternion has problem, then...

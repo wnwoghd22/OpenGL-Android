@@ -84,7 +84,7 @@ public class PlayerObject extends GameObject {
     public PlayerObject(Vector3D position) {
         this.shape = new Cube();
         shape.transform.position = position;
-        shape.transform.rotation = new Quaternion(new Vector3D(90f, 0f, 0f));
+        //shape.transform.rotation = new Quaternion(new Vector3D(90f, 0f, 0f));
         shape.textureID = R.drawable.dice_texture;
         shape.color = new float[] { 1f, 1f, 1f, 1f };
         isMoving = false;

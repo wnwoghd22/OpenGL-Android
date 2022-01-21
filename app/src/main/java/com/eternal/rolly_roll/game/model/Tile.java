@@ -22,6 +22,8 @@ public class Tile extends GameObject {
 
         shape.transform.position = position;
         shape.transform.rotation = new Quaternion(90f, new Vector3D(-1f, 0f, 0f));
+
+        //shape.transform.rotation = new Quaternion(10f, new Vector3D(0f, 0f, 1f));
         //shape.transform.rotation = new Quaternion(30f, new Vector3D(-1f, 0f, 1f));
         //shape.transform.rotation = new Quaternion(90f, new Vector3D(0f, -1f, 0f));
         //shape.transform.rotation = new Quaternion(30f, new Vector3D(0f, 0f, 1f));
