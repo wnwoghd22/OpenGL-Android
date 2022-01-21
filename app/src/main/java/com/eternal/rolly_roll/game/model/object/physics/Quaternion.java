@@ -88,10 +88,31 @@ public class Quaternion {
         );
     }
     public Quaternion power(float alpha) {
-        return new VersorForm(this).power(alpha).toQuaternion();
+        VersorForm versor = new VersorForm(this);
+        if (LoggerConfig.QUATERNION_LOG) {
+            Log.w(TAG, "before power : " + versor);
+        }
+        versor = versor.power(alpha);
+        if (LoggerConfig.QUATERNION_LOG) {
+            Log.w(TAG, "after power : " + versor);
+        }
+        Quaternion result = versor.toQuaternion();
+        if (LoggerConfig.QUATERNION_LOG) {
+            Log.w(TAG, "after convert : " + result);
+        }
+        return result;
     }
     public static Quaternion slerp(Quaternion origin, Quaternion target, float alpha) {
-        return target.product(origin.inverse()).power(alpha).product(origin);
+        Quaternion result = target.product(origin.inverse()).power(alpha).product(origin);
+        if (LoggerConfig.QUATERNION_LOG) {
+            Log.w(TAG,
+                    "Slerp\n" +
+                    "alpha : " + alpha +
+                    "\norigin : " + origin +
+                    "\ntarget : " + target +
+                    "\nresult : " + result);
+        }
+        return result;
     }
     // returns identity - just product Q to rotate
     private Quaternion rotate(Quaternion q) {
@@ -141,13 +162,26 @@ public class Quaternion {
         }
         public VersorForm(Quaternion q) {
             this.tensor = (float) acos(q.s) * 2f;
-            this.versor = new Vector3D(q.x, q.y, q.z).scale(tensor / (float) sin(tensor / 2f));
+            if (tensor < 0.0001f)
+                this.versor = new Vector3D(0f, 0f, 0f);
+            else
+                this.versor = new Vector3D(q.x, q.y, q.z).scale(1f / (float) sin(tensor / 2f));
+            if (LoggerConfig.QUATERNION_LOG) {
+                Log.w(TAG, "" + this);
+            }
         }
         public VersorForm power(float alpha) {
             return new VersorForm(tensor * alpha, versor);
         }
         public Quaternion toQuaternion() {
-            return new Quaternion(tensor, versor);
+            float tensorDegree = (float) toDegrees(tensor);
+            return new Quaternion(tensorDegree, versor);
+        }
+
+        @NonNull
+        @Override
+        public String toString() {
+            return "Quaternion VersorForm(" + tensor + ", " + versor + ")";
         }
     }
 }

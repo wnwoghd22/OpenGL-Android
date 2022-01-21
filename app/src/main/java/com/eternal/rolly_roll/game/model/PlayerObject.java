@@ -40,6 +40,8 @@ public class PlayerObject extends GameObject {
     private final int moveFrame = 15;
     private int frameDelta = 0;
     private Vector3D anchor;
+    private Quaternion originRotation;
+    private Quaternion targetRotation;
 
     private Axis[] axisState = { Axis.U, Axis.F, Axis.R, Axis.B, Axis.L, Axis.D };
     private void rotateAxis(Direction d) {
@@ -136,24 +138,30 @@ public class PlayerObject extends GameObject {
         //ShiftGrid();
         if (!isShifting) {
             Vector3D currentPos = shape.transform.position;
+            originRotation = shape.transform.rotation;
+            if (LoggerConfig.QUATERNION_LOG) {
+                Log.w(TAG, "origin-versorform : " + new Quaternion.VersorForm(originRotation));
+            }
             switch (moveDirection) {
                 case UP:
-                    //shape.transform.rotation = shape.transform.rotation.rotate(new Quaternion(-90f, new Vector3D(1f, 0f, 0f)));
-                    shape.transform.rotation = shape.transform.rotation.product(new Quaternion(90f, new Vector3D(1f, 0f, 0f)));
+                    targetRotation = shape.transform.rotation.product(new Quaternion(90f, new Vector3D(1f, 0f, 0f)));
                     anchor = new Vector3D(currentPos.x, 0, currentPos.z - 0.5f);
                     break;
                 case DOWN:
-                    shape.transform.rotation = shape.transform.rotation.product(new Quaternion(-90f, new Vector3D(1f, 0f, 0f)));
+                    targetRotation = shape.transform.rotation.product(new Quaternion(-90f, new Vector3D(1f, 0f, 0f)));
                     anchor = new Vector3D(currentPos.x, 0, currentPos.z + 0.5f);
                     break;
                 case LEFT:
-                    shape.transform.rotation = shape.transform.rotation.product(new Quaternion(-90f, new Vector3D(0f, 0f, 1f)));
+                    targetRotation = shape.transform.rotation.product(new Quaternion(-90f, new Vector3D(0f, 0f, 1f)));
                     anchor = new Vector3D(currentPos.x - 0.5f, 0, currentPos.z);
                     break;
                 case RIGHT:
-                    shape.transform.rotation = shape.transform.rotation.product(new Quaternion(90f, new Vector3D(0f, 0f, 1f)));
+                    targetRotation = shape.transform.rotation.product(new Quaternion(90f, new Vector3D(0f, 0f, 1f)));
                     anchor = new Vector3D(currentPos.x + 0.5f, 0, currentPos.z);
                     break;
+            }
+            if (LoggerConfig.QUATERNION_LOG) {
+                Log.w(TAG, "target-versorform : " + new Quaternion.VersorForm(targetRotation));
             }
         }
     }
@@ -213,9 +221,10 @@ public class PlayerObject extends GameObject {
         }
     }
     private void Roll() {
-        float rotateDelta = 1f / (float)moveFrame;
-        float moveDelta = (float)Math.toRadians((float)frameDelta / (float)moveFrame * 90f + 45f);
+        float slerpDelta = (float)frameDelta / (float)moveFrame;
+        float moveDelta = (float)Math.toRadians(slerpDelta * 90f + 45f);
 
+        shape.transform.rotation = Quaternion.slerp(originRotation, targetRotation, slerpDelta);
         switch (moveDirection) {
             case UP:
                 shape.transform.position = new Vector3D(
