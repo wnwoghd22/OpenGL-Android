@@ -1,12 +1,17 @@
 package com.eternal.rolly_roll.game.model.object.physics;
 
 import android.opengl.Matrix;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
+
+import com.eternal.rolly_roll.util.LoggerConfig;
 
 import static java.lang.StrictMath.*;
 
 public class Quaternion {
+    private static final String TAG = "QUATERNION";
+
     private final float s, x, y, z;
     // input four elements
     public Quaternion(float scalar, float x, float y, float z) {
@@ -16,15 +21,20 @@ public class Quaternion {
     public Quaternion(float scalarInDegree, Vector3D vector) {
         float alpha = (float)toRadians(scalarInDegree);
         Vector3D projective = vector.normalize(); // cosine value
-        this.s = (float) cos(alpha/ 2f);
-        this.x = (float)(sin(alpha/ 2f) * projective.x);
-        this.y = (float)(sin(alpha/ 2f) * projective.y);
-        this.z = (float)(sin(alpha/ 2f) * projective.z);
+        this.s = (float) cos(alpha / 2f);
+        this.x = (float)(sin(alpha / 2f) * projective.x);
+        this.y = (float)(sin(alpha / 2f) * projective.y);
+        this.z = (float)(sin(alpha / 2f) * projective.z);
+
+        if (LoggerConfig.QUATERNION_LOG) {
+            Log.w(TAG, "" + this);
+        }
     }
+    // need to correct
     // input euler angles in degree and then convert to quaternion
     public Quaternion(Vector3D eulerAnglesInDegree) {
-        float yaw = (float) toRadians(eulerAnglesInDegree.y);
-        float pitch = (float) toRadians(eulerAnglesInDegree.x);
+        float yaw = (float) toRadians(eulerAnglesInDegree.x);
+        float pitch = (float) toRadians(eulerAnglesInDegree.y);
         float roll = (float) toRadians(eulerAnglesInDegree.z);
 
         float cy = (float) cos(yaw * 0.5);
@@ -38,11 +48,16 @@ public class Quaternion {
         this.x = sr * cp * cy - cr * sp * sy;
         this.y = cr * sp * cy + sr * cp * sy;
         this.z = cr * cp * sy - sr * sp * cy;
+
+        if (LoggerConfig.QUATERNION_LOG) {
+            Log.w(TAG, "" + this);
+        }
     }
     public static Quaternion identity() {
         return new Quaternion(1f, 0f, 0f, 0f);
     }
 
+    // need to correct...? only euler to quaternion has problem, then...
     public float[] getRotateM() {
         return new float[] {
             1f - 2f * (y * y - z * z), 2f * (x * y - s * z), 2f * (x * z + s * y), 0f,

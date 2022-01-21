@@ -22,6 +22,10 @@ public class Tile extends GameObject {
 
         shape.transform.position = position;
         shape.transform.rotation = new Quaternion(90f, new Vector3D(-1f, 0f, 0f));
+        //shape.transform.rotation = new Quaternion(30f, new Vector3D(-1f, 0f, 1f));
+        //shape.transform.rotation = new Quaternion(90f, new Vector3D(0f, -1f, 0f));
+        //shape.transform.rotation = new Quaternion(30f, new Vector3D(0f, 0f, 1f));
+        //shape.transform.rotation = new Quaternion(new Vector3D(-90f, 0f, 0f));
         shape.color = new float[] { 0.3f, 0.3f, 0.3f, 1f };
     }
 
