@@ -7,15 +7,23 @@ import com.eternal.rolly_roll.game.model.object.physics.Vector3D;
 import com.eternal.rolly_roll.game.model.object.shape.shape2d.Quad;
 
 public class Tile extends GameObject {
+    enum Color {
+        GRAY,
+        WHITE,
+        BLUE,
+        ORANGE,
+        GREEN,
+        RED,
+        YELLOW,
+    }
 
     private boolean checked = false;
+    private Color currentColor;
 
     private Tile up = null;
     private Tile right = null;
     private Tile left = null;
     private Tile down = null;
-
-    private int currentColor = 0;
 
     public Tile(Vector3D position) {
         this.shape = new Quad();
@@ -23,12 +31,9 @@ public class Tile extends GameObject {
         shape.transform.position = position;
         shape.transform.rotation = new Quaternion(90f, new Vector3D(-1f, 0f, 0f));
 
-        //shape.transform.rotation = new Quaternion(10f, new Vector3D(0f, 0f, 1f));
-        //shape.transform.rotation = new Quaternion(30f, new Vector3D(-1f, 0f, 1f));
-        //shape.transform.rotation = new Quaternion(90f, new Vector3D(0f, -1f, 0f));
-        //shape.transform.rotation = new Quaternion(30f, new Vector3D(0f, 0f, 1f));
-        //shape.transform.rotation = new Quaternion(new Vector3D(-90f, 0f, 0f));
         shape.color = new float[] { 0.3f, 0.3f, 0.3f, 1f };
+
+        currentColor = Color.GRAY;
     }
 
     @Override
@@ -54,4 +59,6 @@ public class Tile extends GameObject {
     public void bindRight(Tile tile) { this.right = tile; }
     public void bindLeft(Tile tile) { this.left = tile; }
     public void bindDown(Tile tile) { this.down = tile; }
+
+    
 }

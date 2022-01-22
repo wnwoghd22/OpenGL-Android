@@ -6,29 +6,21 @@ import android.view.MotionEvent;
 import static com.eternal.rolly_roll.game.control.TouchHandler.*;
 
 import com.eternal.rolly_roll.R;
+import com.eternal.rolly_roll.game.control.Axis;
+import com.eternal.rolly_roll.game.control.Level;
 import com.eternal.rolly_roll.game.model.object.GameObject;
 import com.eternal.rolly_roll.game.model.object.physics.Quaternion;
 import com.eternal.rolly_roll.game.model.object.physics.Vector3D;
 import com.eternal.rolly_roll.game.model.object.shape.shape3d.Cube;
 import com.eternal.rolly_roll.util.LoggerConfig;
 
-enum Direction {
+public class PlayerObject extends GameObject {
+    enum Direction {
     UP,
     DOWN,
     LEFT,
     RIGHT,
-}
-
-enum Axis {
-    F, // front
-    B, // back
-    R, // right
-    L, // left
-    U, // up
-    D  // down
-}
-
-public class PlayerObject extends GameObject {
+    }
     private static String TAG = "player";
 
     private TouchPos initPos;
@@ -42,6 +34,11 @@ public class PlayerObject extends GameObject {
     private Vector3D anchor;
     private Quaternion originRotation;
     private Quaternion targetRotation;
+
+    private Level level;
+    public void setLevel(Level l) {
+        level = l;
+    }
 
     private Axis[] axisState = { Axis.U, Axis.F, Axis.R, Axis.B, Axis.L, Axis.D };
     private void rotateAxis(Direction d) {
@@ -143,7 +140,8 @@ public class PlayerObject extends GameObject {
             }
             switch (moveDirection) {
                 case UP:
-                    targetRotation = shape.transform.rotation.product(new Quaternion(90f, new Vector3D(1f, 0f, 0f)));
+                    //targetRotation = shape.transform.rotation.product(new Quaternion(90f, new Vector3D(1f, 0f, 0f)));
+                    targetRotation = shape.transform.rotation.product(new Quaternion(new Vector3D(90f, 0f, 0f)));
                     anchor = new Vector3D(currentPos.x, 0, currentPos.z - 0.5f);
                     break;
                 case DOWN:
@@ -151,7 +149,8 @@ public class PlayerObject extends GameObject {
                     anchor = new Vector3D(currentPos.x, 0, currentPos.z + 0.5f);
                     break;
                 case LEFT:
-                    targetRotation = shape.transform.rotation.product(new Quaternion(-90f, new Vector3D(0f, 0f, 1f)));
+                    //targetRotation = shape.transform.rotation.product(new Quaternion(-90f, new Vector3D(0f, 0f, 1f)));
+                    targetRotation = shape.transform.rotation.product(new Quaternion(new Vector3D(0f, 0f, -90f)));
                     anchor = new Vector3D(currentPos.x - 0.5f, 0, currentPos.z);
                     break;
                 case RIGHT:

@@ -34,13 +34,11 @@ public class Quaternion {
             Log.w(TAG, "" + this);
         }
     }
-    // need to correct
     // input euler angles in degree and then convert to quaternion
-    // do not use this until correct it
     public Quaternion(Vector3D eulerAnglesInDegree) {
-        float yaw = (float) toRadians(eulerAnglesInDegree.x);
+        float yaw = (float) toRadians(eulerAnglesInDegree.z);
         float pitch = (float) toRadians(eulerAnglesInDegree.y);
-        float roll = (float) toRadians(eulerAnglesInDegree.z);
+        float roll = (float) toRadians(eulerAnglesInDegree.x);
 
         float cy = (float) cos(yaw * 0.5);
         float sy = (float) sin(yaw * 0.5);
@@ -114,16 +112,7 @@ public class Quaternion {
         }
         return result;
     }
-    // returns identity - just product Q to rotate
-    private Quaternion rotate(Quaternion q) {
-        Quaternion result =  q.product(this).product(q.inverse());
-        if (LoggerConfig.QUATERNION_LOG) {
-            Log.w(TAG, "\nrotate by : " + q + "\nresult : " + result);
-        }
-        return result;
-    }
 
-    // need to correct...? only euler to quaternion has problem, then...
     public float[] getRotateM() {
         return new float[] {
             1f - 2f * (y * y + z * z), 2f * (x * y - s * z), 2f * (x * z + s * y), 0f,

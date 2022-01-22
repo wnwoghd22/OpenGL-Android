@@ -11,6 +11,8 @@ public class Level extends GameObject {
     private Tile[][] board;
 
     public Tile[][] GenerateBoard(int size) {
+        boardSize = size;
+
         board = new Tile[size][size];
         for (int i = 0; i < size; ++i)
             for (int j = 0; j < size; ++j)

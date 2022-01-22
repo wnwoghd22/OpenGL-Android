@@ -64,6 +64,8 @@ public class Game {
             )
         );
 
+        player.setLevel(level);
+
         objects.add(player);
 
         Start();
