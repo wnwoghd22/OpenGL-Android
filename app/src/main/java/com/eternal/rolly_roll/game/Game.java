@@ -47,7 +47,7 @@ public class Game {
     }
 
     public void Init() {
-        boardSize = 5;
+        boardSize = 7;
 
         objects.add(level);
         for (Tile[] tiles : level.GenerateBoard(boardSize)) {

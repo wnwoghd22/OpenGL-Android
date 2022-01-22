@@ -1,12 +1,20 @@
 package com.eternal.rolly_roll.game.control;
 
+import android.util.Log;
+
 import com.eternal.rolly_roll.game.model.PlayerObject;
 import com.eternal.rolly_roll.game.model.Tile;
 import com.eternal.rolly_roll.game.model.object.GameObject;
 import com.eternal.rolly_roll.game.model.object.physics.Vector3D;
+import com.eternal.rolly_roll.util.LoggerConfig;
+
+import java.util.logging.Logger;
 
 public class Level extends GameObject {
+    private final String TAG = "Level";
+
     private int boardSize;
+    public int getBoardSize() { return boardSize; }
 
     private Tile[][] board;
 
@@ -42,5 +50,22 @@ public class Level extends GameObject {
     @Override
     public void Update() {
 
+    }
+
+    public void stamp(int i, int j, Axis down) {
+        board[j][i].setColor(down);
+
+        int adjacent = board[j][i].checkAdjacent();
+        if (LoggerConfig.LEVEL_LOG) {
+            Log.w(TAG, "adjacent : " + adjacent);
+        }
+
+        int require;
+        if (adjacent >= 3) {
+            require = board[j][i].clear();
+        } else {
+            board[j][i].uncheck();
+        }
+        // if game mode is "challenge", then require > adjacent -> game over
     }
 }

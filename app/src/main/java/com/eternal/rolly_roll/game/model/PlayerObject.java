@@ -36,8 +36,11 @@ public class PlayerObject extends GameObject {
     private Quaternion targetRotation;
 
     private Level level;
+    private int boardSize;
+    private int posX = 0, posY = 0;
     public void setLevel(Level l) {
         level = l;
+        boardSize = l.getBoardSize();
     }
 
     private Axis[] axisState = { Axis.U, Axis.F, Axis.R, Axis.B, Axis.L, Axis.D };
@@ -119,14 +122,22 @@ public class PlayerObject extends GameObject {
 
         if (deltaY > 0) {
             if (deltaX > 0) { // up
+                if (posY == 0) return;
+                --posY;
                 moveDirection = Direction.UP;
             } else { // left
+                if (posX == 0) return;
+                --posX;
                 moveDirection = Direction.LEFT;
             }
         } else {
             if (deltaX > 0) { // right
+                if (posX == boardSize - 1) return;
+                ++posX;
                 moveDirection = Direction.RIGHT;
             } else { // down
+                if (posY == boardSize - 1) return;
+                ++posY;
                 moveDirection = Direction.DOWN;
             }
         }
@@ -177,7 +188,7 @@ public class PlayerObject extends GameObject {
             isMoving = false;
             if (!isShifting)
                 rotateAxis(moveDirection);
-
+            level.stamp(posX, posY, axisState[5]);
         }
     }
 
