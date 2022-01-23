@@ -8,6 +8,7 @@ import com.eternal.rolly_roll.game.view.Camera;
 import com.eternal.rolly_roll.game.view.RenderMiddleware;
 import com.eternal.rolly_roll.game.view.shader.ShaderProgram;
 import com.eternal.rolly_roll.game.view.shader.SpriteShader;
+import com.eternal.rolly_roll.game.view.shader.TextShader;
 import com.eternal.rolly_roll.util.LoggerConfig;
 import com.eternal.rolly_roll.util.ResourceManager;
 
@@ -33,8 +34,6 @@ public class OpenGLRenderer implements GLSurfaceView.Renderer {
     public void onSurfaceCreated(GL10 gl10, EGLConfig eglConfig) {
         glClearColor(0f, 0f, 0f, 0f);
         glEnable(GL_DEPTH_TEST);
-        //glFrontFace(GL_CCW);
-        //glCullFace(GL_BACK);
 
         SpriteShader spriteShader = new SpriteShader(context);
         renderer.setSpriteShader(spriteShader);
@@ -44,6 +43,11 @@ public class OpenGLRenderer implements GLSurfaceView.Renderer {
         if (LoggerConfig.TEXTURE_LOG) {
             Log.w(TAG, "quad texture : " + renderer.textureMap.get(R.drawable.square));
         }
+
+        TextShader textShader = new TextShader(context, "verdana.ttf");
+        renderer.setTextShader(textShader);
+
+        renderer.setGameUI();
     }
 
     @Override

@@ -9,6 +9,8 @@ import com.eternal.rolly_roll.game.model.PlayerObject;
 import com.eternal.rolly_roll.game.model.Tile;
 import com.eternal.rolly_roll.game.model.object.GameObject;
 import com.eternal.rolly_roll.game.model.object.physics.Vector3D;
+import com.eternal.rolly_roll.game.view.ui.text.Text;
+import com.eternal.rolly_roll.game.view.ui.text.TextContainer;
 import com.eternal.rolly_roll.util.LoggerConfig;
 
 import java.util.ArrayList;
@@ -34,6 +36,8 @@ public class Game {
     //private Vector<GameObject> objectsSync;
     private List<GameObject> objects;
     public List<GameObject> getObjects() { return objects; }
+    private List<GameObject> uiObjects;
+    public List<GameObject> getUiObjects() { return uiObjects; }
     private PlayerObject player;
 
     private Level level;
@@ -44,6 +48,7 @@ public class Game {
 
         level = new Level();
         objects = new ArrayList<GameObject>();
+        uiObjects = new ArrayList<GameObject>();
     }
 
     public void Init() {
@@ -68,7 +73,32 @@ public class Game {
 
         objects.add(player);
 
+
+
         Start();
+    }
+
+    public void setUIComponents() {
+        // add ui components
+        TextContainer SCORE = new TextContainer("SCORE");
+        TextContainer HIGH_SCORE = new TextContainer("HIGH SCORE");
+
+        TextContainer currentScore = new TextContainer("0");
+        TextContainer highScore = new TextContainer("0");
+
+        SCORE.setPosition(new Vector3D(-0.5f, 0.8f, 0f));
+        HIGH_SCORE.setPosition(new Vector3D(0.5f, 0.8f, 0f));
+
+        currentScore.setPosition(new Vector3D(-0.5f, 0.7f, 0f));
+        highScore.setPosition(new Vector3D(0.5f, 0.7f, 0f));
+
+        level.setScoreText(currentScore);
+        level.setHighScoreText(highScore);
+
+        uiObjects.add(SCORE);
+        uiObjects.add(HIGH_SCORE);
+        uiObjects.add(currentScore);
+        uiObjects.add(highScore);
     }
 
     public void onPause() {
@@ -110,6 +140,7 @@ public class Game {
         }
         // UI layer
 
+        // game layer
         player.handleTouch(touch);
     }
 }

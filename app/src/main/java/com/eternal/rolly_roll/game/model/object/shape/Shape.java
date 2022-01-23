@@ -18,9 +18,9 @@ import static com.eternal.rolly_roll.util.Data.BYTES_PER_FLOAT;
 public abstract class Shape implements IRenderable {
     private static String TAG = "Shape";
 
-    private static final int POSITION_COMPONENT_COUNT = 3;
-    private static final int TEXTURE_COORDINATES_COMPONENT_COUNT = 2;
-    private static final int STRIDE = (POSITION_COMPONENT_COUNT + TEXTURE_COORDINATES_COMPONENT_COUNT) * BYTES_PER_FLOAT;
+    protected static final int POSITION_COMPONENT_COUNT = 3;
+    protected static final int TEXTURE_COORDINATES_COMPONENT_COUNT = 2;
+    protected static final int STRIDE = (POSITION_COMPONENT_COUNT + TEXTURE_COORDINATES_COMPONENT_COUNT) * BYTES_PER_FLOAT;
 
     public Transform transform;
     public float[] color;
@@ -42,9 +42,9 @@ public abstract class Shape implements IRenderable {
         }
 
         Matrix.multiplyMM(
-                r.getMVP(), 0,
-                r.getVP(), 0,
-                transform.getTransformM(), 0
+            r.getMVP(), 0,
+            r.getVP(), 0,
+            transform.getTransformM(), 0
         );
 
         bindData(r.getSpriteShader());
