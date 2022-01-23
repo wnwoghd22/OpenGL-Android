@@ -27,19 +27,4 @@ public class Text implements IRenderable {
 
     }
 
-    public static void getCharacterSet(HashMap<java.lang.Character, Character> characterSet, Typeface tf) {
-        characterSet.clear();
-
-        Paint textPaint = new Paint();
-        textPaint.setTypeface(tf);
-
-        textPaint.ascent();
-
-        for (char c = 0; c <= java.lang.Character.MAX_VALUE; ++c) {
-            Character element = new Character(
-
-            );
-            characterSet.put(c, element);
-        }
-    }
 }
