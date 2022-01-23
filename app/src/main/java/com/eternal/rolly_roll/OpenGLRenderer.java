@@ -33,8 +33,6 @@ public class OpenGLRenderer implements GLSurfaceView.Renderer {
     public void onSurfaceCreated(GL10 gl10, EGLConfig eglConfig) {
         glClearColor(0f, 0f, 0f, 0f);
         glEnable(GL_DEPTH_TEST);
-        //glFrontFace(GL_CCW);
-        //glCullFace(GL_BACK);
 
         SpriteShader spriteShader = new SpriteShader(context);
         renderer.setSpriteShader(spriteShader);
@@ -43,6 +41,12 @@ public class OpenGLRenderer implements GLSurfaceView.Renderer {
         renderer.textureMap.put(R.drawable.dice_texture, ResourceManager.loadTexture(context, R.drawable.dice_texture));
         if (LoggerConfig.TEXTURE_LOG) {
             Log.w(TAG, "quad texture : " + renderer.textureMap.get(R.drawable.square));
+        }
+        renderer.fontMap.put("arial", ResourceManager.getTypeFace(context, "arial.ttf"));
+        renderer.fontMap.put("verdana", ResourceManager.getTypeFace(context, "verdana.ttf"));
+
+        if (LoggerConfig.UI_LOG) {
+            Log.w(TAG, "font arial : " + renderer.fontMap.get("arial"));
         }
     }
 

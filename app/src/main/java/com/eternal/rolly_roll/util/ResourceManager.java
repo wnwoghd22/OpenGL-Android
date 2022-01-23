@@ -82,7 +82,7 @@ public class ResourceManager {
         return textureObjectId[0];
     }
 
-    public Typeface getTypeFace(Context context, String name) {
-        return Typeface.createFromAsset(context.getAssets(), name);
+    public static Typeface getTypeFace(Context context, String name) {
+        return Typeface.createFromAsset(context.getAssets(), "font/" + name);
     }
 }

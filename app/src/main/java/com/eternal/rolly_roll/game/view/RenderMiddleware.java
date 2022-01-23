@@ -6,6 +6,7 @@ import static android.opengl.GLES20.*;
 import static android.opengl.Matrix.multiplyMM;
 
 import android.graphics.Shader;
+import android.graphics.Typeface;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -34,7 +35,8 @@ public class RenderMiddleware {
     public void setSpriteShader(SpriteShader shader) { this.spriteShader = shader; }
     public SpriteShader getSpriteShader() { return spriteShader; }
 
-    public HashMap<Integer, Integer> textureMap = new HashMap<Integer, Integer>();
+    public final HashMap<Integer, Integer> textureMap = new HashMap<Integer, Integer>();
+    public final HashMap<String, Typeface> fontMap = new HashMap<String, Typeface>();
 
     public Camera camera;
     float[] viewProjectionMatrix = new float[16];
