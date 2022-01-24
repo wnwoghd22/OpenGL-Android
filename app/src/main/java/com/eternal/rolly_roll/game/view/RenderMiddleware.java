@@ -16,6 +16,7 @@ import com.eternal.rolly_roll.game.Game;
 import com.eternal.rolly_roll.game.model.object.GameObject;
 import com.eternal.rolly_roll.game.view.shader.ShaderProgram;
 import com.eternal.rolly_roll.game.view.shader.SpriteShader;
+import com.eternal.rolly_roll.game.view.shader.TextShader;
 import com.eternal.rolly_roll.util.Data;
 import com.eternal.rolly_roll.util.LoggerConfig;
 
@@ -30,10 +31,17 @@ public class RenderMiddleware {
     private Game game;
     private ShaderProgram shaderProgram;
     private SpriteShader spriteShader;
+    private TextShader textShader;
     // call inside onDraw
     public void SetShaderProgram(ShaderProgram shader) { this.shaderProgram = shader; }
-    public void setSpriteShader(SpriteShader shader) { this.spriteShader = shader; }
     public SpriteShader getSpriteShader() { return spriteShader; }
+    public void setSpriteShader(SpriteShader shader) { this.spriteShader = shader; }
+    public TextShader getTextShader() {
+        return textShader;
+    }
+    public void setTextShader(TextShader textShader) {
+        this.textShader = textShader;
+    }
 
     public final HashMap<Integer, Integer> textureMap = new HashMap<Integer, Integer>();
     public final HashMap<String, Typeface> fontMap = new HashMap<String, Typeface>();

@@ -8,6 +8,7 @@ import com.eternal.rolly_roll.game.view.Camera;
 import com.eternal.rolly_roll.game.view.RenderMiddleware;
 import com.eternal.rolly_roll.game.view.shader.ShaderProgram;
 import com.eternal.rolly_roll.game.view.shader.SpriteShader;
+import com.eternal.rolly_roll.game.view.shader.TextShader;
 import com.eternal.rolly_roll.util.LoggerConfig;
 import com.eternal.rolly_roll.util.ResourceManager;
 
@@ -42,12 +43,9 @@ public class OpenGLRenderer implements GLSurfaceView.Renderer {
         if (LoggerConfig.TEXTURE_LOG) {
             Log.w(TAG, "quad texture : " + renderer.textureMap.get(R.drawable.square));
         }
-        renderer.fontMap.put("arial", ResourceManager.getTypeFace(context, "arial.ttf"));
-        renderer.fontMap.put("verdana", ResourceManager.getTypeFace(context, "verdana.ttf"));
 
-        if (LoggerConfig.UI_LOG) {
-            Log.w(TAG, "font arial : " + renderer.fontMap.get("arial"));
-        }
+        //TextShader textShader = new TextShader(context, "verdana.ttf");
+        //renderer.setTextShader(textShader);
     }
 
     @Override
