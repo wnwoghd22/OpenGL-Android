@@ -44,8 +44,8 @@ public class OpenGLRenderer implements GLSurfaceView.Renderer {
             Log.w(TAG, "quad texture : " + renderer.textureMap.get(R.drawable.square));
         }
 
-        //TextShader textShader = new TextShader(context, "verdana.ttf");
-        //renderer.setTextShader(textShader);
+        TextShader textShader = new TextShader(context, "verdana.ttf");
+        renderer.setTextShader(textShader);
     }
 
     @Override

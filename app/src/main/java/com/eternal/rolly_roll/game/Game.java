@@ -70,9 +70,9 @@ public class Game {
 
         objects.add(player);
 
-//        TextContainer testText = new TextContainer("c");
-//
-//        objects.add(testText);
+        TextContainer testText = new TextContainer("c");
+
+        objects.add(testText);
 
         Start();
     }

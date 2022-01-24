@@ -4,6 +4,8 @@ import android.content.Context;
 import android.graphics.*;
 import android.util.Log;
 
+import androidx.annotation.Nullable;
+
 import static android.opengl.GLUtils.*;
 import static android.opengl.GLES20.*;
 
@@ -24,7 +26,7 @@ public class TextShader extends ShaderProgram {
     public final int uTextureUnitLocation;
 
     private final String font;
-    private final HashMap<java.lang.Character, Character> characterSet = new HashMap<java.lang.Character, Character>();
+    private final HashMap characterSet = new HashMap<java.lang.Character, Character>();
     public HashMap<java.lang.Character, Character> getCharacterSet() {
         return characterSet;
     }
@@ -33,7 +35,7 @@ public class TextShader extends ShaderProgram {
     private float descent;
 
     public TextShader(Context context, String font) {
-        super(context, R.raw.sprite_vertex, R.raw.sprite_fragment);
+        super(context, R.raw.text_vertex, R.raw.text_fragment);
 
         aPositionLocation = glGetAttribLocation(ID, "aPos");
         aTexCoordLocation = glGetAttribLocation(ID, "aTexCoord");
@@ -54,36 +56,43 @@ public class TextShader extends ShaderProgram {
         Canvas canvas = new Canvas();
         Rect rect = new Rect();
         textPaint.setTypeface(tf);
+        textPaint.setColor(0xFFFFFF);
+        textPaint.setTextSize(12f);
 
         Paint.FontMetrics fontMetrics = textPaint.getFontMetrics();
         this.ascent = fontMetrics.ascent;
         this.descent = fontMetrics.descent;
 
+        if (LoggerConfig.UI_LOG) {
+            Log.w(TAG, "ascent : " + this.ascent + ", descent : " + this.descent);
+        }
+
         int charWidth = 0, charHeight = 0;
         int[] textureId = new int[1];
 
-        for (char c = 0; c < java.lang.Character.MAX_VALUE; ++c) {
+        for (char c = 0; c < 128; ++c) {
             textPaint.getTextBounds(c + "", 0, 1, rect);
 
             charWidth = rect.width();
             charHeight = rect.height();
 
-            if (LoggerConfig.TEXTURE_LOG) {
-                Log.w(TAG, "char width : " + charWidth + ", char height : " + charHeight);
+            if (LoggerConfig.UI_LOG) {
+                Log.w(TAG, "char : " + c + ", char width : " + charWidth + ", char height : " + charHeight);
             }
 
-            if (charWidth * charHeight == 0)
+            if (charWidth * charHeight == 0) {
                 continue;
+            }
 
             Bitmap bitmap = Bitmap.createBitmap(charWidth, charHeight, Bitmap.Config.ARGB_4444);
             canvas.setBitmap(bitmap);
-            canvas.drawText(c + "", 0f, ascent, textPaint);
+            canvas.drawText(c + "", 0f, 0f, textPaint);
 
             // generate glyph texture
             glGenTextures(1, textureId, 0);
 
             if (textureId[0] == 0) { // failed to create new texture
-                if (LoggerConfig.TEXTURE_LOG) {
+                if (LoggerConfig.UI_LOG) {
                     Log.w(TAG, "failed to create new texture");
                 }
                 bitmap.recycle();

@@ -44,7 +44,6 @@ public class RenderMiddleware {
     }
 
     public final HashMap<Integer, Integer> textureMap = new HashMap<Integer, Integer>();
-    public final HashMap<String, Typeface> fontMap = new HashMap<String, Typeface>();
 
     public Camera camera;
     float[] viewProjectionMatrix = new float[16];
