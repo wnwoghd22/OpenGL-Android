@@ -31,6 +31,7 @@ public class Text extends Shape {
         super(QUAD_VERTICES);
         this.text = text;
         this.color = new float[] { 1.0f, 1.0f, 1.0f, 1.0f };
+
     }
 
 
@@ -58,6 +59,7 @@ public class Text extends Shape {
             glActiveTexture(GL_TEXTURE0);
             // bind the texture to this unit
             glBindTexture(GL_TEXTURE_2D, textureID);
+            //glBindTexture(GL_TEXTURE_2D, r.textureMap.get(R.drawable.square));
 
             glUniform1i(r.getTextShader().uTextureUnitLocation, 0);
             //glUniformMatrix4fv(r.getTextShader().uMatrixLocation, 1, false, r.getMVP(), 0);

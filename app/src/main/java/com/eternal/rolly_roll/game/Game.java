@@ -36,6 +36,8 @@ public class Game {
     //private Vector<GameObject> objectsSync;
     private List<GameObject> objects;
     public List<GameObject> getObjects() { return objects; }
+    private List<GameObject> uiObjects;
+    public List<GameObject> getUiObjects() { return uiObjects; }
     private PlayerObject player;
 
     private Level level;
@@ -46,6 +48,7 @@ public class Game {
 
         level = new Level();
         objects = new ArrayList<GameObject>();
+        uiObjects = new ArrayList<GameObject>();
     }
 
     public void Init() {
@@ -70,9 +73,11 @@ public class Game {
 
         objects.add(player);
 
+        // add ui components
+
         TextContainer testText = new TextContainer("c");
 
-        objects.add(testText);
+        uiObjects.add(testText);
 
         Start();
     }
@@ -116,6 +121,7 @@ public class Game {
         }
         // UI layer
 
+        // game layer
         player.handleTouch(touch);
     }
 }

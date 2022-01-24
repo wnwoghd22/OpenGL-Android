@@ -73,5 +73,12 @@ public class RenderMiddleware {
         // post processing layer
 
         // ui layer
+        // need to implement set ui canvas camera matrices
+
+        glDisable(GL_DEPTH_TEST);
+        for (GameObject object : game.getUiObjects()) {
+            object.Render(this);
+        }
+        glEnable(GL_DEPTH_TEST);
     }
 }
