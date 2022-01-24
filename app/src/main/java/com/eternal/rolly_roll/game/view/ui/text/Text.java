@@ -12,6 +12,8 @@ import android.opengl.GLUtils;
 import android.util.Log;
 
 import com.eternal.rolly_roll.R;
+import com.eternal.rolly_roll.game.model.object.physics.Quaternion;
+import com.eternal.rolly_roll.game.model.object.physics.Vector3D;
 import com.eternal.rolly_roll.game.model.object.shape.IRenderable;
 import com.eternal.rolly_roll.game.model.object.shape.Shape;
 import com.eternal.rolly_roll.game.view.RenderMiddleware;
@@ -32,6 +34,8 @@ public class Text extends Shape {
         this.text = text;
         this.color = new float[] { 1.0f, 1.0f, 1.0f, 1.0f };
 
+        transform.position = Vector3D.zero();
+        transform.rotation = Quaternion.identity();
     }
 
 

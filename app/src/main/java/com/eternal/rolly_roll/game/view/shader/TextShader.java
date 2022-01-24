@@ -56,8 +56,8 @@ public class TextShader extends ShaderProgram {
         Canvas canvas = new Canvas();
         Rect rect = new Rect();
         textPaint.setTypeface(tf);
-        textPaint.setColor(0xFFFFFF);
-        textPaint.setTextSize(12f);
+        textPaint.setARGB(0xff, 0xff, 0x00, 0x00);
+        textPaint.setTextSize(32f);
 
         Paint.FontMetrics fontMetrics = textPaint.getFontMetrics();
         this.ascent = fontMetrics.ascent;
@@ -84,9 +84,14 @@ public class TextShader extends ShaderProgram {
                 continue;
             }
 
-            Bitmap bitmap = Bitmap.createBitmap(charWidth, charHeight, Bitmap.Config.ARGB_4444);
+            Bitmap bitmap = Bitmap.createBitmap(charWidth, charHeight, Bitmap.Config.ARGB_8888);
             canvas.setBitmap(bitmap);
-            canvas.drawText(c + "", 0f, 0f, textPaint);
+            bitmap.eraseColor(0xFFFFFFFF);
+            //canvas.drawText(c + "", charWidth  / 2, descent, textPaint);
+            //canvas.drawText(c + "", 0, descent, textPaint);
+            //canvas.drawText(c + "", 0, 0, textPaint);
+            //canvas.drawText(c + "", 0, -descent, textPaint);
+            canvas.drawText(c + "", -2, charHeight, textPaint);
 
             // generate glyph texture
             glGenTextures(1, textureId, 0);
@@ -106,8 +111,8 @@ public class TextShader extends ShaderProgram {
             glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER,GL_LINEAR);
 
             //Different possible texture parameters, e.g. GL10.GL_CLAMP_TO_EDGE
-            glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-            glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+            //glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+            //glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
             //Use the Android GLUtils to specify a two-dimensional texture image from our bitmap
             texImage2D(GL_TEXTURE_2D, 0, bitmap, 0);

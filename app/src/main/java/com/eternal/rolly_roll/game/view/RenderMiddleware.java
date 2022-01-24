@@ -75,6 +75,7 @@ public class RenderMiddleware {
         // ui layer
         // need to implement set ui canvas camera matrices
 
+        textShader.use();
         glDisable(GL_DEPTH_TEST);
         for (GameObject object : game.getUiObjects()) {
             object.Render(this);
