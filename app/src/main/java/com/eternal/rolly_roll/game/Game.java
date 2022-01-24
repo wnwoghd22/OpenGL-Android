@@ -75,7 +75,13 @@ public class Game {
 
         // add ui components
 
-        TextContainer testText = new TextContainer("c");
+        //TextContainer testText = new TextContainer("F");
+        //TextContainer testText = new TextContainer("c");
+        //TextContainer testText = new TextContainer("u");
+        //TextContainer testText = new TextContainer("k");
+
+        TextContainer testText = new TextContainer("y");
+
 
         uiObjects.add(testText);
 

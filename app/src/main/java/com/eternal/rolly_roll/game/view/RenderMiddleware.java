@@ -77,9 +77,12 @@ public class RenderMiddleware {
 
         textShader.use();
         glDisable(GL_DEPTH_TEST);
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_ONE, GL_ONE);
         for (GameObject object : game.getUiObjects()) {
             object.Render(this);
         }
         glEnable(GL_DEPTH_TEST);
+        glDisable(GL_BLEND);
     }
 }

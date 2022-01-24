@@ -86,7 +86,9 @@ public class TextShader extends ShaderProgram {
 
             Bitmap bitmap = Bitmap.createBitmap(charWidth, charHeight, Bitmap.Config.ARGB_8888);
             canvas.setBitmap(bitmap);
-            bitmap.eraseColor(0xFFFFFFFF);
+            //bitmap.eraseColor(0xFFFFFFFF);
+            bitmap.eraseColor(Color.TRANSPARENT);
+            //canvas.drawColor(Color.TRANSPARENT);
             //canvas.drawText(c + "", charWidth  / 2, descent, textPaint);
             //canvas.drawText(c + "", 0, descent, textPaint);
             //canvas.drawText(c + "", 0, 0, textPaint);
