@@ -46,6 +46,8 @@ public class OpenGLRenderer implements GLSurfaceView.Renderer {
 
         TextShader textShader = new TextShader(context, "verdana.ttf");
         renderer.setTextShader(textShader);
+
+        renderer.setGameUI();
     }
 
     @Override

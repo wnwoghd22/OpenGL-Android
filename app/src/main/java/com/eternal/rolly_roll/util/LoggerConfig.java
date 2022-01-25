@@ -7,5 +7,5 @@ public class LoggerConfig {
     public static final boolean TEXTURE_LOG = false;
     public static final boolean QUATERNION_LOG = false;
     public static final boolean LEVEL_LOG = true;
-    public static final boolean UI_LOG = false;
+    public static final boolean UI_LOG = true;
 }

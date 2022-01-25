@@ -85,4 +85,9 @@ public class RenderMiddleware {
         glEnable(GL_DEPTH_TEST);
         glDisable(GL_BLEND);
     }
+
+    public void setGameUI() {
+        if (this.game != null)
+            this.game.setUIComponents();
+    }
 }

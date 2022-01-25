@@ -47,10 +47,13 @@ public class Text extends Shape {
         textWidth = 0f;
         for (char c : text.toCharArray()) {
             if (!characterSet.containsKey(c)) {
+                if(LoggerConfig.UI_LOG) {
+                    Log.w(TAG, "no element");
+                }
                 textWidth += 0.3f;
                 continue;
             }
-            textWidth += characterSet.get(c).getCharWidth() + 0.15f;
+            textWidth += (characterSet.get(c).getCharWidth() + 0.15f);
         }
     }
 
@@ -77,7 +80,8 @@ public class Text extends Shape {
         }
 
         float[] tempM = new float[16];
-        float posX = -0.1f * textSize;
+        //float posX = -0.1f * textSize;
+        float posX = 0f;
         switch (align) {
             case CENTER:
                 posX -= (textWidth / 2f) * textSize;
@@ -155,5 +159,4 @@ public class Text extends Shape {
                 color
         );
     }
-
 }

@@ -73,22 +73,24 @@ public class Game {
 
         objects.add(player);
 
+
+
+        Start();
+    }
+
+    public void setUIComponents() {
         // add ui components
-        TextContainer testText = new TextContainer("hello world!");
-
-        uiObjects.add(testText);
-
         TextContainer SCORE = new TextContainer("SCORE");
         TextContainer HIGH_SCORE = new TextContainer("HIGH SCORE");
 
         TextContainer currentScore = new TextContainer("0");
         TextContainer highScore = new TextContainer("0");
 
-        SCORE.setPosition(new Vector3D(0.3f, 0.8f, 0f));
-        HIGH_SCORE.setPosition(new Vector3D(0.7f, 0.8f, 0f));
+        SCORE.setPosition(new Vector3D(-0.5f, 0.8f, 0f));
+        HIGH_SCORE.setPosition(new Vector3D(0.5f, 0.8f, 0f));
 
-        currentScore.setPosition(new Vector3D(0.3f, 0.7f, 0f));
-        highScore.setPosition(new Vector3D(0.7f, 0.7f, 0f));
+        currentScore.setPosition(new Vector3D(-0.5f, 0.7f, 0f));
+        highScore.setPosition(new Vector3D(0.5f, 0.7f, 0f));
 
         level.setScoreText(currentScore);
         level.setHighScoreText(highScore);
@@ -97,8 +99,6 @@ public class Game {
         uiObjects.add(HIGH_SCORE);
         uiObjects.add(currentScore);
         uiObjects.add(highScore);
-
-        Start();
     }
 
     public void onPause() {
