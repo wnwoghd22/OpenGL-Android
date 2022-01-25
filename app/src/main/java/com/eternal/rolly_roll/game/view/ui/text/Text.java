@@ -30,6 +30,8 @@ public class Text extends Shape {
     private String font;
     private String text;
 
+    private float textSize = 0.1f;
+
     public Text(String text) {
         super(QUAD_VERTICES);
         this.text = text;
@@ -49,21 +51,22 @@ public class Text extends Shape {
         }
 
         float[] tempM = new float[16];
-        float posX = 0;
+        float posX = 0f;
 
         for(char c : text.toCharArray()) {
             if (!characterSet.containsKey(c)) {
-                posX += 0.1f;
+                posX += 0.3f * textSize;
                 continue;
             }
 
             Character tempC = characterSet.get(c);
 
             textureID = tempC.getTextureId();
-            int tempWidth = tempC.getCharWidth();
+            float tempWidth = tempC.getCharWidth();
 
             if(LoggerConfig.UI_LOG) {
-                Log.w(TAG, "trying to render character : " + c + ", texture id : " + textureID);
+                Log.w(TAG, "trying to render character : " + c + ", texture id : " + textureID +
+                        "character width : " + tempC.getCharWidth());
             }
             bindData(r.getTextShader());
 
@@ -78,8 +81,13 @@ public class Text extends Shape {
 
             Matrix.setIdentityM(tempM, 0);
             Matrix.translateM(tempM, 0, posX - 0.5f, 0f, 0f);
-            posX += 0.1f;
-            Matrix.scaleM(tempM, 0, ((float)tempWidth / 32) * 0.1f, 0.1f, 1f);
+            //posX += (tempWidth + 0.3f) * 0.1f;
+            posX += (tempWidth + 0.15f) * textSize;
+            if(LoggerConfig.UI_LOG) {
+                Log.w(TAG, "pos X : " + posX);
+            }
+            //Matrix.scaleM(tempM, 0, tempWidth * 0.1f, 0.1f, 1f);
+            Matrix.scaleM(tempM, 0, textSize, textSize, 1f);
 
             glUniformMatrix4fv(r.getTextShader().uMatrixLocation, 1, false, tempM, 0);
 

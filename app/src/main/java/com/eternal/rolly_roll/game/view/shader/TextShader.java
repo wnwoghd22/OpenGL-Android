@@ -91,24 +91,12 @@ public class TextShader extends ShaderProgram {
                 continue;
             }
 
-            //Bitmap bitmap = Bitmap.createBitmap(charWidth, charHeight, Bitmap.Config.ARGB_8888);
-            //Bitmap bitmap = Bitmap.createBitmap(charWidth * 3, (int)(bottom - top), Bitmap.Config.ARGB_8888);
-            Bitmap bitmap = Bitmap.createBitmap(charWidth, (int)textSize, Bitmap.Config.ARGB_8888);
+            Bitmap bitmap = Bitmap.createBitmap((int)textSize, (int)textSize, Bitmap.Config.ARGB_8888);
             canvas.setBitmap(bitmap);
-            //bitmap.eraseColor(0x666666);
-            //bitmap.eraseColor(Color.WHITE);
             bitmap.eraseColor(Color.TRANSPARENT);
-            //canvas.drawColor(Color.TRANSPARENT);
-            //canvas.drawText(c + "", charWidth  / 2, descent, textPaint);
-            //canvas.drawText(c + "", 0, descent, textPaint);
-            //canvas.drawText(c + "", 0, 0, textPaint);
-            //canvas.drawText(c + "", 0, -descent, textPaint);
-            //canvas.drawText(c + "", -1, 0, textPaint);
-            //canvas.drawText(c + "", -1, 10, textPaint);
-            //canvas.drawText("xyz", -1, 20, textPaint);
-            //canvas.drawText("xyf}p", -1, 30, textPaint);
 
-            canvas.drawText(c + "", -3, textSize * (-top / (bottom - top)), textPaint);
+            //canvas.drawText(c + "", -2, textSize * (-top / (bottom - top)), textPaint);
+            canvas.drawText(c + "", 0, textSize * (-top / (bottom - top)), textPaint);
 
             // generate glyph texture
             glGenTextures(1, textureId, 0);
@@ -135,8 +123,8 @@ public class TextShader extends ShaderProgram {
             texImage2D(GL_TEXTURE_2D, 0, bitmap, 0);
 
             Character element = new Character(
-                charWidth,
-                charHeight,
+                (float)charWidth / textSize,
+                (float)charHeight / textSize,
                 textureId[0]
             );
             characterSet.put(c, element);

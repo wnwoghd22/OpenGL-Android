@@ -1,11 +1,11 @@
 package com.eternal.rolly_roll.game.view.ui.text;
 
 public class Character {
-    private int charWidth;
-    private int charHeight;
+    private float charWidth;
+    private float charHeight;
     private int textureId;
 
-    public Character(int charWidth, int charHeight, int textureId) {
+    public Character(float charWidth, float charHeight, int textureId) {
         this.charWidth = charWidth;
         this.charHeight = charHeight;
         this.textureId = textureId;
@@ -14,5 +14,5 @@ public class Character {
     public int getTextureId() {
         return textureId;
     }
-    public int getCharWidth() { return charWidth; }
+    public float getCharWidth() { return charWidth; }
 }
