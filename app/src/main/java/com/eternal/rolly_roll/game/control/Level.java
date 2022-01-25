@@ -65,6 +65,9 @@ public class Level extends GameObject {
     }
 
     public void stamp(int i, int j, Axis down) {
+        if(board[j][i].isColored())
+            return;
+
         board[j][i].setColor(down);
 
         int adjacent = board[j][i].checkAdjacent();

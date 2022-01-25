@@ -24,6 +24,9 @@ public class Tile extends GameObject {
 
     private boolean checked = false;
     private Color currentColor;
+    public boolean isColored() {
+        return currentColor != Color.GRAY;
+    }
     private final float[] COLOR_GRAY = { 0.3f, 0.3f, 0.3f, 1f };
     // for challenge mode
     private int requireNum = 0;
