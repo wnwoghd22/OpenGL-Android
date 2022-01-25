@@ -14,4 +14,5 @@ public class Character {
     public int getTextureId() {
         return textureId;
     }
+    public int getCharWidth() { return charWidth; }
 }

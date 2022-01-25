@@ -80,7 +80,12 @@ public class Game {
         //TextContainer testText = new TextContainer("u");
         //TextContainer testText = new TextContainer("k");
 
-        TextContainer testText = new TextContainer("y");
+        //TextContainer testText = new TextContainer("y");
+
+        //TextContainer testText = new TextContainer("i");
+        //TextContainer testText = new TextContainer("}");
+
+        TextContainer testText = new TextContainer("hello world!");
 
 
         uiObjects.add(testText);

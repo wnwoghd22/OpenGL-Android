@@ -9,6 +9,7 @@ import static android.opengl.GLES20.*;
 import static com.eternal.rolly_roll.util.Data.QUAD_VERTICES;
 
 import android.opengl.GLUtils;
+import android.opengl.Matrix;
 import android.util.Log;
 
 import com.eternal.rolly_roll.R;
@@ -47,11 +48,19 @@ public class Text extends Shape {
             Log.w(TAG, "trying to render text : " + text);
         }
 
-        for(char c : text.toCharArray()) {
-            if (!characterSet.containsKey(c))
-                continue;
+        float[] tempM = new float[16];
+        float posX = 0;
 
-            textureID = characterSet.get(c).getTextureId();
+        for(char c : text.toCharArray()) {
+            if (!characterSet.containsKey(c)) {
+                posX += 0.1f;
+                continue;
+            }
+
+            Character tempC = characterSet.get(c);
+
+            textureID = tempC.getTextureId();
+            int tempWidth = tempC.getCharWidth();
 
             if(LoggerConfig.UI_LOG) {
                 Log.w(TAG, "trying to render character : " + c + ", texture id : " + textureID);
@@ -66,7 +75,13 @@ public class Text extends Shape {
             //glBindTexture(GL_TEXTURE_2D, r.textureMap.get(R.drawable.square));
 
             glUniform1i(r.getTextShader().uTextureUnitLocation, 0);
-            //glUniformMatrix4fv(r.getTextShader().uMatrixLocation, 1, false, r.getMVP(), 0);
+
+            Matrix.setIdentityM(tempM, 0);
+            Matrix.translateM(tempM, 0, posX - 0.5f, 0f, 0f);
+            posX += 0.1f;
+            Matrix.scaleM(tempM, 0, ((float)tempWidth / 32) * 0.1f, 0.1f, 1f);
+
+            glUniformMatrix4fv(r.getTextShader().uMatrixLocation, 1, false, tempM, 0);
 
             //glUniformMatrix4fv(r.getSpriteShader().uMatrixLocation, 1, false, transform.getTransformM(), 0);
             glDrawArrays(GL_TRIANGLES, 0, 6);
