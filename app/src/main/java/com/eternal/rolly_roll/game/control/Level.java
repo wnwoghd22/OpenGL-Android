@@ -6,6 +6,7 @@ import com.eternal.rolly_roll.game.model.PlayerObject;
 import com.eternal.rolly_roll.game.model.Tile;
 import com.eternal.rolly_roll.game.model.object.GameObject;
 import com.eternal.rolly_roll.game.model.object.physics.Vector3D;
+import com.eternal.rolly_roll.game.view.ui.text.TextContainer;
 import com.eternal.rolly_roll.util.LoggerConfig;
 
 import java.util.logging.Logger;
@@ -15,6 +16,17 @@ public class Level extends GameObject {
 
     private int boardSize;
     public int getBoardSize() { return boardSize; }
+
+    private int currentScore = 0;
+    private int highScore = 0;
+    private TextContainer scoreText;
+    private TextContainer highScoreText;
+    public void setScoreText(TextContainer score) {
+        this.scoreText = score;
+    }
+    public void setHighScoreText(TextContainer highScore) {
+        this.highScoreText = highScore;
+    }
 
     private Tile[][] board;
 
@@ -63,9 +75,23 @@ public class Level extends GameObject {
         int require;
         if (adjacent >= 3) {
             require = board[j][i].clear();
+            getScore(adjacent * adjacent * 10);
         } else {
             board[j][i].uncheck();
         }
         // if game mode is "challenge", then require > adjacent -> game over
+    }
+
+    private void getScore(int score) {
+        if (LoggerConfig.LEVEL_LOG) {
+            Log.w(TAG, "current score : " + score);
+        }
+
+        currentScore += score;
+        scoreText.setText(currentScore);
+        if (highScore < currentScore) {
+            highScore = currentScore;
+            highScoreText.setText(currentScore);
+        }
     }
 }

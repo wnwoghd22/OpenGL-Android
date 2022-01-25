@@ -24,34 +24,69 @@ import com.eternal.rolly_roll.util.LoggerConfig;
 
 import java.util.HashMap;
 
+enum eAlign {
+    CENTER,
+    LEFT,
+    RIGHT,
+}
+
 public class Text extends Shape {
     private static final String TAG = "Text";
 
+    private static final HashMap<java.lang.Character, Character> characterSet = new HashMap();
+    public static HashMap<java.lang.Character, Character> getCharacterSet() {
+        return characterSet;
+    }
+
     private String font;
     private String text;
+    private float textWidth = 0f;
+    public void setText(String text) {
+        this.text = text;
+
+        textWidth = 0f;
+        for (char c : text.toCharArray()) {
+            if (!characterSet.containsKey(c)) {
+                textWidth += 0.3f;
+                continue;
+            }
+            textWidth += characterSet.get(c).getCharWidth() + 0.15f;
+        }
+    }
+
+    private eAlign align = eAlign.CENTER;
+    public void alignCenter() {
+        align = eAlign.CENTER;
+    }
 
     private float textSize = 0.1f;
 
     public Text(String text) {
         super(QUAD_VERTICES);
-        this.text = text;
         this.color = new float[] { 1.0f, 1.0f, 1.0f, 1.0f };
 
-        transform.position = Vector3D.zero();
-        transform.rotation = Quaternion.identity();
+        setText(text);
     }
 
 
     @Override
     public void Render(RenderMiddleware r) {
-        HashMap<java.lang.Character, Character> characterSet = r.getTextShader().getCharacterSet();
 
         if(LoggerConfig.UI_LOG) {
             Log.w(TAG, "trying to render text : " + text);
         }
 
         float[] tempM = new float[16];
-        float posX = 0f;
+        float posX = -0.1f * textSize;
+        switch (align) {
+            case CENTER:
+                posX -= (textWidth / 2f) * textSize;
+                break;
+            case LEFT:
+                break;
+            case RIGHT:
+                break;
+        }
 
         for(char c : text.toCharArray()) {
             if (!characterSet.containsKey(c)) {
@@ -80,14 +115,14 @@ public class Text extends Shape {
             glUniform1i(r.getTextShader().uTextureUnitLocation, 0);
 
             Matrix.setIdentityM(tempM, 0);
-            Matrix.translateM(tempM, 0, posX - 0.5f, 0f, 0f);
+            Matrix.translateM(tempM, 0, posX + transform.position.x, transform.position.y, transform.position.z);
             //posX += (tempWidth + 0.3f) * 0.1f;
             posX += (tempWidth + 0.15f) * textSize;
             if(LoggerConfig.UI_LOG) {
                 Log.w(TAG, "pos X : " + posX);
             }
             //Matrix.scaleM(tempM, 0, tempWidth * 0.1f, 0.1f, 1f);
-            Matrix.scaleM(tempM, 0, textSize, textSize, 1f);
+            Matrix.scaleM(tempM, 0, textSize * transform.scale.x, textSize * transform.scale.y, transform.scale.z);
 
             glUniformMatrix4fv(r.getTextShader().uMatrixLocation, 1, false, tempM, 0);
 
@@ -121,7 +156,4 @@ public class Text extends Shape {
         );
     }
 
-    public void setText(String text) {
-        this.text = text;
-    }
 }

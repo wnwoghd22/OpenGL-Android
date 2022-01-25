@@ -74,21 +74,29 @@ public class Game {
         objects.add(player);
 
         // add ui components
-
-        //TextContainer testText = new TextContainer("F");
-        //TextContainer testText = new TextContainer("c");
-        //TextContainer testText = new TextContainer("u");
-        //TextContainer testText = new TextContainer("k");
-
-        //TextContainer testText = new TextContainer("y");
-
-        //TextContainer testText = new TextContainer("i");
-        //TextContainer testText = new TextContainer("}");
-
         TextContainer testText = new TextContainer("hello world!");
 
-
         uiObjects.add(testText);
+
+        TextContainer SCORE = new TextContainer("SCORE");
+        TextContainer HIGH_SCORE = new TextContainer("HIGH SCORE");
+
+        TextContainer currentScore = new TextContainer("0");
+        TextContainer highScore = new TextContainer("0");
+
+        SCORE.setPosition(new Vector3D(0.3f, 0.8f, 0f));
+        HIGH_SCORE.setPosition(new Vector3D(0.7f, 0.8f, 0f));
+
+        currentScore.setPosition(new Vector3D(0.3f, 0.7f, 0f));
+        highScore.setPosition(new Vector3D(0.7f, 0.7f, 0f));
+
+        level.setScoreText(currentScore);
+        level.setHighScoreText(highScore);
+
+        uiObjects.add(SCORE);
+        uiObjects.add(HIGH_SCORE);
+        uiObjects.add(currentScore);
+        uiObjects.add(highScore);
 
         Start();
     }

@@ -2,6 +2,7 @@ package com.eternal.rolly_roll.game.view.shader;
 
 import android.content.Context;
 import android.graphics.*;
+import android.opengl.GLES20;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
@@ -11,6 +12,7 @@ import static android.opengl.GLES20.*;
 
 import com.eternal.rolly_roll.R;
 import com.eternal.rolly_roll.game.view.ui.text.Character;
+import com.eternal.rolly_roll.game.view.ui.text.Text;
 import com.eternal.rolly_roll.util.LoggerConfig;
 import com.eternal.rolly_roll.util.ResourceManager;
 
@@ -26,10 +28,6 @@ public class TextShader extends ShaderProgram {
     public final int uTextureUnitLocation;
 
     private final String font;
-    private final HashMap characterSet = new HashMap<java.lang.Character, Character>();
-    public HashMap<java.lang.Character, Character> getCharacterSet() {
-        return characterSet;
-    }
 
     private float ascent;
     private float descent;
@@ -52,7 +50,7 @@ public class TextShader extends ShaderProgram {
     }
 
     public void createCharacterSet(Typeface tf) {
-        characterSet.clear();
+        Text.getCharacterSet().clear();
 
         float textSize = 32f;
 
@@ -60,7 +58,7 @@ public class TextShader extends ShaderProgram {
         Canvas canvas = new Canvas();
         Rect rect = new Rect();
         textPaint.setTypeface(tf);
-        textPaint.setARGB(0xff, 0xff, 0x00, 0x00);
+        textPaint.setARGB(0xff, 0xff, 0xff, 0xff);
         textPaint.setTextSize(textSize);
 
         Paint.FontMetrics fontMetrics = textPaint.getFontMetrics();
@@ -95,7 +93,6 @@ public class TextShader extends ShaderProgram {
             canvas.setBitmap(bitmap);
             bitmap.eraseColor(Color.TRANSPARENT);
 
-            //canvas.drawText(c + "", -2, textSize * (-top / (bottom - top)), textPaint);
             canvas.drawText(c + "", 0, textSize * (-top / (bottom - top)), textPaint);
 
             // generate glyph texture
@@ -116,8 +113,10 @@ public class TextShader extends ShaderProgram {
             glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER,GL_LINEAR);
 
             //Different possible texture parameters, e.g. GL10.GL_CLAMP_TO_EDGE
-            glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-            glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+            //glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+            //glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+            glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+            glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
             //Use the Android GLUtils to specify a two-dimensional texture image from our bitmap
             texImage2D(GL_TEXTURE_2D, 0, bitmap, 0);
@@ -127,7 +126,7 @@ public class TextShader extends ShaderProgram {
                 (float)charHeight / textSize,
                 textureId[0]
             );
-            characterSet.put(c, element);
+            Text.getCharacterSet().put(c, element);
 
             glBindTexture(GL_TEXTURE_2D, 0);
             bitmap.recycle();
