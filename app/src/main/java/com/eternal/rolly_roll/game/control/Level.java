@@ -16,6 +16,8 @@ public class Level extends GameObject {
 
     private int boardSize;
     public int getBoardSize() { return boardSize; }
+    private int coloredTile = 0;
+    private int moveLeft = 3; // if move on colored tile, then minus one
 
     private int currentScore = 0;
     private int highScore = 0;
@@ -59,30 +61,43 @@ public class Level extends GameObject {
         return board;
     }
 
+    public void initLevel() {
+        coloredTile = 0;
+        moveLeft = 3;
+        currentScore = 0;
+    }
+
     @Override
     public void Update() {
 
     }
 
     public void stamp(int i, int j, Axis down) {
-        if(board[j][i].isColored())
-            return;
-
-        board[j][i].setColor(down);
-
-        int adjacent = board[j][i].checkAdjacent();
-        if (LoggerConfig.LEVEL_LOG) {
-            Log.w(TAG, "adjacent : " + adjacent);
-        }
-
-        int require;
-        if (adjacent >= 3) {
-            require = board[j][i].clear();
-            getScore(adjacent * adjacent * 10);
+        if(board[j][i].isColored()) {
+            --moveLeft;
         } else {
-            board[j][i].uncheck();
+            if (moveLeft < 3)
+                ++moveLeft;
+
+            board[j][i].setColor(down);
+            ++coloredTile;
+
+            int adjacent = board[j][i].checkAdjacent();
+            if (LoggerConfig.LEVEL_LOG) {
+                Log.w(TAG, "adjacent : " + adjacent);
+            }
+
+            int require;
+            if (adjacent >= 3) {
+                require = board[j][i].clear();
+                getScore(adjacent * adjacent * 10);
+                coloredTile -= adjacent;
+            } else {
+                board[j][i].uncheck();
+            }
         }
         // if game mode is "challenge", then require > adjacent -> game over
+
     }
 
     private void getScore(int score) {
@@ -95,6 +110,14 @@ public class Level extends GameObject {
         if (highScore < currentScore) {
             highScore = currentScore;
             highScoreText.setText(currentScore);
+        }
+    }
+
+    private void checkIsGameOver() {
+        if (coloredTile == boardSize * boardSize) { // all tiles are colored
+            if (LoggerConfig.LEVEL_LOG) {
+                Log.w(TAG, "Game Over : all tile colored");
+            }
         }
     }
 }

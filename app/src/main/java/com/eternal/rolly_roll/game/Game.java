@@ -9,6 +9,7 @@ import com.eternal.rolly_roll.game.model.PlayerObject;
 import com.eternal.rolly_roll.game.model.Tile;
 import com.eternal.rolly_roll.game.model.object.GameObject;
 import com.eternal.rolly_roll.game.model.object.physics.Vector3D;
+import com.eternal.rolly_roll.game.view.ui.panel.PanelContainer;
 import com.eternal.rolly_roll.game.view.ui.text.Text;
 import com.eternal.rolly_roll.game.view.ui.text.TextContainer;
 import com.eternal.rolly_roll.util.LoggerConfig;
@@ -99,6 +100,13 @@ public class Game {
         uiObjects.add(HIGH_SCORE);
         uiObjects.add(currentScore);
         uiObjects.add(highScore);
+
+        PanelContainer gameOverPanel = new PanelContainer();
+        gameOverPanel.setScale(new Vector3D(2f, 2f, 1f));
+        gameOverPanel.setColor(1f, 1f, 1f, 0.7f);
+        //gameOverPanel.setActive(false);
+
+        uiObjects.add(gameOverPanel);
     }
 
     public void onPause() {

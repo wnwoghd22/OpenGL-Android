@@ -27,4 +27,10 @@ public abstract class GameObject {
     public void setPosition(Vector3D position) {
         shape.transform.position = position;
     }
+    public void setScale(Vector3D scale) {
+        shape.transform.scale = scale;
+    }
+    public void setColor(float r, float g, float b, float a) {
+        shape.color = new float[] { r, g, b, a };
+    }
 }

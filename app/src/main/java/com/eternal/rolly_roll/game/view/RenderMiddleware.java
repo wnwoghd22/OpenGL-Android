@@ -5,23 +5,15 @@ import android.content.Context;
 import static android.opengl.GLES20.*;
 import static android.opengl.Matrix.multiplyMM;
 
-import android.graphics.Shader;
-import android.graphics.Typeface;
 import android.util.Log;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 import com.eternal.rolly_roll.game.Game;
 import com.eternal.rolly_roll.game.model.object.GameObject;
 import com.eternal.rolly_roll.game.view.shader.ShaderProgram;
 import com.eternal.rolly_roll.game.view.shader.SpriteShader;
-import com.eternal.rolly_roll.game.view.shader.TextShader;
-import com.eternal.rolly_roll.util.Data;
+import com.eternal.rolly_roll.game.view.shader.UIShader;
 import com.eternal.rolly_roll.util.LoggerConfig;
 
-import java.nio.*;
-import java.util.Collection;
 import java.util.HashMap;
 
 public class RenderMiddleware {
@@ -31,16 +23,16 @@ public class RenderMiddleware {
     private Game game;
     private ShaderProgram shaderProgram;
     private SpriteShader spriteShader;
-    private TextShader textShader;
+    private UIShader uiShader;
     // call inside onDraw
     public void SetShaderProgram(ShaderProgram shader) { this.shaderProgram = shader; }
     public SpriteShader getSpriteShader() { return spriteShader; }
     public void setSpriteShader(SpriteShader shader) { this.spriteShader = shader; }
-    public TextShader getTextShader() {
-        return textShader;
+    public UIShader getUiShader() {
+        return uiShader;
     }
-    public void setTextShader(TextShader textShader) {
-        this.textShader = textShader;
+    public void setUiShader(UIShader uiShader) {
+        this.uiShader = uiShader;
     }
 
     public final HashMap<Integer, Integer> textureMap = new HashMap<Integer, Integer>();
@@ -75,10 +67,11 @@ public class RenderMiddleware {
         // ui layer
         // need to implement set ui canvas camera matrices
 
-        textShader.use();
+        uiShader.use();
         glDisable(GL_DEPTH_TEST);
         glEnable(GL_BLEND);
-        glBlendFunc(GL_ONE, GL_ONE);
+        //glBlendFunc(GL_ONE, GL_ONE);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         for (GameObject object : game.getUiObjects()) {
             object.Render(this);
         }
