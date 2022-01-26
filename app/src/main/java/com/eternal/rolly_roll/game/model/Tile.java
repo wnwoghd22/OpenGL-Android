@@ -143,4 +143,10 @@ public class Tile extends GameObject {
                 break;
         }
     }
+
+    public void resetTile() {
+        checked = false;
+        currentColor = Color.GRAY;
+        shape.color = COLOR_GRAY;
+    }
 }

@@ -39,6 +39,7 @@ public class OpenGLRenderer implements GLSurfaceView.Renderer {
 
         renderer.textureMap.put(R.drawable.square, ResourceManager.loadTexture(context, R.drawable.square));
         renderer.textureMap.put(R.drawable.dice_texture, ResourceManager.loadTexture(context, R.drawable.dice_texture));
+        renderer.textureMap.put(R.drawable.restart_icon, ResourceManager.loadTexture(context, R.drawable.restart_icon));
         if (LoggerConfig.TEXTURE_LOG) {
             Log.w(TAG, "quad texture : " + renderer.textureMap.get(R.drawable.square));
         }

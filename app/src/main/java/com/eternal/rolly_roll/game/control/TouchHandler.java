@@ -58,7 +58,7 @@ public class TouchHandler implements View.OnTouchListener {
             screenHeight = view.getHeight();
 
             if (LoggerConfig.TOUCH_LOG) {
-                Log.w(TAG, "" + touch.pos);
+                Log.w(TAG, "" + touch.pos + ", normalized : " + touch.pos.normalized());
             }
 
             int action = motionEvent.getAction();

@@ -1,5 +1,6 @@
 package com.eternal.rolly_roll.game.model.object;
 
+import com.eternal.rolly_roll.game.model.object.physics.Quaternion;
 import com.eternal.rolly_roll.game.model.object.physics.Vector3D;
 import com.eternal.rolly_roll.game.model.object.shape.Shape;
 import com.eternal.rolly_roll.game.view.RenderMiddleware;
@@ -25,12 +26,24 @@ public abstract class GameObject {
     }
 
     public void setPosition(Vector3D position) {
-        shape.transform.position = position;
+        if (shape != null)
+            shape.transform.position = position;
     }
     public void setScale(Vector3D scale) {
-        shape.transform.scale = scale;
+        if (shape != null)
+            shape.transform.scale = scale;
+    }
+    public void setRotation(Quaternion rotation) {
+        if (shape != null)
+            shape.transform.rotation = rotation;
     }
     public void setColor(float r, float g, float b, float a) {
-        shape.color = new float[] { r, g, b, a };
+        if (shape != null)
+            shape.color = new float[] { r, g, b, a };
+    }
+    public void setTexture(int textureId) {
+        if (shape != null) {
+            shape.textureID = textureId;
+        }
     }
 }

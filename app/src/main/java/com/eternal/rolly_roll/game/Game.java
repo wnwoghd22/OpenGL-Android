@@ -1,16 +1,18 @@
 package com.eternal.rolly_roll.game;
 
 import android.content.Context;
+import android.util.DisplayMetrics;
 import android.util.Log;
 
+import com.eternal.rolly_roll.R;
 import com.eternal.rolly_roll.game.control.Level;
 import com.eternal.rolly_roll.game.control.TouchHandler;
 import com.eternal.rolly_roll.game.model.PlayerObject;
 import com.eternal.rolly_roll.game.model.Tile;
 import com.eternal.rolly_roll.game.model.object.GameObject;
 import com.eternal.rolly_roll.game.model.object.physics.Vector3D;
+import com.eternal.rolly_roll.game.view.ui.Button;
 import com.eternal.rolly_roll.game.view.ui.panel.PanelContainer;
-import com.eternal.rolly_roll.game.view.ui.text.Text;
 import com.eternal.rolly_roll.game.view.ui.text.TextContainer;
 import com.eternal.rolly_roll.util.LoggerConfig;
 
@@ -39,6 +41,8 @@ public class Game {
     public List<GameObject> getObjects() { return objects; }
     private List<GameObject> uiObjects;
     public List<GameObject> getUiObjects() { return uiObjects; }
+    private List<Button> buttons;
+    public List<Button> getButtons() { return buttons; }
     private PlayerObject player;
 
     private Level level;
@@ -50,6 +54,7 @@ public class Game {
         level = new Level();
         objects = new ArrayList<GameObject>();
         uiObjects = new ArrayList<GameObject>();
+        buttons = new ArrayList<Button>();
     }
 
     public void Init() {
@@ -74,13 +79,16 @@ public class Game {
 
         objects.add(player);
 
-
-
         Start();
     }
 
     public void setUIComponents() {
         // add ui components
+        TextContainer moveLeft = new TextContainer("MOVE LEFT : 3");
+        moveLeft.setPosition(new Vector3D(-0.5f, 0.6f, 0f));
+        level.setMoveLeftText(moveLeft);
+        uiObjects.add(moveLeft);
+
         TextContainer SCORE = new TextContainer("SCORE");
         TextContainer HIGH_SCORE = new TextContainer("HIGH SCORE");
 
@@ -104,9 +112,28 @@ public class Game {
         PanelContainer gameOverPanel = new PanelContainer();
         gameOverPanel.setScale(new Vector3D(2f, 2f, 1f));
         gameOverPanel.setColor(1f, 1f, 1f, 0.7f);
-        //gameOverPanel.setActive(false);
-
+        gameOverPanel.setActive(false);
+        TextContainer gameOverText = new TextContainer("Game Over!");
+        gameOverText.setColor(0f, 0f, 0f, 1f);
+        gameOverText.setActive(false);
+        level.setGameOverPanel(gameOverPanel);
+        level.setGameOverText(gameOverText);
         uiObjects.add(gameOverPanel);
+        uiObjects.add(gameOverText);
+
+        Button restartButton = new Button();
+        DisplayMetrics screen = context.getResources().getDisplayMetrics();
+        float aspectRatio = (float) screen.heightPixels / screen.widthPixels;
+        float restartButtonSize = 0.3f;
+        Vector3D restartButtonPosition = new Vector3D(0.7f, 0.3f, 0f);
+        restartButton.setPosition(restartButtonPosition);
+        restartButton.setScale(new Vector3D(1f, 1f / aspectRatio, 1f).scale(restartButtonSize));
+        restartButton.setTouchBound();
+        restartButton.setTexture(R.drawable.restart_icon);
+        restartButton.setColor(1f, 1f, 1f, 0.7f);
+        restartButton.setAction(this::restartGame);
+        uiObjects.add(restartButton);
+        buttons.add(restartButton);
     }
 
     public void onPause() {
@@ -146,8 +173,18 @@ public class Game {
             Log.w(TAG, "Game Touch : " + touch.state + ", " + touch.pos);
         }
         // UI layer
+        for (Button button : buttons) {
+            if (button.isTouching(touch.pos.normalized())) {
+                button.onPressed();
+            }
+        }
 
         // game layer
         player.handleTouch(touch);
+    }
+
+    public void restartGame() {
+        level.restart();
+        player.resetPlayer();
     }
 }

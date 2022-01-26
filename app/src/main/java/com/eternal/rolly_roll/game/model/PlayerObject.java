@@ -43,7 +43,7 @@ public class PlayerObject extends GameObject {
         boardSize = l.getBoardSize();
     }
 
-    private Axis[] axisState = { Axis.U, Axis.F, Axis.R, Axis.B, Axis.L, Axis.D };
+    private final Axis[] axisState = { Axis.U, Axis.F, Axis.R, Axis.B, Axis.L, Axis.D };
     private void rotateAxis(Direction d) {
         Axis temp = axisState[0];
         switch (d) {
@@ -72,6 +72,14 @@ public class PlayerObject extends GameObject {
                 axisState[2] = temp;
                 break;
         }
+    }
+    private void resetAxisState() {
+        axisState[0] = Axis.U;
+        axisState[1] = Axis.F;
+        axisState[2] = Axis.R;
+        axisState[3] = Axis.B;
+        axisState[4] = Axis.L;
+        axisState[5] = Axis.D;
     }
 
     public PlayerObject() {
@@ -119,6 +127,10 @@ public class PlayerObject extends GameObject {
 
         float deltaX = endPos.x - initPos.x;
         float deltaY = endPos.y - initPos.y;
+
+        initPos = null; endPos = null;
+
+        if (deltaX * deltaX + deltaY * deltaY < 0.01f) return; // too short drag
 
         if (deltaY > 0) {
             if (deltaX > 0) { // up
@@ -264,5 +276,12 @@ public class PlayerObject extends GameObject {
                 );
                 break;
         }
+    }
+
+    public void resetPlayer() {
+        setPosition(new Vector3D(-(float)(boardSize - 1) / 2.0f, 0.5f, -(float)(boardSize - 1) / 2.0f));
+        setRotation(Quaternion.identity());
+        posX = 0; posY = 0;
+        resetAxisState();
     }
 }

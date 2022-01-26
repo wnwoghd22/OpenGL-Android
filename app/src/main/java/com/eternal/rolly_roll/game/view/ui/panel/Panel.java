@@ -14,7 +14,7 @@ import static com.eternal.rolly_roll.util.Data.QUAD_VERTICES;
 
 public class Panel extends Shape {
 
-    protected Panel() {
+    public Panel() {
         super(QUAD_VERTICES);
         textureID = R.drawable.square;
     }
