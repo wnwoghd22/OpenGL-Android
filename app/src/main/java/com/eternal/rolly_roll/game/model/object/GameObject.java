@@ -6,12 +6,21 @@ import com.eternal.rolly_roll.game.view.RenderMiddleware;
 
 public abstract class GameObject {
     protected Shape shape;
+    protected boolean active = true;
+    public boolean isActive() {
+        return active;
+    }
+    public void setActive(boolean b) {
+        active = b;
+    }
 
     public abstract void Update();
     
     public final void Render(RenderMiddleware r) {
-        if (shape != null) {
-            shape.Render(r);
+        if (active) {
+            if (shape != null) {
+                shape.Render(r);
+            }
         }
     }
 

@@ -114,7 +114,6 @@ public class Text extends Shape {
             glActiveTexture(GL_TEXTURE0);
             // bind the texture to this unit
             glBindTexture(GL_TEXTURE_2D, textureID);
-            //glBindTexture(GL_TEXTURE_2D, r.textureMap.get(R.drawable.square));
 
             glUniform1i(r.getTextShader().uTextureUnitLocation, 0);
 

@@ -128,8 +128,7 @@ public class Game {
             Log.w(TAG, "Game Update");
         }
 
-        for (GameObject object : objects
-             ) {
+        for (GameObject object : objects) {
             object.Update();
         }
     }
