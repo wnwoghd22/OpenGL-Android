@@ -12,6 +12,8 @@ import com.eternal.rolly_roll.game.model.object.GameObject;
 import com.eternal.rolly_roll.game.model.object.physics.Quaternion;
 import com.eternal.rolly_roll.game.model.object.physics.Vector3D;
 import com.eternal.rolly_roll.game.model.object.shape.shape3d.Cube;
+import com.eternal.rolly_roll.game.view.ui.Button;
+import com.eternal.rolly_roll.game.view.ui.text.TextContainer;
 import com.eternal.rolly_roll.util.LoggerConfig;
 
 public class PlayerObject extends GameObject {
@@ -26,7 +28,11 @@ public class PlayerObject extends GameObject {
     private TouchPos initPos;
     private TouchPos endPos;
 
+    private int shiftItem = 1;
     private boolean isShifting;
+    private Button shiftButton;
+    private TextContainer shiftLeft;
+
     private boolean isMoving;
     private Direction moveDirection;
     private final int moveFrame = 15;
@@ -43,7 +49,7 @@ public class PlayerObject extends GameObject {
         boardSize = l.getBoardSize();
     }
 
-    private Axis[] axisState = { Axis.U, Axis.F, Axis.R, Axis.B, Axis.L, Axis.D };
+    private final Axis[] axisState = { Axis.U, Axis.F, Axis.R, Axis.B, Axis.L, Axis.D };
     private void rotateAxis(Direction d) {
         Axis temp = axisState[0];
         switch (d) {
@@ -72,6 +78,14 @@ public class PlayerObject extends GameObject {
                 axisState[2] = temp;
                 break;
         }
+    }
+    private void resetAxisState() {
+        axisState[0] = Axis.U;
+        axisState[1] = Axis.F;
+        axisState[2] = Axis.R;
+        axisState[3] = Axis.B;
+        axisState[4] = Axis.L;
+        axisState[5] = Axis.D;
     }
 
     public PlayerObject() {
@@ -119,6 +133,10 @@ public class PlayerObject extends GameObject {
 
         float deltaX = endPos.x - initPos.x;
         float deltaY = endPos.y - initPos.y;
+
+        initPos = null; endPos = null;
+
+        if (deltaX * deltaX + deltaY * deltaY < 0.01f) return; // too short drag
 
         if (deltaY > 0) {
             if (deltaX > 0) { // up
@@ -192,20 +210,15 @@ public class PlayerObject extends GameObject {
         }
     }
 
-    private void ShiftGrid() {
-        switch (moveDirection) {
-            case UP:
-                shape.transform.position.z -= 1f;
-                break;
-            case DOWN:
-                shape.transform.position.z += 1f;
-                break;
-            case LEFT:
-                shape.transform.position.x -= 1f;
-                break;
-            case RIGHT:
-                shape.transform.position.x += 1f;
-                break;
+    public void switchShift() {
+        if (!isShifting) {
+            if (shiftItem > 0) {
+                --shiftItem;
+                isShifting = true;
+            }
+        } else {
+            ++shiftItem;
+            isShifting = false;
         }
     }
 
@@ -264,5 +277,12 @@ public class PlayerObject extends GameObject {
                 );
                 break;
         }
+    }
+
+    public void resetPlayer() {
+        setPosition(new Vector3D(-(float)(boardSize - 1) / 2.0f, 0.5f, -(float)(boardSize - 1) / 2.0f));
+        setRotation(Quaternion.identity());
+        posX = 0; posY = 0;
+        resetAxisState();
     }
 }

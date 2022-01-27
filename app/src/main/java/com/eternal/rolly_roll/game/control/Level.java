@@ -6,6 +6,8 @@ import com.eternal.rolly_roll.game.model.PlayerObject;
 import com.eternal.rolly_roll.game.model.Tile;
 import com.eternal.rolly_roll.game.model.object.GameObject;
 import com.eternal.rolly_roll.game.model.object.physics.Vector3D;
+import com.eternal.rolly_roll.game.view.ui.panel.Panel;
+import com.eternal.rolly_roll.game.view.ui.panel.PanelContainer;
 import com.eternal.rolly_roll.game.view.ui.text.TextContainer;
 import com.eternal.rolly_roll.util.LoggerConfig;
 
@@ -16,6 +18,12 @@ public class Level extends GameObject {
 
     private int boardSize;
     public int getBoardSize() { return boardSize; }
+    private int coloredTile = 0;
+    private int moveLeft = 3; // if move on colored tile, then minus one
+    private TextContainer moveLeftText;
+    public void setMoveLeftText(TextContainer moveLeft) {
+        this.moveLeftText = moveLeft;
+    }
 
     private int currentScore = 0;
     private int highScore = 0;
@@ -26,6 +34,14 @@ public class Level extends GameObject {
     }
     public void setHighScoreText(TextContainer highScore) {
         this.highScoreText = highScore;
+    }
+    private  TextContainer gameOverText;
+    private PanelContainer gameOverPanel;
+    public void setGameOverText(TextContainer gameOverText) {
+        this.gameOverText = gameOverText;
+    }
+    public void setGameOverPanel(PanelContainer gameOverPanel) {
+        this.gameOverPanel = gameOverPanel;
     }
 
     private Tile[][] board;
@@ -59,30 +75,53 @@ public class Level extends GameObject {
         return board;
     }
 
+    public void initLevel() {
+        coloredTile = 0;
+        moveLeft = 3;
+        moveLeftText.setText("MOVE LEFT : " + moveLeft);
+        currentScore = 0;
+        scoreText.setText(currentScore);
+        if (gameOverText != null)
+            gameOverText.setActive(false);
+        if (gameOverPanel != null)
+            gameOverPanel.setActive(false);
+    }
+
     @Override
     public void Update() {
 
     }
 
     public void stamp(int i, int j, Axis down) {
-        if(board[j][i].isColored())
-            return;
-
-        board[j][i].setColor(down);
-
-        int adjacent = board[j][i].checkAdjacent();
-        if (LoggerConfig.LEVEL_LOG) {
-            Log.w(TAG, "adjacent : " + adjacent);
-        }
-
-        int require;
-        if (adjacent >= 3) {
-            require = board[j][i].clear();
-            getScore(adjacent * adjacent * 10);
+        if(board[j][i].isColored()) {
+            --moveLeft;
         } else {
-            board[j][i].uncheck();
+            if (moveLeft < 3)
+                ++moveLeft;
+
+            board[j][i].setColor(down);
+            ++coloredTile;
+
+            int adjacent = board[j][i].checkAdjacent();
+            if (LoggerConfig.LEVEL_LOG) {
+                Log.w(TAG, "adjacent : " + adjacent);
+            }
+
+            int require;
+            if (adjacent >= 3) {
+                require = board[j][i].clear();
+                getScore(adjacent * adjacent * 10);
+                coloredTile -= adjacent;
+            } else {
+                board[j][i].uncheck();
+            }
         }
+        moveLeftText.setText("MOVE LEFT : " + moveLeft);
         // if game mode is "challenge", then require > adjacent -> game over
+        if (checkIsGameOver()) {
+            gameOverPanel.setActive(true);
+            gameOverText.setActive(true);
+        }
     }
 
     private void getScore(int score) {
@@ -96,5 +135,29 @@ public class Level extends GameObject {
             highScore = currentScore;
             highScoreText.setText(currentScore);
         }
+    }
+
+    private boolean checkIsGameOver() {
+        if (coloredTile == boardSize * boardSize) { // all tiles are colored
+            if (LoggerConfig.LEVEL_LOG) {
+                Log.w(TAG, "Game Over : all tile colored");
+            }
+            return true;
+        } else if (moveLeft == 0) {
+            if (LoggerConfig.LEVEL_LOG) {
+                Log.w(TAG, "Game Over : no moving chance");
+            }
+            return true;
+        }
+        return false;
+    }
+
+    public void restart() {
+        for (int i  = 0; i < boardSize; ++i) {
+            for (int j = 0; j < boardSize; ++j) {
+                board[j][i].resetTile();
+            }
+        }
+        initLevel();
     }
 }

@@ -32,6 +32,7 @@ public abstract class Shape implements IRenderable {
         floatBuffer = ByteBuffer.allocateDirect(vertexData.length * BYTES_PER_FLOAT)
                 .order(ByteOrder.nativeOrder()).asFloatBuffer().put(vertexData);
         transform = new Transform();
+        color = new float[] { 1f, 1f, 1f, 1f };
     }
 
     @Override

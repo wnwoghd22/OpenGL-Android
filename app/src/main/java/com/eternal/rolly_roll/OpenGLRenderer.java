@@ -6,9 +6,8 @@ import android.util.Log;
 
 import com.eternal.rolly_roll.game.view.Camera;
 import com.eternal.rolly_roll.game.view.RenderMiddleware;
-import com.eternal.rolly_roll.game.view.shader.ShaderProgram;
 import com.eternal.rolly_roll.game.view.shader.SpriteShader;
-import com.eternal.rolly_roll.game.view.shader.TextShader;
+import com.eternal.rolly_roll.game.view.shader.UIShader;
 import com.eternal.rolly_roll.util.LoggerConfig;
 import com.eternal.rolly_roll.util.ResourceManager;
 
@@ -40,12 +39,13 @@ public class OpenGLRenderer implements GLSurfaceView.Renderer {
 
         renderer.textureMap.put(R.drawable.square, ResourceManager.loadTexture(context, R.drawable.square));
         renderer.textureMap.put(R.drawable.dice_texture, ResourceManager.loadTexture(context, R.drawable.dice_texture));
+        renderer.textureMap.put(R.drawable.restart_icon, ResourceManager.loadTexture(context, R.drawable.restart_icon));
         if (LoggerConfig.TEXTURE_LOG) {
             Log.w(TAG, "quad texture : " + renderer.textureMap.get(R.drawable.square));
         }
 
-        TextShader textShader = new TextShader(context, "verdana.ttf");
-        renderer.setTextShader(textShader);
+        UIShader uiShader = new UIShader(context, "verdana.ttf");
+        renderer.setUiShader(uiShader);
 
         renderer.setGameUI();
     }

@@ -1,37 +1,26 @@
 package com.eternal.rolly_roll.game.view.ui.text;
 
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.Typeface;
-import android.graphics.drawable.Drawable;
 import static android.opengl.GLES20.*;
 import static com.eternal.rolly_roll.util.Data.QUAD_VERTICES;
 
-import android.opengl.GLUtils;
 import android.opengl.Matrix;
 import android.util.Log;
 
-import com.eternal.rolly_roll.R;
-import com.eternal.rolly_roll.game.model.object.physics.Quaternion;
-import com.eternal.rolly_roll.game.model.object.physics.Vector3D;
-import com.eternal.rolly_roll.game.model.object.shape.IRenderable;
 import com.eternal.rolly_roll.game.model.object.shape.Shape;
 import com.eternal.rolly_roll.game.view.RenderMiddleware;
-import com.eternal.rolly_roll.game.view.shader.SpriteShader;
-import com.eternal.rolly_roll.game.view.shader.TextShader;
+import com.eternal.rolly_roll.game.view.shader.UIShader;
 import com.eternal.rolly_roll.util.LoggerConfig;
 
 import java.util.HashMap;
 
-enum eAlign {
-    CENTER,
-    LEFT,
-    RIGHT,
-}
-
 public class Text extends Shape {
     private static final String TAG = "Text";
+
+    enum eAlign {
+        CENTER,
+        LEFT,
+        RIGHT,
+    }
 
     private static final HashMap<java.lang.Character, Character> characterSet = new HashMap();
     public static HashMap<java.lang.Character, Character> getCharacterSet() {
@@ -107,7 +96,7 @@ public class Text extends Shape {
                 Log.w(TAG, "trying to render character : " + c + ", texture id : " + textureID +
                         "character width : " + tempC.getCharWidth());
             }
-            bindData(r.getTextShader());
+            bindData(r.getUiShader());
 
             //set texture
             // set the active texture unit to texture unit 0
@@ -115,7 +104,7 @@ public class Text extends Shape {
             // bind the texture to this unit
             glBindTexture(GL_TEXTURE_2D, textureID);
 
-            glUniform1i(r.getTextShader().uTextureUnitLocation, 0);
+            glUniform1i(r.getUiShader().uTextureUnitLocation, 0);
 
             Matrix.setIdentityM(tempM, 0);
             Matrix.translateM(tempM, 0, posX + transform.position.x, transform.position.y, transform.position.z);
@@ -127,7 +116,7 @@ public class Text extends Shape {
             //Matrix.scaleM(tempM, 0, tempWidth * 0.1f, 0.1f, 1f);
             Matrix.scaleM(tempM, 0, textSize * transform.scale.x, textSize * transform.scale.y, transform.scale.z);
 
-            glUniformMatrix4fv(r.getTextShader().uMatrixLocation, 1, false, tempM, 0);
+            glUniformMatrix4fv(r.getUiShader().uMatrixLocation, 1, false, tempM, 0);
 
             //glUniformMatrix4fv(r.getSpriteShader().uMatrixLocation, 1, false, transform.getTransformM(), 0);
             glDrawArrays(GL_TRIANGLES, 0, 6);
@@ -136,11 +125,11 @@ public class Text extends Shape {
         }
     }
 
-    protected void bindData(TextShader textShader) {
+    protected void bindData(UIShader uiShader) {
         //set position
         setVertexAttribPointer(
                 0,
-                textShader.aPositionLocation,
+                uiShader.aPositionLocation,
                 POSITION_COMPONENT_COUNT,
                 STRIDE
         );
@@ -148,13 +137,13 @@ public class Text extends Shape {
         //set texture coordinates
         setVertexAttribPointer(
                 POSITION_COMPONENT_COUNT,
-                textShader.aTexCoordLocation,
+                uiShader.aTexCoordLocation,
                 TEXTURE_COORDINATES_COMPONENT_COUNT,
                 STRIDE
         );
         //set color
         setUniformVec4(
-                textShader.uColorLocation,
+                uiShader.uColorLocation,
                 color
         );
     }

@@ -2,10 +2,7 @@ package com.eternal.rolly_roll.game.view.shader;
 
 import android.content.Context;
 import android.graphics.*;
-import android.opengl.GLES20;
 import android.util.Log;
-
-import androidx.annotation.Nullable;
 
 import static android.opengl.GLUtils.*;
 import static android.opengl.GLES20.*;
@@ -16,10 +13,8 @@ import com.eternal.rolly_roll.game.view.ui.text.Text;
 import com.eternal.rolly_roll.util.LoggerConfig;
 import com.eternal.rolly_roll.util.ResourceManager;
 
-import java.util.HashMap;
-
-public class TextShader extends ShaderProgram {
-    private static final String TAG = "Text Shader";
+public class UIShader extends ShaderProgram {
+    private static final String TAG = "UI Shader";
 
     public final int aPositionLocation;
     public final int aTexCoordLocation;
@@ -29,13 +24,8 @@ public class TextShader extends ShaderProgram {
 
     private final String font;
 
-    private float ascent;
-    private float descent;
-    private float top;
-    private float bottom;
-
-    public TextShader(Context context, String font) {
-        super(context, R.raw.text_vertex, R.raw.text_fragment);
+    public UIShader(Context context, String font) {
+        super(context, R.raw.ui_vertex, R.raw.ui_fragment);
 
         aPositionLocation = glGetAttribLocation(ID, "aPos");
         aTexCoordLocation = glGetAttribLocation(ID, "aTexCoord");
@@ -62,15 +52,8 @@ public class TextShader extends ShaderProgram {
         textPaint.setTextSize(textSize);
 
         Paint.FontMetrics fontMetrics = textPaint.getFontMetrics();
-        this.ascent = fontMetrics.ascent;
-        this.descent = fontMetrics.descent;
-        this.top = fontMetrics.top;
-        this.bottom = fontMetrics.bottom;
-
-        if (LoggerConfig.UI_LOG) {
-            Log.w(TAG, "ascent : " + this.ascent + ", descent : " + this.descent +
-                    "\ntop : " + this.top + ", bottom : " + this.bottom);
-        }
+        final float top = fontMetrics.top;
+        final float bottom = fontMetrics.bottom;
 
         int charWidth = 0, charHeight = 0;
         int[] textureId = new int[1];
@@ -112,9 +95,6 @@ public class TextShader extends ShaderProgram {
             glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,GL_NEAREST);
             glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER,GL_LINEAR);
 
-            //Different possible texture parameters, e.g. GL10.GL_CLAMP_TO_EDGE
-            //glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-            //glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
             glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
             glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
