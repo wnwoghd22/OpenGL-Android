@@ -1,7 +1,6 @@
 package com.eternal.rolly_roll.game.control;
 
 import android.content.Context;
-import android.text.method.Touch;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -58,8 +57,8 @@ public class TouchHandler implements View.OnTouchListener {
             screenWidth = view.getWidth();
             screenHeight = view.getHeight();
 
-            if (LoggerConfig.TOUCHLOG) {
-                Log.w(TAG, "" + touch.pos);
+            if (LoggerConfig.TOUCH_LOG) {
+                Log.w(TAG, "" + touch.pos + ", normalized : " + touch.pos.normalized());
             }
 
             int action = motionEvent.getAction();

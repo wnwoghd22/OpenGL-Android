@@ -35,7 +35,7 @@ public class ShaderProgram {
         final int shaderObjectId = glCreateShader(type);
 
         if (shaderObjectId == 0) {
-            if (LoggerConfig.ON) {
+            if (LoggerConfig.SHADER_LOG) {
                 Log.w(TAG, "Could not create new shader.");
             }
             return 0;
@@ -47,16 +47,16 @@ public class ShaderProgram {
         final int[] compileStatus = new int[1];
         glGetShaderiv(shaderObjectId, GL_COMPILE_STATUS, compileStatus, 0);
 
-        if (LoggerConfig.ON) {
-            Log.v(TAG, "Results of compiling source: " + "\n" + shaderCode + "\n: "
+        if (LoggerConfig.SHADER_LOG) {
+            Log.w(TAG, "Results of compiling source: " + "\n" + shaderCode + "\n: "
                     + glGetShaderInfoLog(shaderObjectId));
         }
 
         if (compileStatus[0] == 0) {
             glDeleteShader(shaderObjectId);
 
-            if (LoggerConfig.ON) {
-                Log.v(TAG, "Compilation of shader failed.");
+            if (LoggerConfig.SHADER_LOG) {
+                Log.w(TAG, "Compilation of shader failed.");
             }
 
             return 0;
@@ -69,7 +69,7 @@ public class ShaderProgram {
         final int programObjectId = glCreateProgram();
 
         if (programObjectId == 0) {
-            if (LoggerConfig.ON) {
+            if (LoggerConfig.SHADER_LOG) {
                 Log.w(TAG, "Could not create new program");
             }
             return 0;
@@ -82,15 +82,15 @@ public class ShaderProgram {
 
         final int[] linkStatus = new int[1];
         glGetProgramiv(programObjectId, GL_LINK_STATUS, linkStatus, 0);
-        if (LoggerConfig.ON) {
-            Log.v(TAG, "Result of linking program: \n" +
+        if (LoggerConfig.SHADER_LOG) {
+            Log.w(TAG, "Result of linking program: \n" +
                     glGetShaderInfoLog(programObjectId));
         }
 
         if (linkStatus[0] == 0) {
             glDeleteProgram(programObjectId);
-            if (LoggerConfig.ON) {
-                Log.v(TAG, "Linking of program failed.");
+            if (LoggerConfig.SHADER_LOG) {
+                Log.w(TAG, "Linking of program failed.");
             }
             return 0;
         }
@@ -115,7 +115,7 @@ public class ShaderProgram {
 
         final int program = linkProgram(vertexShader, fragmentShader);
 
-        if (LoggerConfig.ON) {
+        if (LoggerConfig.SHADER_LOG) {
             validateProgram(program);
         }
 

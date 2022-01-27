@@ -11,12 +11,12 @@ public class Transform {
     private static String TAG = "Transform";
 
     public Vector3D position;
-    public Vector3D rotation;
+    public Quaternion rotation;
     public Vector3D scale;
 
     public Transform() {
         position = new Vector3D();
-        rotation = new Vector3D();
+        rotation = Quaternion.identity();
         scale = new Vector3D(1, 1, 1);
     }
 
@@ -24,22 +24,9 @@ public class Transform {
         float[] transformM = new float[16];
         Matrix.setIdentityM(transformM, 0);
         Matrix.translateM(transformM, 0, position.x, position.y, position.z);
-        //rotate
-        if (rotation.magnitude() > 0.001f) { //threshold?
-            if (LoggerConfig.TOUCHLOG) {
-                Log.w(TAG, "rotation : " + rotation);
-            }
-            //Matrix.setRotateEulerM(transformM, 0, rotation.x * 90f, rotation.y * 90f, rotation.z * 90f);
-            Matrix.rotateM(transformM, 0,  90f, rotation.x, rotation.y, rotation.z);
-        }
-        
 
-//        if (Math.abs(rotation.z) > 0.001f)
-//            Matrix.rotateM(transformM, 0, rotation.z * 90f, 0f, 0f, 1f);
-//        if (Math.abs(rotation.y) > 0.001f)
-//            Matrix.rotateM(transformM, 0, rotation.y * 90f, 0f, 1f, 0f);
-//        if (Math.abs(rotation.x) > 0.001f)
-//            Matrix.rotateM(transformM, 0, rotation.x * 90f, 1f, 0f, 0f);
+        //rotate
+        Quaternion.rotateM(transformM, 0, rotation);
 
         Matrix.scaleM(transformM, 0, scale.x, scale.y, scale.z);
 

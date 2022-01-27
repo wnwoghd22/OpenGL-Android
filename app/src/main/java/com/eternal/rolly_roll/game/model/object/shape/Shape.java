@@ -18,9 +18,9 @@ import static com.eternal.rolly_roll.util.Data.BYTES_PER_FLOAT;
 public abstract class Shape implements IRenderable {
     private static String TAG = "Shape";
 
-    private static final int POSITION_COMPONENT_COUNT = 3;
-    private static final int TEXTURE_COORDINATES_COMPONENT_COUNT = 2;
-    private static final int STRIDE = (POSITION_COMPONENT_COUNT + TEXTURE_COORDINATES_COMPONENT_COUNT) * BYTES_PER_FLOAT;
+    protected static final int POSITION_COMPONENT_COUNT = 3;
+    protected static final int TEXTURE_COORDINATES_COMPONENT_COUNT = 2;
+    protected static final int STRIDE = (POSITION_COMPONENT_COUNT + TEXTURE_COORDINATES_COMPONENT_COUNT) * BYTES_PER_FLOAT;
 
     public Transform transform;
     public float[] color;
@@ -32,6 +32,7 @@ public abstract class Shape implements IRenderable {
         floatBuffer = ByteBuffer.allocateDirect(vertexData.length * BYTES_PER_FLOAT)
                 .order(ByteOrder.nativeOrder()).asFloatBuffer().put(vertexData);
         transform = new Transform();
+        color = new float[] { 1f, 1f, 1f, 1f };
     }
 
     @Override
@@ -42,16 +43,26 @@ public abstract class Shape implements IRenderable {
         }
 
         Matrix.multiplyMM(
-                r.getMVP(), 0,
-                r.getVP(), 0,
-                transform.getTransformM(), 0
+            r.getMVP(), 0,
+            r.getVP(), 0,
+            transform.getTransformM(), 0
         );
 
         bindData(r.getSpriteShader());
+
+        //set texture
+        // set the active texture unit to texture unit 0
+        glActiveTexture(GL_TEXTURE0);
+        // bind the texture to this unit
+        glBindTexture(GL_TEXTURE_2D, r.textureMap.get(textureID));
+
+        glUniform1i(r.getSpriteShader().uTextureUnitLocation, 0);
         glUniformMatrix4fv(r.getSpriteShader().uMatrixLocation, 1, false, r.getMVP(), 0);
 
         //glUniformMatrix4fv(r.getSpriteShader().uMatrixLocation, 1, false, transform.getTransformM(), 0);
         glDrawArrays(GL_TRIANGLES, 0, 6);
+
+        glBindTexture(GL_TEXTURE_2D, 0);
     }
 
     protected void bindData(SpriteShader spriteShader) {

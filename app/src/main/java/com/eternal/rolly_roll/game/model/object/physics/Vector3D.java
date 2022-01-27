@@ -21,10 +21,12 @@ public class Vector3D {
         return (float) Math.sqrt(x * x + y * y + z * z);
     }
 
-    public void normalize() {
-        x /= magnitude();
-        y /= magnitude();
-        z /= magnitude();
+    public Vector3D normalize() {
+        return new Vector3D(x / magnitude(), y / magnitude(), z / magnitude());
+    }
+
+    public Vector3D scale(float scalar) {
+        return new Vector3D(x * scalar, y *scalar, z * scalar);
     }
 
     @NonNull
