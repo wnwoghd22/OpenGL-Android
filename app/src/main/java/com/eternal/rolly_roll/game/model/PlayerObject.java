@@ -13,6 +13,7 @@ import com.eternal.rolly_roll.game.model.object.physics.Quaternion;
 import com.eternal.rolly_roll.game.model.object.physics.Vector3D;
 import com.eternal.rolly_roll.game.model.object.shape.shape3d.Cube;
 import com.eternal.rolly_roll.game.view.ui.Button;
+import com.eternal.rolly_roll.game.view.ui.panel.Panel;
 import com.eternal.rolly_roll.game.view.ui.text.TextContainer;
 import com.eternal.rolly_roll.util.LoggerConfig;
 
@@ -29,6 +30,9 @@ public class PlayerObject extends GameObject {
     private TouchPos endPos;
 
     private int shiftItem = 1;
+    public int getShiftItemCount() {
+        return shiftItem;
+    }
     private boolean isShifting;
     private Button shiftButton;
     private TextContainer shiftLeft;
@@ -40,6 +44,9 @@ public class PlayerObject extends GameObject {
     }
 
     private int bombItem = 1;
+    public int getBombItemCount() {
+        return bombItem;
+    }
     private Button bombButton;
     private TextContainer bombLeft;
     public void setBombButton(Button button) {
@@ -208,7 +215,7 @@ public class PlayerObject extends GameObject {
             }
         } else {
             if (shiftButton != null)
-                shiftButton.setColor(1f, 1f, 1f, 1f);
+                shiftButton.setColor(1f, 1f, 1f, 0.7f);
         }
     }
 
@@ -225,8 +232,11 @@ public class PlayerObject extends GameObject {
             isMoving = false;
             if (!isShifting)
                 rotateAxis(moveDirection);
-            else
+            else {
                 isShifting = false;
+                if (shiftLeft != null)
+                    shiftLeft.setText(shiftItem);
+            }
 
             level.stamp(posX, posY, axisState[5]);
         }
@@ -238,13 +248,13 @@ public class PlayerObject extends GameObject {
                 --shiftItem;
                 isShifting = true;
                 if (shiftButton != null)
-                    shiftButton.setColor(1f, 0f, 0f, 1f);
+                    shiftButton.setColor(1f, 0f, 0f, 0.7f);
             }
         } else {
             ++shiftItem;
             isShifting = false;
             if (shiftButton != null)
-                shiftButton.setColor(1f, 1f, 1f, 1f);
+                shiftButton.setColor(1f, 1f, 1f, 0.7f);
         }
     }
 
@@ -309,6 +319,9 @@ public class PlayerObject extends GameObject {
         if (bombItem == 0)
             return;
         --bombItem;
+        if (bombLeft != null) {
+            bombLeft.setText(bombItem);
+        }
 
         level.bomb(posX, posY);
     }

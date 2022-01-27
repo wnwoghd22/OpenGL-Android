@@ -84,8 +84,12 @@ public class Game {
 
     public void setUIComponents() {
         // add ui components
+        DisplayMetrics screen = context.getResources().getDisplayMetrics();
+        float aspectRatio = (float) screen.heightPixels / screen.widthPixels;
+
         TextContainer moveLeft = new TextContainer("MOVE LEFT : 3");
         moveLeft.setPosition(new Vector3D(-0.5f, 0.6f, 0f));
+        moveLeft.setScale(new Vector3D(1f, 1f / aspectRatio, 1f));
         level.setMoveLeftText(moveLeft);
         uiObjects.add(moveLeft);
 
@@ -97,9 +101,13 @@ public class Game {
 
         SCORE.setPosition(new Vector3D(-0.5f, 0.8f, 0f));
         HIGH_SCORE.setPosition(new Vector3D(0.5f, 0.8f, 0f));
+        SCORE.setScale(new Vector3D(1f, 1f / aspectRatio, 1f));
+        HIGH_SCORE.setScale(new Vector3D(1f, 1f / aspectRatio, 1f));
 
-        currentScore.setPosition(new Vector3D(-0.5f, 0.7f, 0f));
-        highScore.setPosition(new Vector3D(0.5f, 0.7f, 0f));
+        currentScore.setPosition(new Vector3D(-0.5f, 0.72f, 0f));
+        highScore.setPosition(new Vector3D(0.5f, 0.72f, 0f));
+        currentScore.setScale(new Vector3D(1f, 1f / aspectRatio, 1f));
+        highScore.setScale(new Vector3D(1f, 1f / aspectRatio, 1f));
 
         level.setScoreText(currentScore);
         level.setHighScoreText(highScore);
@@ -122,8 +130,6 @@ public class Game {
         uiObjects.add(gameOverText);
 
         Button restartButton = new Button();
-        DisplayMetrics screen = context.getResources().getDisplayMetrics();
-        float aspectRatio = (float) screen.heightPixels / screen.widthPixels;
         float restartButtonSize = 0.3f;
         Vector3D restartButtonPosition = new Vector3D(0.7f, 0.3f, 0f);
         restartButton.setPosition(restartButtonPosition);
@@ -140,6 +146,8 @@ public class Game {
         shiftButton.setPosition(shiftButtonPosition);
         shiftButton.setScale(new Vector3D(1f, 1f / aspectRatio, 1f).scale(restartButtonSize));
         shiftButton.setTouchBound();
+        shiftButton.setTexture(R.drawable.shift_icon);
+        shiftButton.setColor(1f, 1f, 1f, 0.7f);
         player.setShiftButton(shiftButton);
         shiftButton.setAction(player::switchShift);
         uiObjects.add(shiftButton);
@@ -150,10 +158,19 @@ public class Game {
         bombButton.setPosition(bombButtonPosition);
         bombButton.setScale(new Vector3D(1f, 1f / aspectRatio, 1f).scale(restartButtonSize));
         bombButton.setTouchBound();
+        bombButton.setTexture(R.drawable.bomb_icon);
+        bombButton.setColor(1f, 1f, 1f, 0.7f);
         player.setBombButton(bombButton);
         bombButton.setAction(player::useBombItem);
         uiObjects.add(bombButton);
         buttons.add(bombButton);
+
+        TextContainer shiftLeftText = new TextContainer(player.getShiftItemCount());
+        Vector3D shiftTextPosition = new Vector3D(0.5f, -0.3f, 0f);
+        shiftLeftText.setPosition(shiftTextPosition);
+        player.setShiftText(shiftLeftText);
+        uiObjects.add(shiftLeftText);
+
     }
 
     public void onPause() {
