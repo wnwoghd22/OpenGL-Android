@@ -44,6 +44,8 @@ public class Level extends GameObject {
         this.gameOverPanel = gameOverPanel;
     }
 
+    private final int bombRange = 2;
+
     private Tile[][] board;
 
     public Tile[][] GenerateBoard(int size) {
@@ -122,6 +124,12 @@ public class Level extends GameObject {
             gameOverPanel.setActive(true);
             gameOverText.setActive(true);
         }
+    }
+
+    public void bomb(int i, int j) {
+        int removed = board[j][i].bomb(bombRange);
+        coloredTile -= removed;
+        getScore(removed * 10);
     }
 
     private void getScore(int score) {

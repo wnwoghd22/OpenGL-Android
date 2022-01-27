@@ -144,6 +144,16 @@ public class Game {
         shiftButton.setAction(player::switchShift);
         uiObjects.add(shiftButton);
         buttons.add(shiftButton);
+
+        Button bombButton = new Button();
+        Vector3D bombButtonPosition = new Vector3D(0.7f, -0.5f, 0f);
+        bombButton.setPosition(bombButtonPosition);
+        bombButton.setScale(new Vector3D(1f, 1f / aspectRatio, 1f).scale(restartButtonSize));
+        bombButton.setTouchBound();
+        player.setBombButton(bombButton);
+        bombButton.setAction(player::useBombItem);
+        uiObjects.add(bombButton);
+        buttons.add(bombButton);
     }
 
     public void onPause() {

@@ -39,6 +39,16 @@ public class PlayerObject extends GameObject {
         shiftLeft = text;
     }
 
+    private int bombItem = 1;
+    private Button bombButton;
+    private TextContainer bombLeft;
+    public void setBombButton(Button button) {
+        bombButton = button;
+    }
+    public void setBombText(TextContainer text) {
+        bombLeft = text;
+    }
+
     private boolean isMoving;
     private Direction moveDirection;
     private final int moveFrame = 15;
@@ -217,7 +227,7 @@ public class PlayerObject extends GameObject {
                 rotateAxis(moveDirection);
             else
                 isShifting = false;
-            
+
             level.stamp(posX, posY, axisState[5]);
         }
     }
@@ -295,11 +305,20 @@ public class PlayerObject extends GameObject {
         }
     }
 
+    public void useBombItem() {
+        if (bombItem == 0)
+            return;
+        --bombItem;
+
+        level.bomb(posX, posY);
+    }
+
     public void resetPlayer() {
         setPosition(new Vector3D(-(float)(boardSize - 1) / 2.0f, 0.5f, -(float)(boardSize - 1) / 2.0f));
         setRotation(Quaternion.identity());
         posX = 0; posY = 0;
         resetAxisState();
         shiftItem = 1;
+        bombItem = 1;
     }
 }
