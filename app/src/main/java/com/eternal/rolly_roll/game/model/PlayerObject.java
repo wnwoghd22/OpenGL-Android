@@ -32,6 +32,12 @@ public class PlayerObject extends GameObject {
     private boolean isShifting;
     private Button shiftButton;
     private TextContainer shiftLeft;
+    public void setShiftButton(Button button) {
+        shiftButton = button;
+    }
+    public void setShiftText(TextContainer text) {
+        shiftLeft = text;
+    }
 
     private boolean isMoving;
     private Direction moveDirection;
@@ -160,7 +166,7 @@ public class PlayerObject extends GameObject {
             }
         }
         isMoving = true;
-        //ShiftGrid();
+
         if (!isShifting) {
             Vector3D currentPos = shape.transform.position;
             originRotation = shape.transform.rotation;
@@ -190,6 +196,9 @@ public class PlayerObject extends GameObject {
             if (LoggerConfig.QUATERNION_LOG) {
                 Log.w(TAG, "target-versorform : " + new Quaternion.VersorForm(targetRotation));
             }
+        } else {
+            if (shiftButton != null)
+                shiftButton.setColor(1f, 1f, 1f, 1f);
         }
     }
 
@@ -206,6 +215,9 @@ public class PlayerObject extends GameObject {
             isMoving = false;
             if (!isShifting)
                 rotateAxis(moveDirection);
+            else
+                isShifting = false;
+            
             level.stamp(posX, posY, axisState[5]);
         }
     }
@@ -215,10 +227,14 @@ public class PlayerObject extends GameObject {
             if (shiftItem > 0) {
                 --shiftItem;
                 isShifting = true;
+                if (shiftButton != null)
+                    shiftButton.setColor(1f, 0f, 0f, 1f);
             }
         } else {
             ++shiftItem;
             isShifting = false;
+            if (shiftButton != null)
+                shiftButton.setColor(1f, 1f, 1f, 1f);
         }
     }
 
@@ -284,5 +300,6 @@ public class PlayerObject extends GameObject {
         setRotation(Quaternion.identity());
         posX = 0; posY = 0;
         resetAxisState();
+        shiftItem = 1;
     }
 }

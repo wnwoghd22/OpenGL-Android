@@ -134,6 +134,16 @@ public class Game {
         restartButton.setAction(this::restartGame);
         uiObjects.add(restartButton);
         buttons.add(restartButton);
+
+        Button shiftButton = new Button();
+        Vector3D shiftButtonPosition = new Vector3D(0.7f, -0.3f, 0f);
+        shiftButton.setPosition(shiftButtonPosition);
+        shiftButton.setScale(new Vector3D(1f, 1f / aspectRatio, 1f).scale(restartButtonSize));
+        shiftButton.setTouchBound();
+        player.setShiftButton(shiftButton);
+        shiftButton.setAction(player::switchShift);
+        uiObjects.add(shiftButton);
+        buttons.add(shiftButton);
     }
 
     public void onPause() {
@@ -176,6 +186,7 @@ public class Game {
         for (Button button : buttons) {
             if (button.isTouching(touch.pos.normalized())) {
                 button.onPressed();
+                return;
             }
         }
 
