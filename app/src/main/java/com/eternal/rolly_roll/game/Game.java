@@ -167,10 +167,17 @@ public class Game {
 
         TextContainer shiftLeftText = new TextContainer(player.getShiftItemCount());
         Vector3D shiftTextPosition = new Vector3D(0.5f, -0.3f, 0f);
+        shiftLeftText.setScale(new Vector3D(1f, 1f / aspectRatio, 1f));
         shiftLeftText.setPosition(shiftTextPosition);
         player.setShiftText(shiftLeftText);
         uiObjects.add(shiftLeftText);
 
+        TextContainer bombLeftText = new TextContainer(player.getBombItemCount());
+        Vector3D bombTextPosition = new Vector3D(0.5f, -0.5f, 0f);
+        bombLeftText.setScale(new Vector3D(1f, 1f / aspectRatio, 1f));
+        bombLeftText.setPosition(bombTextPosition);
+        player.setBombText(bombLeftText);
+        uiObjects.add(bombLeftText);
     }
 
     public void onPause() {
@@ -218,7 +225,8 @@ public class Game {
         }
 
         // game layer
-        player.handleTouch(touch);
+        if (!level.isGameOver())
+            player.handleTouch(touch);
     }
 
     public void restartGame() {

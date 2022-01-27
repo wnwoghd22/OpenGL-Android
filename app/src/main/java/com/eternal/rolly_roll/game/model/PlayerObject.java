@@ -332,6 +332,10 @@ public class PlayerObject extends GameObject {
         posX = 0; posY = 0;
         resetAxisState();
         shiftItem = 1;
+        if (shiftLeft != null)
+            shiftLeft.setText(shiftItem);
         bombItem = 1;
+        if (bombLeft != null)
+            bombLeft.setText(bombItem);
     }
 }
