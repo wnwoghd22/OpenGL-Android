@@ -5,6 +5,7 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 
 import com.eternal.rolly_roll.R;
+import com.eternal.rolly_roll.game.control.IButton;
 import com.eternal.rolly_roll.game.control.Level;
 import com.eternal.rolly_roll.game.control.TouchHandler;
 import com.eternal.rolly_roll.game.model.PlayerObject;
@@ -37,12 +38,12 @@ public class Game {
 
     // is it better using Vector in multi-thread environment?
     //private Vector<GameObject> objectsSync;
-    private List<GameObject> objects;
+    private final List<GameObject> objects;
     public List<GameObject> getObjects() { return objects; }
-    private List<GameObject> uiObjects;
+    private final List<GameObject> uiObjects;
     public List<GameObject> getUiObjects() { return uiObjects; }
-    private List<Button> buttons;
-    public List<Button> getButtons() { return buttons; }
+    private final List<IButton> buttons;
+    public List<IButton> getButtons() { return buttons; }
     private PlayerObject player;
 
     private Level level;
@@ -54,7 +55,7 @@ public class Game {
         level = new Level();
         objects = new ArrayList<GameObject>();
         uiObjects = new ArrayList<GameObject>();
-        buttons = new ArrayList<Button>();
+        buttons = new ArrayList<IButton>();
     }
 
     public void Init() {
@@ -207,6 +208,10 @@ public class Game {
             Log.w(TAG, "Game Update");
         }
 
+        for (GameObject object : uiObjects) {
+            object.Update();
+        }
+
         for (GameObject object : objects) {
             object.Update();
         }
@@ -217,9 +222,8 @@ public class Game {
             Log.w(TAG, "Game Touch : " + touch.state + ", " + touch.pos);
         }
         // UI layer
-        for (Button button : buttons) {
-            if (button.isTouching(touch.pos.normalized())) {
-                button.onPressed();
+        for (IButton button : buttons) {
+            if (button.handleTouch(touch)) {
                 return;
             }
         }
