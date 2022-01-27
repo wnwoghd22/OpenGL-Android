@@ -13,6 +13,7 @@ import com.eternal.rolly_roll.game.model.object.physics.Quaternion;
 import com.eternal.rolly_roll.game.model.object.physics.Vector3D;
 import com.eternal.rolly_roll.game.model.object.shape.shape3d.Cube;
 import com.eternal.rolly_roll.game.view.ui.Button;
+import com.eternal.rolly_roll.game.view.ui.panel.Panel;
 import com.eternal.rolly_roll.game.view.ui.text.TextContainer;
 import com.eternal.rolly_roll.util.LoggerConfig;
 
@@ -29,9 +30,31 @@ public class PlayerObject extends GameObject {
     private TouchPos endPos;
 
     private int shiftItem = 1;
+    public int getShiftItemCount() {
+        return shiftItem;
+    }
     private boolean isShifting;
     private Button shiftButton;
     private TextContainer shiftLeft;
+    public void setShiftButton(Button button) {
+        shiftButton = button;
+    }
+    public void setShiftText(TextContainer text) {
+        shiftLeft = text;
+    }
+
+    private int bombItem = 1;
+    public int getBombItemCount() {
+        return bombItem;
+    }
+    private Button bombButton;
+    private TextContainer bombLeft;
+    public void setBombButton(Button button) {
+        bombButton = button;
+    }
+    public void setBombText(TextContainer text) {
+        bombLeft = text;
+    }
 
     private boolean isMoving;
     private Direction moveDirection;
@@ -160,7 +183,7 @@ public class PlayerObject extends GameObject {
             }
         }
         isMoving = true;
-        //ShiftGrid();
+
         if (!isShifting) {
             Vector3D currentPos = shape.transform.position;
             originRotation = shape.transform.rotation;
@@ -190,6 +213,9 @@ public class PlayerObject extends GameObject {
             if (LoggerConfig.QUATERNION_LOG) {
                 Log.w(TAG, "target-versorform : " + new Quaternion.VersorForm(targetRotation));
             }
+        } else {
+            if (shiftButton != null)
+                shiftButton.setColor(1f, 1f, 1f, 0.7f);
         }
     }
 
@@ -206,6 +232,12 @@ public class PlayerObject extends GameObject {
             isMoving = false;
             if (!isShifting)
                 rotateAxis(moveDirection);
+            else {
+                isShifting = false;
+                if (shiftLeft != null)
+                    shiftLeft.setText(shiftItem);
+            }
+
             level.stamp(posX, posY, axisState[5]);
         }
     }
@@ -215,10 +247,14 @@ public class PlayerObject extends GameObject {
             if (shiftItem > 0) {
                 --shiftItem;
                 isShifting = true;
+                if (shiftButton != null)
+                    shiftButton.setColor(1f, 0f, 0f, 0.7f);
             }
         } else {
             ++shiftItem;
             isShifting = false;
+            if (shiftButton != null)
+                shiftButton.setColor(1f, 1f, 1f, 0.7f);
         }
     }
 
@@ -279,10 +315,27 @@ public class PlayerObject extends GameObject {
         }
     }
 
+    public void useBombItem() {
+        if (bombItem == 0)
+            return;
+        --bombItem;
+        if (bombLeft != null) {
+            bombLeft.setText(bombItem);
+        }
+
+        level.bomb(posX, posY);
+    }
+
     public void resetPlayer() {
         setPosition(new Vector3D(-(float)(boardSize - 1) / 2.0f, 0.5f, -(float)(boardSize - 1) / 2.0f));
         setRotation(Quaternion.identity());
         posX = 0; posY = 0;
         resetAxisState();
+        shiftItem = 1;
+        if (shiftLeft != null)
+            shiftLeft.setText(shiftItem);
+        bombItem = 1;
+        if (bombLeft != null)
+            bombLeft.setText(bombItem);
     }
 }

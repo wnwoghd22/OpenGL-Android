@@ -84,8 +84,12 @@ public class Game {
 
     public void setUIComponents() {
         // add ui components
+        DisplayMetrics screen = context.getResources().getDisplayMetrics();
+        float aspectRatio = (float) screen.heightPixels / screen.widthPixels;
+
         TextContainer moveLeft = new TextContainer("MOVE LEFT : 3");
         moveLeft.setPosition(new Vector3D(-0.5f, 0.6f, 0f));
+        moveLeft.setScale(new Vector3D(1f, 1f / aspectRatio, 1f));
         level.setMoveLeftText(moveLeft);
         uiObjects.add(moveLeft);
 
@@ -97,9 +101,13 @@ public class Game {
 
         SCORE.setPosition(new Vector3D(-0.5f, 0.8f, 0f));
         HIGH_SCORE.setPosition(new Vector3D(0.5f, 0.8f, 0f));
+        SCORE.setScale(new Vector3D(1f, 1f / aspectRatio, 1f));
+        HIGH_SCORE.setScale(new Vector3D(1f, 1f / aspectRatio, 1f));
 
-        currentScore.setPosition(new Vector3D(-0.5f, 0.7f, 0f));
-        highScore.setPosition(new Vector3D(0.5f, 0.7f, 0f));
+        currentScore.setPosition(new Vector3D(-0.5f, 0.72f, 0f));
+        highScore.setPosition(new Vector3D(0.5f, 0.72f, 0f));
+        currentScore.setScale(new Vector3D(1f, 1f / aspectRatio, 1f));
+        highScore.setScale(new Vector3D(1f, 1f / aspectRatio, 1f));
 
         level.setScoreText(currentScore);
         level.setHighScoreText(highScore);
@@ -122,8 +130,6 @@ public class Game {
         uiObjects.add(gameOverText);
 
         Button restartButton = new Button();
-        DisplayMetrics screen = context.getResources().getDisplayMetrics();
-        float aspectRatio = (float) screen.heightPixels / screen.widthPixels;
         float restartButtonSize = 0.3f;
         Vector3D restartButtonPosition = new Vector3D(0.7f, 0.3f, 0f);
         restartButton.setPosition(restartButtonPosition);
@@ -134,6 +140,44 @@ public class Game {
         restartButton.setAction(this::restartGame);
         uiObjects.add(restartButton);
         buttons.add(restartButton);
+
+        Button shiftButton = new Button();
+        Vector3D shiftButtonPosition = new Vector3D(0.7f, -0.3f, 0f);
+        shiftButton.setPosition(shiftButtonPosition);
+        shiftButton.setScale(new Vector3D(1f, 1f / aspectRatio, 1f).scale(restartButtonSize));
+        shiftButton.setTouchBound();
+        shiftButton.setTexture(R.drawable.shift_icon);
+        shiftButton.setColor(1f, 1f, 1f, 0.7f);
+        player.setShiftButton(shiftButton);
+        shiftButton.setAction(player::switchShift);
+        uiObjects.add(shiftButton);
+        buttons.add(shiftButton);
+
+        Button bombButton = new Button();
+        Vector3D bombButtonPosition = new Vector3D(0.7f, -0.5f, 0f);
+        bombButton.setPosition(bombButtonPosition);
+        bombButton.setScale(new Vector3D(1f, 1f / aspectRatio, 1f).scale(restartButtonSize));
+        bombButton.setTouchBound();
+        bombButton.setTexture(R.drawable.bomb_icon);
+        bombButton.setColor(1f, 1f, 1f, 0.7f);
+        player.setBombButton(bombButton);
+        bombButton.setAction(player::useBombItem);
+        uiObjects.add(bombButton);
+        buttons.add(bombButton);
+
+        TextContainer shiftLeftText = new TextContainer(player.getShiftItemCount());
+        Vector3D shiftTextPosition = new Vector3D(0.5f, -0.3f, 0f);
+        shiftLeftText.setScale(new Vector3D(1f, 1f / aspectRatio, 1f));
+        shiftLeftText.setPosition(shiftTextPosition);
+        player.setShiftText(shiftLeftText);
+        uiObjects.add(shiftLeftText);
+
+        TextContainer bombLeftText = new TextContainer(player.getBombItemCount());
+        Vector3D bombTextPosition = new Vector3D(0.5f, -0.5f, 0f);
+        bombLeftText.setScale(new Vector3D(1f, 1f / aspectRatio, 1f));
+        bombLeftText.setPosition(bombTextPosition);
+        player.setBombText(bombLeftText);
+        uiObjects.add(bombLeftText);
     }
 
     public void onPause() {
@@ -176,11 +220,13 @@ public class Game {
         for (Button button : buttons) {
             if (button.isTouching(touch.pos.normalized())) {
                 button.onPressed();
+                return;
             }
         }
 
         // game layer
-        player.handleTouch(touch);
+        if (!level.isGameOver())
+            player.handleTouch(touch);
     }
 
     public void restartGame() {

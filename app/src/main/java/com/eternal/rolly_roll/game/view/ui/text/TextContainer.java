@@ -5,8 +5,8 @@ import com.eternal.rolly_roll.game.model.object.GameObject;
 public class TextContainer extends GameObject {
     private Text text;
 
-    public TextContainer(String text) {
-        this.text = new Text(text);
+    public TextContainer(Object o) {
+        this.text = new Text(o.toString());
         this.shape = this.text;
     }
 

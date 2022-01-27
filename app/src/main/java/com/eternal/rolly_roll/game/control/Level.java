@@ -43,6 +43,10 @@ public class Level extends GameObject {
     public void setGameOverPanel(PanelContainer gameOverPanel) {
         this.gameOverPanel = gameOverPanel;
     }
+    private boolean gameOver = false;
+    public boolean isGameOver() { return gameOver; }
+
+    private final int bombRange = 2;
 
     private Tile[][] board;
 
@@ -81,6 +85,8 @@ public class Level extends GameObject {
         moveLeftText.setText("MOVE LEFT : " + moveLeft);
         currentScore = 0;
         scoreText.setText(currentScore);
+
+        gameOver = false;
         if (gameOverText != null)
             gameOverText.setActive(false);
         if (gameOverPanel != null)
@@ -118,10 +124,19 @@ public class Level extends GameObject {
         }
         moveLeftText.setText("MOVE LEFT : " + moveLeft);
         // if game mode is "challenge", then require > adjacent -> game over
-        if (checkIsGameOver()) {
+
+        gameOver = checkIsGameOver();
+
+        if (gameOver) {
             gameOverPanel.setActive(true);
             gameOverText.setActive(true);
         }
+    }
+
+    public void bomb(int i, int j) {
+        int removed = board[j][i].bomb(bombRange);
+        coloredTile -= removed;
+        getScore(removed * 10);
     }
 
     private void getScore(int score) {

@@ -109,6 +109,26 @@ public class Tile extends GameObject {
         }
         return result;
     }
+    public int bomb(int range) {
+        int result = currentColor == Color.GRAY ? 0 : 1;
+        currentColor = Color.GRAY;
+        shape.color = COLOR_GRAY;
+
+        if (range == 0)
+            return result;
+
+        --range;
+        if (up != null)
+            result += up.bomb(range);
+        if (down != null)
+            result += down.bomb(range);
+        if (right != null)
+            result += right.bomb(range);
+        if (left != null)
+            result += left.bomb(range);
+
+        return result;
+    }
 
     public void bindUp(Tile tile) { this.up = tile; }
     public void bindRight(Tile tile) { this.right = tile; }
