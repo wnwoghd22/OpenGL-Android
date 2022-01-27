@@ -19,10 +19,154 @@ import com.eternal.rolly_roll.util.LoggerConfig;
 
 public class PlayerObject extends GameObject {
     enum Direction {
-    UP,
-    DOWN,
-    LEFT,
-    RIGHT,
+        UP {
+            @Override
+            void initRoll(PlayerObject player) {
+                Vector3D currentPos = player.shape.transform.position;
+                player.originRotation = player.shape.transform.rotation;
+
+                player.targetRotation = player.shape.transform.rotation.product(new Quaternion(new Vector3D(90f, 0f, 0f)));
+                player.anchor = new Vector3D(currentPos.x, 0, currentPos.z - 0.5f);
+            }
+
+            @Override
+            public void roll(PlayerObject player, float slerpDelta) {
+                float moveDelta = (float)Math.toRadians(slerpDelta * 90f + 45f);
+                player.shape.transform.rotation = Quaternion.slerp(player.originRotation, player.targetRotation, slerpDelta);
+
+                player.shape.transform.position = new Vector3D(
+                    player.anchor.x,
+                    (float)Math.sin(moveDelta) / (float)Math.sqrt(2f),
+                    player.anchor.z + (float)Math.cos(moveDelta) / (float)Math.sqrt(2f)
+                );
+            }
+
+            @Override
+            void shift(PlayerObject player, float moveDelta) {
+                player.shape.transform.position.z -= moveDelta;
+            }
+
+            @Override
+            void rotateAxis(Axis[] axes) {
+                Axis temp = axes[0];
+                axes[0] = axes[1];
+                axes[1] = axes[5];
+                axes[5] = axes[3];
+                axes[3] = temp;
+            }
+        },
+        DOWN {
+            @Override
+            void initRoll(PlayerObject player) {
+                Vector3D currentPos = player.shape.transform.position;
+                player.originRotation = player.shape.transform.rotation;
+
+                player.targetRotation = player.shape.transform.rotation.product(new Quaternion(-90f, new Vector3D(1f, 0f, 0f)));
+                player.anchor = new Vector3D(currentPos.x, 0, currentPos.z + 0.5f);
+            }
+
+            @Override
+            public void roll(PlayerObject player, float slerpDelta) {
+                float moveDelta = (float)Math.toRadians(slerpDelta * 90f + 45f);
+                player.shape.transform.rotation = Quaternion.slerp(player.originRotation, player.targetRotation, slerpDelta);
+
+                player.shape.transform.position = new Vector3D(
+                        player.anchor.x,
+                        (float)Math.sin(moveDelta) / (float)Math.sqrt(2f),
+                        player.anchor.z - (float)Math.cos(moveDelta) / (float)Math.sqrt(2f)
+                );
+            }
+
+            @Override
+            void shift(PlayerObject player, float moveDelta) {
+                player.shape.transform.position.z += moveDelta;
+            }
+
+            @Override
+            void rotateAxis(Axis[] axes) {
+                Axis temp = axes[0];
+                axes[0] = axes[3];
+                axes[3] = axes[5];
+                axes[5] = axes[1];
+                axes[1] = temp;
+            }
+        },
+        LEFT {
+            @Override
+            void initRoll(PlayerObject player) {
+                Vector3D currentPos = player.shape.transform.position;
+                player.originRotation = player.shape.transform.rotation;
+
+                player.targetRotation = player.shape.transform.rotation.product(new Quaternion(new Vector3D(0f, 0f, -90f)));
+                player.anchor = new Vector3D(currentPos.x - 0.5f, 0, currentPos.z);
+            }
+
+            @Override
+            public void roll(PlayerObject player, float slerpDelta) {
+                float moveDelta = (float)Math.toRadians(slerpDelta * 90f + 45f);
+                player.shape.transform.rotation = Quaternion.slerp(player.originRotation, player.targetRotation, slerpDelta);
+
+                player.shape.transform.position = new Vector3D(
+                        player.anchor.x + (float)Math.cos(moveDelta) / (float)Math.sqrt(2f),
+                        (float)Math.sin(moveDelta) / (float)Math.sqrt(2f),
+                        player.anchor.z
+                );
+            }
+
+            @Override
+            void shift(PlayerObject player, float moveDelta) {
+                player.shape.transform.position.x -= moveDelta;
+            }
+
+            @Override
+            void rotateAxis(Axis[] axes) {
+                Axis temp = axes[0];
+                axes[0] = axes[2];
+                axes[2] = axes[5];
+                axes[5] = axes[4];
+                axes[4] = temp;
+            }
+        },
+        RIGHT {
+            @Override
+            void initRoll(PlayerObject player) {
+                Vector3D currentPos = player.shape.transform.position;
+                player.originRotation = player.shape.transform.rotation;
+
+                player.targetRotation = player.shape.transform.rotation.product(new Quaternion(90f, new Vector3D(0f, 0f, 1f)));
+                player.anchor = new Vector3D(currentPos.x + 0.5f, 0, currentPos.z);
+            }
+
+            @Override
+            public void roll(PlayerObject player, float slerpDelta) {
+                float moveDelta = (float)Math.toRadians(slerpDelta * 90f + 45f);
+                player.shape.transform.rotation = Quaternion.slerp(player.originRotation, player.targetRotation, slerpDelta);
+
+                player.shape.transform.position = new Vector3D(
+                        player.anchor.x - (float)Math.cos(moveDelta) / (float)Math.sqrt(2f),
+                        (float)Math.sin(moveDelta) / (float)Math.sqrt(2f),
+                        player.anchor.z
+                );
+            }
+
+            @Override
+            void shift(PlayerObject player, float moveDelta) {
+                player.shape.transform.position.x += moveDelta;
+            }
+
+            @Override
+            void rotateAxis(Axis[] axes) {
+                Axis temp = axes[0];
+                axes[0] = axes[4];
+                axes[4] = axes[5];
+                axes[5] = axes[2];
+                axes[2] = temp;
+            }
+        };
+        abstract void initRoll(PlayerObject player);
+        abstract void roll(PlayerObject player, float slerpDelta);
+        abstract void shift(PlayerObject player, float moveDelta);
+        abstract void rotateAxis(Axis[] axes);
     }
     private static String TAG = "player";
 
@@ -73,35 +217,6 @@ public class PlayerObject extends GameObject {
     }
 
     private final Axis[] axisState = { Axis.U, Axis.F, Axis.R, Axis.B, Axis.L, Axis.D };
-    private void rotateAxis(Direction d) {
-        Axis temp = axisState[0];
-        switch (d) {
-            case UP:
-                axisState[0] = axisState[1];
-                axisState[1] = axisState[5];
-                axisState[5] = axisState[3];
-                axisState[3] = temp;
-                break;
-            case DOWN:
-                axisState[0] = axisState[3];
-                axisState[3] = axisState[5];
-                axisState[5] = axisState[1];
-                axisState[1] = temp;
-                break;
-            case LEFT:
-                axisState[0] = axisState[2];
-                axisState[2] = axisState[5];
-                axisState[5] = axisState[4];
-                axisState[4] = temp;
-                break;
-            case RIGHT:
-                axisState[0] = axisState[4];
-                axisState[4] = axisState[5];
-                axisState[5] = axisState[2];
-                axisState[2] = temp;
-                break;
-        }
-    }
     private void resetAxisState() {
         axisState[0] = Axis.U;
         axisState[1] = Axis.F;
@@ -185,31 +300,8 @@ public class PlayerObject extends GameObject {
         isMoving = true;
 
         if (!isShifting) {
-            Vector3D currentPos = shape.transform.position;
-            originRotation = shape.transform.rotation;
-            if (LoggerConfig.QUATERNION_LOG) {
-                Log.w(TAG, "origin-versorform : " + new Quaternion.VersorForm(originRotation));
-            }
-            switch (moveDirection) {
-                case UP:
-                    //targetRotation = shape.transform.rotation.product(new Quaternion(90f, new Vector3D(1f, 0f, 0f)));
-                    targetRotation = shape.transform.rotation.product(new Quaternion(new Vector3D(90f, 0f, 0f)));
-                    anchor = new Vector3D(currentPos.x, 0, currentPos.z - 0.5f);
-                    break;
-                case DOWN:
-                    targetRotation = shape.transform.rotation.product(new Quaternion(-90f, new Vector3D(1f, 0f, 0f)));
-                    anchor = new Vector3D(currentPos.x, 0, currentPos.z + 0.5f);
-                    break;
-                case LEFT:
-                    //targetRotation = shape.transform.rotation.product(new Quaternion(-90f, new Vector3D(0f, 0f, 1f)));
-                    targetRotation = shape.transform.rotation.product(new Quaternion(new Vector3D(0f, 0f, -90f)));
-                    anchor = new Vector3D(currentPos.x - 0.5f, 0, currentPos.z);
-                    break;
-                case RIGHT:
-                    targetRotation = shape.transform.rotation.product(new Quaternion(90f, new Vector3D(0f, 0f, 1f)));
-                    anchor = new Vector3D(currentPos.x + 0.5f, 0, currentPos.z);
-                    break;
-            }
+            moveDirection.initRoll(this);
+
             if (LoggerConfig.QUATERNION_LOG) {
                 Log.w(TAG, "target-versorform : " + new Quaternion.VersorForm(targetRotation));
             }
@@ -222,16 +314,13 @@ public class PlayerObject extends GameObject {
     // call in Update
     private void Move() {
         if (frameDelta++ < moveFrame) {
-            if (!isShifting) {
-                Roll();
-            } else {
-                Shift();
-            }
+            if (!isShifting) Roll();
+            else Shift();
         } else {
             frameDelta = 0;
             isMoving = false;
             if (!isShifting)
-                rotateAxis(moveDirection);
+                moveDirection.rotateAxis(axisState);
             else {
                 isShifting = false;
                 if (shiftLeft != null)
@@ -260,59 +349,11 @@ public class PlayerObject extends GameObject {
 
     private void Shift() {
         float moveDelta = 1f / (float)moveFrame;
-        switch (moveDirection) {
-            case UP:
-                shape.transform.position.z -= moveDelta;
-                break;
-            case DOWN:
-                shape.transform.position.z += moveDelta;
-                break;
-            case LEFT:
-                shape.transform.position.x -= moveDelta;
-                break;
-            case RIGHT:
-                shape.transform.position.x += moveDelta;
-                break;
-        }
-        if (LoggerConfig.TOUCH_LOG) {
-            Log.w(TAG, "shift, frame: " + frameDelta + "player position : " + shape.transform.position);
-        }
+        moveDirection.shift(this, moveDelta);
     }
     private void Roll() {
         float slerpDelta = (float)frameDelta / (float)moveFrame;
-        float moveDelta = (float)Math.toRadians(slerpDelta * 90f + 45f);
-
-        shape.transform.rotation = Quaternion.slerp(originRotation, targetRotation, slerpDelta);
-        switch (moveDirection) {
-            case UP:
-                shape.transform.position = new Vector3D(
-                        anchor.x,
-                        (float)Math.sin(moveDelta) / (float)Math.sqrt(2f),
-                        anchor.z + (float)Math.cos(moveDelta) / (float)Math.sqrt(2f)
-                );
-                break;
-            case DOWN:
-                shape.transform.position = new Vector3D(
-                        anchor.x,
-                        (float)Math.sin(moveDelta) / (float)Math.sqrt(2f),
-                        anchor.z - (float)Math.cos(moveDelta) / (float)Math.sqrt(2f)
-                );
-                break;
-            case LEFT:
-                shape.transform.position = new Vector3D(
-                        anchor.x + (float)Math.cos(moveDelta) / (float)Math.sqrt(2f),
-                        (float)Math.sin(moveDelta) / (float)Math.sqrt(2f),
-                        anchor.z
-                );
-                break;
-            case RIGHT:
-                shape.transform.position = new Vector3D(
-                    anchor.x - (float)Math.cos(moveDelta) / (float)Math.sqrt(2f),
-                    (float)Math.sin(moveDelta) / (float)Math.sqrt(2f),
-                    anchor.z
-                );
-                break;
-        }
+        moveDirection.roll(this, slerpDelta);
     }
 
     public void useBombItem() {

@@ -1,6 +1,7 @@
 package com.eternal.rolly_roll.game.view.ui;
 
 import android.util.Log;
+import static android.view.MotionEvent.*;
 
 import com.eternal.rolly_roll.game.control.IButton;
 import com.eternal.rolly_roll.game.model.object.GameObject;
@@ -14,6 +15,13 @@ import com.eternal.rolly_roll.util.LoggerConfig;
 import static com.eternal.rolly_roll.game.control.TouchHandler.*;
 
 public class Button extends GameObject implements IButton {
+    public enum eState {
+        NONE,
+        DOWN,
+        PRESSED,
+        UP,
+    }
+
     private static final String TAG = "Button";
     private static final float QUAD_BOUND = 0.5f;
 
@@ -31,16 +39,57 @@ public class Button extends GameObject implements IButton {
         leftBottom = new TouchPos(leftBound, bottomBound);
         rightTop = new TouchPos(rightBound, topBound);
     }
+
+    @Override
     public boolean isTouching(TouchPos pos) {
         if (LoggerConfig.TOUCH_LOG) {
             Log.w(TAG, "\ntouch pos : " + pos +
                     "\nleftBottom pos : " + leftBottom +
                     "\nrightTop pos : " + rightTop);
         }
-        return (
-            (pos.x > leftBottom.x && pos.x < rightTop.x) &&
-            (pos.y > leftBottom.y && pos.y < rightTop.y)
-        );
+        boolean isTouching = (pos.x > leftBottom.x && pos.x < rightTop.x) &&
+                (pos.y > leftBottom.y && pos.y < rightTop.y);
+        if (LoggerConfig.TOUCH_LOG) {
+            Log.w(TAG, "\nis touching : " + isTouching);
+        }
+        return isTouching;
+    }
+
+    @Override
+    public boolean handleTouch(Touch touch) {
+        if (!isTouching(touch.pos.normalized())) { // touch outside
+            switch (state) {
+                case NONE:
+                    break;
+                case DOWN:
+                case PRESSED:
+                case UP:
+                    state = eState.NONE;
+                    break;
+            }
+            return false;
+        } else {
+            switch (state) {
+                case NONE:
+                    if (touch.state == ACTION_DOWN)
+                        state = eState.DOWN;
+                    break;
+                case DOWN:
+                    break;
+                case PRESSED:
+                    if (touch.state == ACTION_UP)
+                        state = eState.UP;
+                    break;
+                case UP:
+                    break;
+            }
+            return true;
+        }
+    }
+
+    private eState state = eState.NONE;
+    public eState getState() {
+        return state;
     }
 
     private Runnable action;
@@ -59,7 +108,19 @@ public class Button extends GameObject implements IButton {
 
     @Override
     public void Update() {
-
+        switch (state) {
+            case NONE:
+                break;
+            case DOWN:
+                state = eState.PRESSED;
+                break;
+            case PRESSED:
+                break;
+            case UP:
+                state = eState.NONE;
+                onPressed();
+                break;
+        }
     }
 
     @Override
