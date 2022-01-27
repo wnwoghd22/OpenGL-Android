@@ -12,6 +12,8 @@ import com.eternal.rolly_roll.game.model.object.GameObject;
 import com.eternal.rolly_roll.game.model.object.physics.Quaternion;
 import com.eternal.rolly_roll.game.model.object.physics.Vector3D;
 import com.eternal.rolly_roll.game.model.object.shape.shape3d.Cube;
+import com.eternal.rolly_roll.game.view.ui.Button;
+import com.eternal.rolly_roll.game.view.ui.text.TextContainer;
 import com.eternal.rolly_roll.util.LoggerConfig;
 
 public class PlayerObject extends GameObject {
@@ -26,7 +28,11 @@ public class PlayerObject extends GameObject {
     private TouchPos initPos;
     private TouchPos endPos;
 
+    private int shiftItem = 1;
     private boolean isShifting;
+    private Button shiftButton;
+    private TextContainer shiftLeft;
+
     private boolean isMoving;
     private Direction moveDirection;
     private final int moveFrame = 15;
@@ -204,20 +210,15 @@ public class PlayerObject extends GameObject {
         }
     }
 
-    private void ShiftGrid() {
-        switch (moveDirection) {
-            case UP:
-                shape.transform.position.z -= 1f;
-                break;
-            case DOWN:
-                shape.transform.position.z += 1f;
-                break;
-            case LEFT:
-                shape.transform.position.x -= 1f;
-                break;
-            case RIGHT:
-                shape.transform.position.x += 1f;
-                break;
+    public void switchShift() {
+        if (!isShifting) {
+            if (shiftItem > 0) {
+                --shiftItem;
+                isShifting = true;
+            }
+        } else {
+            ++shiftItem;
+            isShifting = false;
         }
     }
 
