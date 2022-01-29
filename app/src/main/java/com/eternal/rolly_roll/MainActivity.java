@@ -12,6 +12,8 @@ import com.eternal.rolly_roll.game.model.object.physics.Vector3D;
 import com.eternal.rolly_roll.game.view.Camera;
 import com.eternal.rolly_roll.game.view.RenderMiddleware;
 
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+
 public class MainActivity extends AppCompatActivity {
 
     private OpenGLView openGLView;
