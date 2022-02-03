@@ -20,6 +20,8 @@ public class MainActivity extends AppCompatActivity {
     private Game game;
     private TouchHandler touchHandler;
 
+    private GPGSManager gpgs;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,6 +29,8 @@ public class MainActivity extends AppCompatActivity {
         game = new Game(this);
         game.Init();
         touchHandler = new TouchHandler(this, game);
+        gpgs = new GPGSManager(this);
+        gpgs.signInSilently();
 
         RenderMiddleware r = new RenderMiddleware(this, game);
         Camera camera = new Camera(
