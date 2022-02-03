@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.eternal.rolly_roll.R;
 import com.eternal.rolly_roll.game.model.object.physics.Transform;
+import com.eternal.rolly_roll.game.model.object.physics.Vector3D;
 import com.eternal.rolly_roll.game.view.RenderMiddleware;
 import com.eternal.rolly_roll.game.view.shader.ShaderProgram;
 import com.eternal.rolly_roll.game.view.shader.SpriteShader;
@@ -57,10 +58,12 @@ public abstract class Shape implements IRenderable {
             Log.w(TAG, "draw shape");
         }
 
+        float[] modelM = transform.getTransformM();
+
         Matrix.multiplyMM(
             r.getMVP(), 0,
             r.getVP(), 0,
-            transform.getTransformM(), 0
+            modelM, 0
         );
 
         bindData(r.getSpriteShader());
@@ -73,6 +76,16 @@ public abstract class Shape implements IRenderable {
 
         glUniform1i(r.getSpriteShader().uTextureUnitLocation, 0);
         glUniformMatrix4fv(r.getSpriteShader().uMatrixLocation, 1, false, r.getMVP(), 0);
+
+        glUniformMatrix4fv(r.getSpriteShader().uModelLocation, 1, false, modelM, 0);
+
+        //set directional light
+        if (r.directionalLightVector != null) {
+            setUniformVec3(
+                    r.getSpriteShader().uDirectionalLightLocation,
+                    r.directionalLightVector
+            );
+        }
 
         //glUniformMatrix4fv(r.getSpriteShader().uMatrixLocation, 1, false, transform.getTransformM(), 0);
         if (indexArray != null) {
@@ -128,5 +141,8 @@ public abstract class Shape implements IRenderable {
     }
     protected void setUniformMf4(int uniformLocation, float[] matrix) {
         glUniformMatrix4fv(uniformLocation, 1, false, matrix, 0);
+    }
+    protected void setUniformVec3(int uniformLocation, Vector3D vector) {
+        glUniform3f(uniformLocation, vector.x, vector.y, vector.z);
     }
 }
