@@ -12,7 +12,7 @@ public class SpriteShader extends ShaderProgram {
 
     public final int uColorLocation;
     public final int uMatrixLocation;
-    public final int uModelLocation;
+    public final int uIT_ModelLocation;
     public final int uTextureUnitLocation;
     public final int uDirectionalLightLocation;
 
@@ -25,7 +25,7 @@ public class SpriteShader extends ShaderProgram {
 
         uColorLocation = glGetUniformLocation(ID, "uColor");
         uMatrixLocation = glGetUniformLocation(ID, "uMat");
-        uModelLocation = glGetUniformLocation(ID, "uModel");
+        uIT_ModelLocation = glGetUniformLocation(ID, "uIT_Model");
         uTextureUnitLocation = glGetUniformLocation(ID, "uTextureUnit");
         uDirectionalLightLocation = glGetUniformLocation(ID, "uDirectionalLight");
     }

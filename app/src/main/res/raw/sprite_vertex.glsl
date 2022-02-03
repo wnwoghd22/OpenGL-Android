@@ -1,5 +1,5 @@
 uniform mat4 uMat;
-uniform mat4 uModel;
+uniform mat4 uIT_Model;
 uniform vec3 uDirectionalLight;
 
 attribute vec4 aPos;
@@ -16,6 +16,6 @@ void main()
     vTexCoord = aTexCoord;
     gl_Position = uMat * aPos;
 
-    normal = (uModel * vec4(aNormal, 1.0)).xyz;
+    normal = mat3(uIT_Model) * aNormal;
     directionalLight = uDirectionalLight;
 }

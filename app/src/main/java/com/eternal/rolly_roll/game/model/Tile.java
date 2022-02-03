@@ -41,7 +41,7 @@ public class Tile extends GameObject {
         this.shape = new Quad();
 
         shape.transform.position = position;
-        shape.transform.rotation = new Quaternion(90f, new Vector3D(-1f, 0f, 0f));
+        shape.transform.rotation = new Quaternion(90f, new Vector3D(1f, 0f, 0f));
 
         shape.color = COLOR_GRAY;
 

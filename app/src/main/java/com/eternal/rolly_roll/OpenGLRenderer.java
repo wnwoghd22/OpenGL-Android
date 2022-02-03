@@ -47,7 +47,8 @@ public class OpenGLRenderer implements GLSurfaceView.Renderer {
             Log.w(TAG, "quad texture : " + renderer.textureMap.get(R.drawable.square));
         }
 
-        renderer.directionalLightVector = new Vector3D(0f, -1f, -1f).normalize();
+        //renderer.directionalLightVector = new Vector3D(0f, -1f, -1f).normalize();
+        renderer.directionalLightVector = new Vector3D(0f, 1f, 1f).normalize();
 
         UIShader uiShader = new UIShader(context, "verdana.ttf");
         renderer.setUiShader(uiShader);

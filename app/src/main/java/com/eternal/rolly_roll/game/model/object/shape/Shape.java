@@ -77,7 +77,17 @@ public abstract class Shape implements IRenderable {
         glUniform1i(r.getSpriteShader().uTextureUnitLocation, 0);
         glUniformMatrix4fv(r.getSpriteShader().uMatrixLocation, 1, false, r.getMVP(), 0);
 
-        glUniformMatrix4fv(r.getSpriteShader().uModelLocation, 1, false, modelM, 0);
+        float[] tempM = new float[16];
+        float[] it_modelM = new float[16];
+
+        Matrix.invertM(tempM, 0, modelM, 0);
+        Matrix.transposeM(it_modelM, 0, tempM, 0);
+
+        glUniformMatrix4fv(r.getSpriteShader().uIT_ModelLocation, 1, false, it_modelM, 0);
+
+        tempM = null;
+        modelM = null;
+        it_modelM = null;
 
         //set directional light
         if (r.directionalLightVector != null) {

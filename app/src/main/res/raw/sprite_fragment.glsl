@@ -10,8 +10,9 @@ varying vec3 directionalLight;
 
 void main()
 {
-    float diffuse = max(dot(normal, directionalLight), 0.0);
+    float diffuse = 0.7;
+    float directional = dot(normal, directionalLight) * (1.0 - diffuse);
+    float result = directional + diffuse;
 
-    gl_FragColor = texture2D(uTextureUnit, vTexCoord) * uColor * diffuse;
-    //gl_FragColor = uColor;
+    gl_FragColor = texture2D(uTextureUnit, vTexCoord) * uColor * result;
 }
