@@ -11,11 +11,12 @@ import com.eternal.rolly_roll.util.LoggerConfig;
 
 import static android.opengl.GLES20.*;
 import static com.eternal.rolly_roll.util.Data.QUAD_VERTICES;
+import static com.eternal.rolly_roll.util.Data.SIMPLE_QUAD_VERTICES;
 
 public class Panel extends Shape {
 
     public Panel() {
-        super(QUAD_VERTICES);
+        super(SIMPLE_QUAD_VERTICES);
         textureID = R.drawable.square;
     }
 

@@ -9,6 +9,7 @@ import android.util.Log;
 
 import com.eternal.rolly_roll.game.Game;
 import com.eternal.rolly_roll.game.model.object.GameObject;
+import com.eternal.rolly_roll.game.model.object.physics.Vector3D;
 import com.eternal.rolly_roll.game.view.shader.ShaderProgram;
 import com.eternal.rolly_roll.game.view.shader.SpriteShader;
 import com.eternal.rolly_roll.game.view.shader.UIShader;
@@ -42,6 +43,8 @@ public class RenderMiddleware {
     public float[] getVP() { return viewProjectionMatrix; }
     float[] modelViewProjectionMatrix = new float[16];
     public float[] getMVP() { return modelViewProjectionMatrix; }
+
+    public Vector3D directionalLightVector;
 
     public RenderMiddleware(Context context, Game game) {
         this.context = context;

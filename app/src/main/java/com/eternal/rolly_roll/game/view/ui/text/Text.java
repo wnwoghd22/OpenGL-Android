@@ -2,6 +2,7 @@ package com.eternal.rolly_roll.game.view.ui.text;
 
 import static android.opengl.GLES20.*;
 import static com.eternal.rolly_roll.util.Data.QUAD_VERTICES;
+import static com.eternal.rolly_roll.util.Data.SIMPLE_QUAD_VERTICES;
 
 import android.opengl.Matrix;
 import android.util.Log;
@@ -54,7 +55,7 @@ public class Text extends Shape {
     private float textSize = 0.1f;
 
     public Text(String text) {
-        super(QUAD_VERTICES);
+        super(SIMPLE_QUAD_VERTICES);
         this.color = new float[] { 1.0f, 1.0f, 1.0f, 1.0f };
 
         setText(text);

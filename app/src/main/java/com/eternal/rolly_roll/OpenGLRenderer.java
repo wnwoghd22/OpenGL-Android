@@ -4,6 +4,7 @@ import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.util.Log;
 
+import com.eternal.rolly_roll.game.model.object.physics.Vector3D;
 import com.eternal.rolly_roll.game.view.Camera;
 import com.eternal.rolly_roll.game.view.RenderMiddleware;
 import com.eternal.rolly_roll.game.view.shader.SpriteShader;
@@ -45,6 +46,9 @@ public class OpenGLRenderer implements GLSurfaceView.Renderer {
         if (LoggerConfig.TEXTURE_LOG) {
             Log.w(TAG, "quad texture : " + renderer.textureMap.get(R.drawable.square));
         }
+
+        //renderer.directionalLightVector = new Vector3D(0f, -1f, -1f).normalize();
+        renderer.directionalLightVector = new Vector3D(0f, 1f, 1f).normalize();
 
         UIShader uiShader = new UIShader(context, "verdana.ttf");
         renderer.setUiShader(uiShader);
