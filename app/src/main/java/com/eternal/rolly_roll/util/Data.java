@@ -1,17 +1,6 @@
 package com.eternal.rolly_roll.util;
 
 public class Data {
-    public static final float[] SIMPLE_QUAD_VERTICES = {
-        // pos              // tex
-        -0.5f,  0.5f, 0.0f, 0.0f, 1.0f, 0f, 0f, 1f,
-         0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0f, 0f, 1f,
-        -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 0f, 0f, 1f,
-
-        -0.5f,  0.5f, 0.0f, 0.0f, 1.0f, 0f, 0f, 1f,
-         0.5f,  0.5f, 0.0f, 1.0f, 1.0f, 0f, 0f, 1f,
-         0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0f, 0f, 1f
-    };
-
     public static final float[] QUAD_VERTICES = {
         // pos              // tex      //normal
         -0.5f,  0.5f, 0.0f, 0.0f, 1.0f, 0f, 0f, 1f, // top left

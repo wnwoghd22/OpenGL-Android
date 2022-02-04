@@ -56,18 +56,10 @@ public class Tile extends GameObject {
     public int checkAdjacent() {
         checked = true;
         int result = 1;
-        if (up != null && !up.checked && up.currentColor == this.currentColor) {
-            if (LoggerConfig.LEVEL_LOG) {
-                Log.w(TAG, "check up");
-            }
+        if (up != null && !up.checked && up.currentColor == this.currentColor)
             result += up.checkAdjacent();
-        }
-        if (right != null && !right.checked && right.currentColor == this.currentColor) {
-            if (LoggerConfig.LEVEL_LOG) {
-                Log.w(TAG, "check right");
-            }
+        if (right != null && !right.checked && right.currentColor == this.currentColor)
             result += right.checkAdjacent();
-        }
         if (left != null && !left.checked && left.currentColor == this.currentColor)
             result += left.checkAdjacent();
         if (down != null && !down.checked && down.currentColor == this.currentColor)

@@ -218,15 +218,10 @@ public class Game {
     }
 
     public void GetTouch(TouchHandler.Touch touch) {
-        if (LoggerConfig.TOUCH_LOG) {
-            Log.w(TAG, "Game Touch : " + touch.state + ", " + touch.pos);
-        }
         // UI layer
-        for (IButton button : buttons) {
-            if (button.handleTouch(touch)) {
+        for (IButton button : buttons)
+            if (button.handleTouch(touch))
                 return;
-            }
-        }
 
         // game layer
         if (!level.isGameOver())

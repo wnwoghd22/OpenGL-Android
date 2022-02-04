@@ -1,18 +1,17 @@
 package com.eternal.rolly_roll.game.view.ui;
 
 import android.util.Log;
-import static android.view.MotionEvent.*;
 
 import com.eternal.rolly_roll.game.control.IButton;
 import com.eternal.rolly_roll.game.model.object.GameObject;
 import com.eternal.rolly_roll.game.model.object.physics.Vector3D;
-import com.eternal.rolly_roll.game.model.object.shape.IRenderable;
-import com.eternal.rolly_roll.game.model.object.shape.shape2d.Quad;
-import com.eternal.rolly_roll.game.view.RenderMiddleware;
 import com.eternal.rolly_roll.game.view.ui.panel.Panel;
 import com.eternal.rolly_roll.util.LoggerConfig;
 
-import static com.eternal.rolly_roll.game.control.TouchHandler.*;
+import static android.view.MotionEvent.ACTION_DOWN;
+import static android.view.MotionEvent.ACTION_UP;
+import static com.eternal.rolly_roll.game.control.TouchHandler.Touch;
+import static com.eternal.rolly_roll.game.control.TouchHandler.TouchPos;
 
 public class Button extends GameObject implements IButton {
     public enum eState {

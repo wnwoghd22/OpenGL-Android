@@ -68,7 +68,6 @@ public class RenderMiddleware {
         // post processing layer
 
         // ui layer
-        // need to implement set ui canvas camera matrices
 
         uiShader.use();
         glDisable(GL_DEPTH_TEST);

@@ -1,7 +1,9 @@
 package com.eternal.rolly_roll.game.view.shader;
 
 import android.content.Context;
-import static android.opengl.GLES20.*;
+
+import static android.opengl.GLES20.glGetAttribLocation;
+import static android.opengl.GLES20.glGetUniformLocation;
 
 import com.eternal.rolly_roll.R;
 

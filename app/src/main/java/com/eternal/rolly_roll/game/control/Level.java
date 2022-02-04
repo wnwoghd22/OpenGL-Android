@@ -2,16 +2,12 @@ package com.eternal.rolly_roll.game.control;
 
 import android.util.Log;
 
-import com.eternal.rolly_roll.game.model.PlayerObject;
 import com.eternal.rolly_roll.game.model.Tile;
 import com.eternal.rolly_roll.game.model.object.GameObject;
 import com.eternal.rolly_roll.game.model.object.physics.Vector3D;
-import com.eternal.rolly_roll.game.view.ui.panel.Panel;
 import com.eternal.rolly_roll.game.view.ui.panel.PanelContainer;
 import com.eternal.rolly_roll.game.view.ui.text.TextContainer;
 import com.eternal.rolly_roll.util.LoggerConfig;
-
-import java.util.logging.Logger;
 
 public class Level extends GameObject {
     private final String TAG = "Level";

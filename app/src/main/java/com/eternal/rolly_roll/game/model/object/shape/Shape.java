@@ -53,20 +53,51 @@ public abstract class Shape implements IRenderable {
 
     @Override
     public void Render(RenderMiddleware r) {
+        bindData(r);
 
-        if(LoggerConfig.ON) {
-            Log.w(TAG, "draw shape");
-        }
+        glDrawElements(GL_TRIANGLES, indexLength, GL_UNSIGNED_BYTE, indexArray);
+
+        glBindTexture(GL_TEXTURE_2D, 0);
+    }
+
+    protected void bindData(RenderMiddleware r) {
+        //set position
+        setVertexAttribPointer(
+                0,
+                r.getSpriteShader().aPositionLocation,
+                POSITION_COMPONENT_COUNT,
+                STRIDE
+        );
+
+        //set texture coordinates
+        setVertexAttribPointer(
+                POSITION_COMPONENT_COUNT,
+                r.getSpriteShader().aTexCoordLocation,
+                TEXTURE_COORDINATES_COMPONENT_COUNT,
+                STRIDE
+        );
+
+        //set normal vector
+        setVertexAttribPointer(
+                POSITION_COMPONENT_COUNT + TEXTURE_COORDINATES_COMPONENT_COUNT,
+                r.getSpriteShader().aNormalLocation,
+                NORMAL_COMPONENT_COUNT,
+                STRIDE
+        );
+
+        //set color
+        setUniformVec4(
+                r.getSpriteShader().uColorLocation,
+                color
+        );
 
         float[] modelM = transform.getTransformM();
 
         Matrix.multiplyMM(
-            r.getMVP(), 0,
-            r.getVP(), 0,
-            modelM, 0
+                r.getMVP(), 0,
+                r.getVP(), 0,
+                modelM, 0
         );
-
-        bindData(r.getSpriteShader());
 
         //set texture
         // set the active texture unit to texture unit 0
@@ -96,47 +127,6 @@ public abstract class Shape implements IRenderable {
                     r.directionalLightVector
             );
         }
-
-        //glUniformMatrix4fv(r.getSpriteShader().uMatrixLocation, 1, false, transform.getTransformM(), 0);
-        if (indexArray != null) {
-            glDrawElements(GL_TRIANGLES, indexLength, GL_UNSIGNED_BYTE, indexArray);
-        } else {
-            glDrawArrays(GL_TRIANGLES, 0, 6);
-        }
-
-        glBindTexture(GL_TEXTURE_2D, 0);
-    }
-
-    protected void bindData(SpriteShader spriteShader) {
-        //set position
-        setVertexAttribPointer(
-                0,
-                spriteShader.aPositionLocation,
-                POSITION_COMPONENT_COUNT,
-                STRIDE
-        );
-
-        //set texture coordinates
-        setVertexAttribPointer(
-                POSITION_COMPONENT_COUNT,
-                spriteShader.aTexCoordLocation,
-                TEXTURE_COORDINATES_COMPONENT_COUNT,
-                STRIDE
-        );
-
-        //set normal vector
-        setVertexAttribPointer(
-                POSITION_COMPONENT_COUNT + TEXTURE_COORDINATES_COMPONENT_COUNT,
-                spriteShader.aNormalLocation,
-                NORMAL_COMPONENT_COUNT,
-                STRIDE
-        );
-
-        //set color
-        setUniformVec4(
-                spriteShader.uColorLocation,
-                color
-        );
     }
 
     protected void setVertexAttribPointer(int dataOffset, int attributeLocation, int componentCount, int stride) {

@@ -1,13 +1,15 @@
 package com.eternal.rolly_roll.game.model.object.physics;
 
 import android.opengl.Matrix;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import com.eternal.rolly_roll.util.LoggerConfig;
-
-import static java.lang.StrictMath.*;
+import static java.lang.StrictMath.acos;
+import static java.lang.StrictMath.cos;
+import static java.lang.StrictMath.sin;
+import static java.lang.StrictMath.sqrt;
+import static java.lang.StrictMath.toDegrees;
+import static java.lang.StrictMath.toRadians;
 
 public class Quaternion {
     private static final String TAG = "QUATERNION";
@@ -16,10 +18,6 @@ public class Quaternion {
     // input four elements
     public Quaternion(float s, float x, float y, float z) {
         this.s = s; this.x = x; this.y = y; this.z = z;
-
-        if (LoggerConfig.QUATERNION_LOG) {
-            Log.w(TAG, "" + this);
-        }
     }
     // input rotation vector and rotation scalar
     public Quaternion(float scalarInDegree, Vector3D vector) {
@@ -29,10 +27,6 @@ public class Quaternion {
         this.x = (float)(sin(alpha / 2f) * projective.x);
         this.y = (float)(sin(alpha / 2f) * projective.y);
         this.z = (float)(sin(alpha / 2f) * projective.z);
-
-        if (LoggerConfig.QUATERNION_LOG) {
-            Log.w(TAG, "" + this);
-        }
     }
     // input euler angles in degree and then convert to quaternion
     public Quaternion(Vector3D eulerAnglesInDegree) {
@@ -51,10 +45,6 @@ public class Quaternion {
         this.x = sr * cp * cy - cr * sp * sy;
         this.y = cr * sp * cy + sr * cp * sy;
         this.z = cr * cp * sy - sr * sp * cy;
-
-        if (LoggerConfig.QUATERNION_LOG) {
-            Log.w(TAG, "" + this);
-        }
     }
     public static Quaternion identity() {
         return new Quaternion(1f, 0f, 0f, 0f);
@@ -66,15 +56,9 @@ public class Quaternion {
         return (float) sqrt(s * s + x * x + y * y + z * z);
     }
     public Quaternion scale(float scalar) {
-        if (LoggerConfig.QUATERNION_LOG) {
-            Log.w(TAG, "scale : ");
-        }
         return new Quaternion(scalar * s, scalar * x, scalar * y, scalar * z);
     }
     public Quaternion inverse() {
-        if (LoggerConfig.QUATERNION_LOG) {
-            Log.w(TAG, "inverse : ");
-        }
         return conjugate().scale(1f / norm() * norm());
     }
     public Quaternion product(Quaternion q) {
@@ -86,31 +70,14 @@ public class Quaternion {
         );
     }
     public Quaternion power(float alpha) {
-        VersorForm versor = new VersorForm(this);
-        if (LoggerConfig.QUATERNION_LOG) {
-            Log.w(TAG, "before power : " + versor);
-        }
-        versor = versor.power(alpha);
-        if (LoggerConfig.QUATERNION_LOG) {
-            Log.w(TAG, "after power : " + versor);
-        }
+        VersorForm versor = new VersorForm(this).power(alpha);
         Quaternion result = versor.toQuaternion();
-        if (LoggerConfig.QUATERNION_LOG) {
-            Log.w(TAG, "after convert : " + result);
-        }
+        versor = null;
+
         return result;
     }
     public static Quaternion slerp(Quaternion origin, Quaternion target, float alpha) {
-        Quaternion result = target.product(origin.inverse()).power(alpha).product(origin);
-        if (LoggerConfig.QUATERNION_LOG) {
-            Log.w(TAG,
-                    "Slerp\n" +
-                    "alpha : " + alpha +
-                    "\norigin : " + origin +
-                    "\ntarget : " + target +
-                    "\nresult : " + result);
-        }
-        return result;
+        return target.product(origin.inverse()).power(alpha).product(origin);
     }
 
     public float[] getRotateM() {
@@ -122,19 +89,14 @@ public class Quaternion {
         };
     }
 
-    public static void rotateM(float[] matrix, int mOffset, Vector3D eulerAngleInDegree) {
-        float[] result = new float[16];
-        Matrix.multiplyMM(result, 0, matrix, mOffset, new Quaternion(eulerAngleInDegree).getRotateM(), 0);
-        for (int i = 0; i < 16; ++i) {
-            matrix[i + mOffset] = result[i];
-        }
-    }
     public static void rotateM(float[] matrix, int mOffset, Quaternion q) {
         float[] result = new float[16];
-        Matrix.multiplyMM(result, 0, matrix, mOffset, q.getRotateM(), 0);
-        for (int i = 0; i < 16; ++i) {
+        float[] rotateM = q.getRotateM();
+        Matrix.multiplyMM(result, 0, matrix, mOffset, rotateM, 0);
+        for (int i = 0; i < 16; ++i)
             matrix[i + mOffset] = result[i];
-        }
+
+        result = null; rotateM = null;
     }
 
     @NonNull
@@ -151,13 +113,7 @@ public class Quaternion {
         }
         public VersorForm(Quaternion q) {
             this.tensor = (float) acos(q.s) * 2f;
-            if (tensor < 0.0001f)
-                this.versor = new Vector3D(0f, 0f, 0f);
-            else
-                this.versor = new Vector3D(q.x, q.y, q.z).scale(1f / (float) sin(tensor / 2f));
-            if (LoggerConfig.QUATERNION_LOG) {
-                Log.w(TAG, "" + this);
-            }
+            this.versor = tensor < 0.0001f ? new Vector3D(0f, 0f, 0f) : new Vector3D(q.x, q.y, q.z).scale(1f / (float) sin(tensor / 2f));
         }
         public VersorForm power(float alpha) {
             return new VersorForm(tensor * alpha, versor);
