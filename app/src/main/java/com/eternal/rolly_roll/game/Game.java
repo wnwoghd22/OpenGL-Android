@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.Vector;
 
 public class Game {
     private Timer timer;
@@ -37,13 +38,12 @@ public class Game {
     private final Context context;
 
     // is it better using Vector in multi-thread environment?
-    //private Vector<GameObject> objectsSync;
-    private final List<GameObject> objects;
-    public List<GameObject> getObjects() { return objects; }
-    private final List<GameObject> uiObjects;
-    public List<GameObject> getUiObjects() { return uiObjects; }
-    private final List<IButton> buttons;
-    public List<IButton> getButtons() { return buttons; }
+    private final Vector<GameObject> objects;
+    public Vector<GameObject> getObjects() { return objects; }
+    private final Vector<GameObject> uiObjects;
+    public Vector<GameObject> getUiObjects() { return uiObjects; }
+    private final Vector<IButton> buttons;
+    public Vector<IButton> getButtons() { return buttons; }
     private PlayerObject player;
 
     private Level level;
@@ -53,9 +53,9 @@ public class Game {
         this.context = context;
 
         level = new Level();
-        objects = new ArrayList<GameObject>();
-        uiObjects = new ArrayList<GameObject>();
-        buttons = new ArrayList<IButton>();
+        objects = new Vector<GameObject>();
+        uiObjects = new Vector<GameObject>();
+        buttons = new Vector<IButton>();
     }
 
     public void Init() {
@@ -218,15 +218,10 @@ public class Game {
     }
 
     public void GetTouch(TouchHandler.Touch touch) {
-        if (LoggerConfig.TOUCH_LOG) {
-            Log.w(TAG, "Game Touch : " + touch.state + ", " + touch.pos);
-        }
         // UI layer
-        for (IButton button : buttons) {
-            if (button.handleTouch(touch)) {
+        for (IButton button : buttons)
+            if (button.handleTouch(touch))
                 return;
-            }
-        }
 
         // game layer
         if (!level.isGameOver())

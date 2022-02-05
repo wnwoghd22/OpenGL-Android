@@ -10,8 +10,11 @@ android {
         applicationId "com.eternal.rolly_roll"
         minSdkVersion 16
         targetSdkVersion 30
-        versionCode 1004
-        versionName "0.3"
+        // download version
+        //versionCode 1006
+        //instant version code
+        versionCode 2
+        versionName "0.5"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }

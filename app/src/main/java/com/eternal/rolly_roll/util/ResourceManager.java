@@ -15,7 +15,7 @@ import java.io.InputStreamReader;
 
 import static android.opengl.GLES20.*;
 
-//make it singleton?
+//make it singleton
 public class ResourceManager {
     private static String TAG = "ResourceManager";
 
@@ -41,7 +41,6 @@ public class ResourceManager {
 
         return body.toString();
     }
-
 
     public static int loadTexture(Context context, int resourceId) {
         final int[] textureObjectId = new int[1];

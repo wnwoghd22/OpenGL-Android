@@ -2,10 +2,7 @@ package com.eternal.rolly_roll.game.view;
 
 import android.opengl.Matrix;
 
-import com.eternal.rolly_roll.game.model.object.physics.Transform;
 import com.eternal.rolly_roll.game.model.object.physics.Vector3D;
-
-import java.util.Vector;
 
 public class Camera {
     private Vector3D eyePosition;

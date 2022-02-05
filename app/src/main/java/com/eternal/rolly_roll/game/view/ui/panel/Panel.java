@@ -1,28 +1,44 @@
 package com.eternal.rolly_roll.game.view.ui.panel;
 
 import android.opengl.Matrix;
-import android.util.Log;
 
 import com.eternal.rolly_roll.R;
 import com.eternal.rolly_roll.game.model.object.shape.Shape;
 import com.eternal.rolly_roll.game.view.RenderMiddleware;
-import com.eternal.rolly_roll.game.view.shader.UIShader;
-import com.eternal.rolly_roll.util.LoggerConfig;
 
 import static android.opengl.GLES20.*;
+import static com.eternal.rolly_roll.util.Data.QUAD_INDICES;
 import static com.eternal.rolly_roll.util.Data.QUAD_VERTICES;
-import static com.eternal.rolly_roll.util.Data.SIMPLE_QUAD_VERTICES;
 
 public class Panel extends Shape {
 
     public Panel() {
-        super(SIMPLE_QUAD_VERTICES);
+        super(QUAD_VERTICES, QUAD_INDICES);
         textureID = R.drawable.square;
     }
 
     @Override
-    public void Render(RenderMiddleware r) {
-        bindData(r.getUiShader());
+    protected void bindData(RenderMiddleware r) {
+        //set position
+        setVertexAttribPointer(
+                0,
+                r.getUiShader().aPositionLocation,
+                POSITION_COMPONENT_COUNT,
+                STRIDE
+        );
+
+        //set texture coordinates
+        setVertexAttribPointer(
+                POSITION_COMPONENT_COUNT,
+                r.getUiShader().aTexCoordLocation,
+                TEXTURE_COORDINATES_COMPONENT_COUNT,
+                STRIDE
+        );
+        //set color
+        setUniformVec4(
+                r.getUiShader().uColorLocation,
+                color
+        );
 
         //set texture
         // set the active texture unit to texture unit 0
@@ -40,32 +56,5 @@ public class Panel extends Shape {
         Matrix.scaleM(tempM, 0, transform.scale.x, transform.scale.y, transform.scale.z);
 
         glUniformMatrix4fv(r.getUiShader().uMatrixLocation, 1, false, tempM, 0);
-
-        glDrawArrays(GL_TRIANGLES, 0, 6);
-
-        glBindTexture(GL_TEXTURE_2D, 0);
-    }
-
-    protected void bindData(UIShader uiShader) {
-        //set position
-        setVertexAttribPointer(
-                0,
-                uiShader.aPositionLocation,
-                POSITION_COMPONENT_COUNT,
-                STRIDE
-        );
-
-        //set texture coordinates
-        setVertexAttribPointer(
-                POSITION_COMPONENT_COUNT,
-                uiShader.aTexCoordLocation,
-                TEXTURE_COORDINATES_COMPONENT_COUNT,
-                STRIDE
-        );
-        //set color
-        setUniformVec4(
-                uiShader.uColorLocation,
-                color
-        );
     }
 }

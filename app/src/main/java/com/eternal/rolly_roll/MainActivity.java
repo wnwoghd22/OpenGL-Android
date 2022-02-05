@@ -1,10 +1,8 @@
 package com.eternal.rolly_roll;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
-import android.view.MotionEvent;
-import android.view.View;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.eternal.rolly_roll.game.Game;
 import com.eternal.rolly_roll.game.control.TouchHandler;
