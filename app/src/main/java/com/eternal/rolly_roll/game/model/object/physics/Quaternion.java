@@ -15,6 +15,10 @@ public class Quaternion {
     private static final String TAG = "QUATERNION";
 
     private final float s, x, y, z;
+
+    private static float[] tempM = new float[16]; // is it bad for multi-thread?
+    private static float[] tempRotateM = new float[16];
+
     // input four elements
     public Quaternion(float s, float x, float y, float z) {
         this.s = s; this.x = x; this.y = y; this.z = z;
@@ -70,11 +74,7 @@ public class Quaternion {
         );
     }
     public Quaternion power(float alpha) {
-        VersorForm versor = new VersorForm(this).power(alpha);
-        Quaternion result = versor.toQuaternion();
-        versor = null;
-
-        return result;
+        return new VersorForm(this).power(alpha).toQuaternion();
     }
     public static Quaternion slerp(Quaternion origin, Quaternion target, float alpha) {
         return target.product(origin.inverse()).power(alpha).product(origin);
@@ -88,15 +88,18 @@ public class Quaternion {
             0f, 0f, 0f, 1f
         };
     }
+    public void getRotateM(float[] m) {
+        m[0] = 1f - 2f * (y * y + z * z); m[1] = 2f * (x * y - s * z); m[2] = 2f * (x * z + s * y); m[3] = 0f;
+        m[4] = 2f * (x * y + s * z); m[5] = 1f - 2f * (x * x + z * z); m[6] = 2f * (y * z - s * x); m[7] = 0f;
+        m[8] = 2f * (x * z - s * y); m[9] = 2f * (y * z + s * x); m[10] = 1f - 2f * (x * x + y * y); m[11] = 0f;
+        m[12] = 0f; m[13] = 0f; m[14] = 0f; m[15] = 1f;
+    }
 
     public static void rotateM(float[] matrix, int mOffset, Quaternion q) {
-        float[] result = new float[16];
-        float[] rotateM = q.getRotateM();
-        Matrix.multiplyMM(result, 0, matrix, mOffset, rotateM, 0);
+        q.getRotateM(tempRotateM);
+        Matrix.multiplyMM(tempM, 0, matrix, mOffset, tempRotateM, 0);
         for (int i = 0; i < 16; ++i)
-            matrix[i + mOffset] = result[i];
-
-        result = null; rotateM = null;
+            matrix[i + mOffset] = tempM[i];
     }
 
     @NonNull
