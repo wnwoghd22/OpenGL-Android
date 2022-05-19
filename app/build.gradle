@@ -11,10 +11,10 @@ android {
         minSdkVersion 16
         targetSdkVersion 30
         // download version
-        //versionCode 1006
+        //versionCode 1007
         //instant version code
-        versionCode 2
-        versionName "0.5"
+        versionCode 3
+        versionName "0.5.1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
