@@ -32,6 +32,10 @@ public abstract class Shape implements IRenderable {
     private final ByteBuffer indexArray;
     private final int indexLength;
 
+    private float[] modelM;
+    private float[] tempM;
+    private float[] it_modelM;
+
     protected Shape(float[] vertexData) {
         floatBuffer = ByteBuffer.allocateDirect(vertexData.length * BYTES_PER_FLOAT)
                 .order(ByteOrder.nativeOrder()).asFloatBuffer().put(vertexData);
@@ -40,6 +44,10 @@ public abstract class Shape implements IRenderable {
 
         transform = new Transform();
         color = new float[] { 1f, 1f, 1f, 1f };
+
+        modelM = new float[16];
+        tempM = new float[16];
+        it_modelM = new float[16];
     }
     protected Shape(float[] vertexData, byte[] indexArray) {
         floatBuffer = ByteBuffer.allocateDirect(vertexData.length * BYTES_PER_FLOAT)
@@ -49,6 +57,10 @@ public abstract class Shape implements IRenderable {
         this.indexArray.position(0);
         transform = new Transform();
         color = new float[] { 1f, 1f, 1f, 1f };
+
+        modelM = new float[16];
+        tempM = new float[16];
+        it_modelM = new float[16];
     }
 
     @Override
@@ -91,7 +103,8 @@ public abstract class Shape implements IRenderable {
                 color
         );
 
-        float[] modelM = transform.getTransformM();
+        // float[] modelM = transform.getTransformM();
+        transform.getTransformM(modelM);
 
         Matrix.multiplyMM(
                 r.getMVP(), 0,
@@ -108,17 +121,17 @@ public abstract class Shape implements IRenderable {
         glUniform1i(r.getSpriteShader().uTextureUnitLocation, 0);
         glUniformMatrix4fv(r.getSpriteShader().uMatrixLocation, 1, false, r.getMVP(), 0);
 
-        float[] tempM = new float[16];
-        float[] it_modelM = new float[16];
+        // float[] tempM = new float[16];
+        // float[] it_modelM = new float[16];
 
         Matrix.invertM(tempM, 0, modelM, 0);
         Matrix.transposeM(it_modelM, 0, tempM, 0);
 
         glUniformMatrix4fv(r.getSpriteShader().uIT_ModelLocation, 1, false, it_modelM, 0);
 
-        tempM = null;
-        modelM = null;
-        it_modelM = null;
+        // tempM = null;
+        // modelM = null;
+        // it_modelM = null;
 
         //set directional light
         if (r.directionalLightVector != null) {

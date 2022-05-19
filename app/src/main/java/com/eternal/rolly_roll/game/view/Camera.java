@@ -17,7 +17,6 @@ public class Camera {
     public float[] getProjectionM() { return projectionM; }
     private float[] viewM;
     public float[] getViewM() {
-        float[] viewM = new float[16];
         Matrix.setLookAtM(
                 viewM, 0,
                 eyePosition.x, eyePosition.y, eyePosition.z,
