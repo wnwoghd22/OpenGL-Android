@@ -48,7 +48,7 @@ public class Game {
     private final Vector<GameObject> _objects2;
     private Vector<GameObject> next;
     private Vector<GameObject> current;
-    public Vector<GameObject> getObjects() { return objects; }
+    public Vector<GameObject> getObjects() { return current; }
     private final Vector<GameObject> uiObjects;
     public Vector<GameObject> getUiObjects() { return uiObjects; }
     private final Vector<IButton> buttons;
@@ -103,8 +103,8 @@ public class Game {
         objects.add(player);
 
         for (GameObject object: objects) {
-            _objects1.add(object);
-            _objects2.add(object);
+            _objects1.add(new GameObject(object));
+            _objects2.add(new GameObject(object));
         }
 
         Start();
@@ -239,9 +239,14 @@ public class Game {
             object.Update();
         }
 
+        next.clear();
         for (GameObject object : objects) {
             object.Update();
+            next.add(new GameObject(object));
         }
+        Vector<GameObject> temp = next;
+        next = current;
+        current = temp;
     }
 
     public void GetTouch(TouchHandler.Touch touch) {

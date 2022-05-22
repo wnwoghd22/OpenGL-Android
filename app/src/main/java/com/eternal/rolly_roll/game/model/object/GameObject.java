@@ -23,7 +23,7 @@ public class GameObject {
 
     public GameObject(GameObject o) {
         this.active = o.active;
-        this.shape = new Shape(o.shape);
+        this.shape = o.shape != null ? new Shape(o.shape) : null;
     }
     
     public final void Render(RenderMiddleware r) {

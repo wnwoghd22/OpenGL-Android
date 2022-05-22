@@ -71,6 +71,7 @@ public class Shape implements IRenderable {
 
         this.transform = new Transform(s.transform);
         this.color = new float[] {s.color[0], s.color[1], s.color[2], s.color[3]};
+        this.textureID = s.textureID;
     }
 
     @Override
