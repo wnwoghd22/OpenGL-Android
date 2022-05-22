@@ -9,23 +9,15 @@ public class Transform {
     public Quaternion rotation;
     public Vector3D scale;
 
-    private float[] transformM;
-
     public Transform() {
         position = new Vector3D();
         rotation = Quaternion.identity();
         scale = new Vector3D(1, 1, 1);
-        transformM = new float[16];
     }
-
-    public float[] getTransformM() {
-        // float[] transformM = new float[16];
-        Matrix.setIdentityM(transformM, 0);
-        Matrix.translateM(transformM, 0, position.x, position.y, position.z);
-        Quaternion.rotateM(transformM, 0, rotation);
-        Matrix.scaleM(transformM, 0, scale.x, scale.y, scale.z);
-
-        return transformM;
+    public Transform(Transform t) {
+        this.position = new Vector3D(t.position);
+        rotation = new Quaternion(t.rotation);
+        scale = new Vector3D(t.scale);
     }
 
     public void getTransformM(float[] m) {

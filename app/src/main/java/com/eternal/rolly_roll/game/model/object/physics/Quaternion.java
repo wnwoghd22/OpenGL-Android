@@ -23,6 +23,9 @@ public class Quaternion {
     public Quaternion(float s, float x, float y, float z) {
         this.s = s; this.x = x; this.y = y; this.z = z;
     }
+    public Quaternion(Quaternion q) {
+        this.s = q.s; this.x = q.x; this.y = q.y; this.z = q.z;
+    }
     // input rotation vector and rotation scalar
     public Quaternion(float scalarInDegree, Vector3D vector) {
         float alpha = (float)toRadians(scalarInDegree);

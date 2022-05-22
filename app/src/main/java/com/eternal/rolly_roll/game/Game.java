@@ -12,6 +12,7 @@ import com.eternal.rolly_roll.game.model.PlayerObject;
 import com.eternal.rolly_roll.game.model.Tile;
 import com.eternal.rolly_roll.game.model.object.GameObject;
 import com.eternal.rolly_roll.game.model.object.physics.Vector3D;
+import com.eternal.rolly_roll.game.model.object.shape.IRenderable;
 import com.eternal.rolly_roll.game.view.ui.Button;
 import com.eternal.rolly_roll.game.view.ui.panel.PanelContainer;
 import com.eternal.rolly_roll.game.view.ui.text.TextContainer;
@@ -39,7 +40,11 @@ public class Game {
 
     // is it better using Vector in multi-thread environment?
     private final Vector<GameObject> objects;
-    public Vector<GameObject> getObjects() { return objects; }
+    private final Vector<GameObject> _objects1;
+    private final Vector<GameObject> _objects2;
+    private Vector<GameObject> next;
+    private Vector<GameObject> current;
+    public Vector<GameObject> getObjects() { return current; }
     private final Vector<GameObject> uiObjects;
     public Vector<GameObject> getUiObjects() { return uiObjects; }
     private final Vector<IButton> buttons;
@@ -54,6 +59,11 @@ public class Game {
 
         level = new Level();
         objects = new Vector<GameObject>();
+        _objects1 = new Vector<>();
+        _objects2 = new Vector<>();
+        next = _objects2;
+        current = _objects1;
+
         uiObjects = new Vector<GameObject>();
         buttons = new Vector<IButton>();
     }
@@ -79,6 +89,11 @@ public class Game {
         player.setLevel(level);
 
         objects.add(player);
+
+        for (GameObject object: objects) {
+            _objects1.add(object);
+            _objects2.add(object);
+        }
 
         Start();
     }

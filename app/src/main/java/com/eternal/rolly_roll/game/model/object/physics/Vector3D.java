@@ -12,6 +12,7 @@ public class Vector3D {
     public Vector3D(float x) { this.x = x; y = 0f; z = 0f; }
     public Vector3D(float x, float y) { this.x = x; this.y = y; z = 0f; }
     public Vector3D(float x, float y, float z) { this.x = x; this.y = y; this.z = z; }
+    public Vector3D(Vector3D v) { this.x = v.x; this.y = v.y; this.z = v.z; }
 
     public static Vector3D zero() {
         return new Vector3D();

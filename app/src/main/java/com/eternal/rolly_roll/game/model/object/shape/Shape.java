@@ -1,22 +1,18 @@
 package com.eternal.rolly_roll.game.model.object.shape;
 
 import android.opengl.Matrix;
-import android.util.Log;
 
-import com.eternal.rolly_roll.R;
 import com.eternal.rolly_roll.game.model.object.physics.Transform;
 import com.eternal.rolly_roll.game.model.object.physics.Vector3D;
 import com.eternal.rolly_roll.game.view.RenderMiddleware;
-import com.eternal.rolly_roll.game.view.shader.ShaderProgram;
-import com.eternal.rolly_roll.game.view.shader.SpriteShader;
-import com.eternal.rolly_roll.util.LoggerConfig;
+import com.eternal.rolly_roll.util.Data;
 
 import java.nio.*;
 
 import static android.opengl.GLES20.*;
 import static com.eternal.rolly_roll.util.Data.BYTES_PER_FLOAT;
 
-public abstract class Shape implements IRenderable {
+public class Shape implements IRenderable {
     private static String TAG = "Shape";
 
     protected static final int POSITION_COMPONENT_COUNT = 3;
@@ -32,23 +28,20 @@ public abstract class Shape implements IRenderable {
     private final ByteBuffer indexArray;
     private final int indexLength;
 
-    private float[] modelM;
-    private float[] tempM;
-    private float[] it_modelM;
+    private static final float[] modelM = new float[16];
+    private static final float[] tempM = new float[16];
+    private static final float[] it_modelM = new float[16];
 
-    protected Shape(float[] vertexData) {
-        floatBuffer = ByteBuffer.allocateDirect(vertexData.length * BYTES_PER_FLOAT)
-                .order(ByteOrder.nativeOrder()).asFloatBuffer().put(vertexData);
-        indexArray = null;
-        indexLength = 0;
+    public static final int STATIC_MESH_QUAD = 0;
+    private static final FloatBuffer quadBuffer = ByteBuffer.allocateDirect(Data.QUAD_VERTICES.length * BYTES_PER_FLOAT)
+            .order(ByteOrder.nativeOrder()).asFloatBuffer().put(Data.QUAD_VERTICES);
+    private static final ByteBuffer quadIndex = ByteBuffer.allocateDirect(Data.QUAD_INDICES.length).put(Data.QUAD_INDICES);
 
-        transform = new Transform();
-        color = new float[] { 1f, 1f, 1f, 1f };
+    public static final int STATIC_MESH_CUBE = 1;
+    private static final FloatBuffer cubeBuffer = ByteBuffer.allocateDirect(Data.CUBE_VERTICES.length * BYTES_PER_FLOAT)
+            .order(ByteOrder.nativeOrder()).asFloatBuffer().put(Data.CUBE_VERTICES);
+    private static final ByteBuffer cubeIndex = ByteBuffer.allocateDirect(Data.CUBE_INDICES.length).put(Data.CUBE_INDICES);
 
-        modelM = new float[16];
-        tempM = new float[16];
-        it_modelM = new float[16];
-    }
     protected Shape(float[] vertexData, byte[] indexArray) {
         floatBuffer = ByteBuffer.allocateDirect(vertexData.length * BYTES_PER_FLOAT)
                 .order(ByteOrder.nativeOrder()).asFloatBuffer().put(vertexData);
@@ -57,10 +50,35 @@ public abstract class Shape implements IRenderable {
         this.indexArray.position(0);
         transform = new Transform();
         color = new float[] { 1f, 1f, 1f, 1f };
+    }
+    protected Shape(int staticMeshCode) {
+        switch(staticMeshCode) {
+            case STATIC_MESH_QUAD:
+                floatBuffer = quadBuffer;
+                indexArray = quadIndex;
+                indexLength = 6;
+                break;
+            case STATIC_MESH_CUBE:
+                floatBuffer = cubeBuffer;
+                indexArray = cubeIndex;
+                indexLength = 36;
+                break;
+            default:
+                floatBuffer = null;
+                indexArray = null;
+                indexLength = 0;
+        }
 
-        modelM = new float[16];
-        tempM = new float[16];
-        it_modelM = new float[16];
+        transform = new Transform();
+        color = new float[] { 1f, 1f, 1f, 1f };
+    }
+    public Shape(Shape s) {
+        this.floatBuffer = s.floatBuffer;
+        this.indexArray = s.indexArray;
+        this.indexLength = s.indexLength;
+
+        this.transform = new Transform(s.transform);
+        this.color = new float[] {s.color[0], s.color[1], s.color[2], s.color[3]};
     }
 
     @Override

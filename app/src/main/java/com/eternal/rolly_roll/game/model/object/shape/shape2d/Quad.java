@@ -8,7 +8,8 @@ import static com.eternal.rolly_roll.util.Data.QUAD_VERTICES;
 
 public class Quad extends Shape {
     public Quad() {
-        super(QUAD_VERTICES, QUAD_INDICES);
+        // super(QUAD_VERTICES, QUAD_INDICES);
+        super(Shape.STATIC_MESH_QUAD);
         color = new float[] {1f, 1f, 1f, 1f};
         textureID = R.drawable.square;
     }

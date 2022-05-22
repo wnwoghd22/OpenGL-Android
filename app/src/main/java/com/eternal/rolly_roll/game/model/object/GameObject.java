@@ -5,7 +5,7 @@ import com.eternal.rolly_roll.game.model.object.physics.Vector3D;
 import com.eternal.rolly_roll.game.model.object.shape.Shape;
 import com.eternal.rolly_roll.game.view.RenderMiddleware;
 
-public abstract class GameObject {
+public class GameObject {
     protected Shape shape;
     protected boolean active = true;
     public boolean isActive() {
@@ -15,7 +15,16 @@ public abstract class GameObject {
         active = b;
     }
 
-    public abstract void Update();
+    public void Update() {}
+
+    public GameObject() {
+
+    }
+
+    public GameObject(GameObject o) {
+        this.active = o.active;
+        this.shape = new Shape(o.shape);
+    }
     
     public final void Render(RenderMiddleware r) {
         if (active) {

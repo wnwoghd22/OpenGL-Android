@@ -8,7 +8,8 @@ import static com.eternal.rolly_roll.util.Data.CUBE_VERTICES;
 
 public class Cube extends Shape {
     public Cube() {
-        super(CUBE_VERTICES, CUBE_INDICES);
+        // super(CUBE_VERTICES, CUBE_INDICES);
+        super(Shape.STATIC_MESH_CUBE);
         color = new float[] {1f, 1f, 1f, 1f};
         textureID = R.drawable.square;
     }
