@@ -5,6 +5,7 @@ import android.opengl.Matrix;
 import com.eternal.rolly_roll.R;
 import com.eternal.rolly_roll.game.model.object.shape.Shape;
 import com.eternal.rolly_roll.game.view.RenderMiddleware;
+import com.eternal.rolly_roll.util.Data;
 
 import static android.opengl.GLES20.*;
 import static com.eternal.rolly_roll.util.Data.QUAD_INDICES;
@@ -13,7 +14,8 @@ import static com.eternal.rolly_roll.util.Data.QUAD_VERTICES;
 public class Panel extends Shape {
 
     public Panel() {
-        super(QUAD_VERTICES, QUAD_INDICES);
+        //super(QUAD_VERTICES, QUAD_INDICES);
+        super(Data.STATIC_MESH_QUAD);
         textureID = R.drawable.square;
     }
 

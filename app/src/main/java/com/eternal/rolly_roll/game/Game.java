@@ -16,8 +16,12 @@ import com.eternal.rolly_roll.game.model.object.shape.IRenderable;
 import com.eternal.rolly_roll.game.view.ui.Button;
 import com.eternal.rolly_roll.game.view.ui.panel.PanelContainer;
 import com.eternal.rolly_roll.game.view.ui.text.TextContainer;
+import com.eternal.rolly_roll.util.Data;
 import com.eternal.rolly_roll.util.LoggerConfig;
 
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
@@ -44,7 +48,7 @@ public class Game {
     private final Vector<GameObject> _objects2;
     private Vector<GameObject> next;
     private Vector<GameObject> current;
-    public Vector<GameObject> getObjects() { return current; }
+    public Vector<GameObject> getObjects() { return objects; }
     private final Vector<GameObject> uiObjects;
     public Vector<GameObject> getUiObjects() { return uiObjects; }
     private final Vector<IButton> buttons;
@@ -56,6 +60,14 @@ public class Game {
 
     public Game(Context context) {
         this.context = context;
+
+        Data.quadBuffer = ByteBuffer.allocateDirect(Data.QUAD_VERTICES.length * Data.BYTES_PER_FLOAT).
+                order(ByteOrder.nativeOrder()).asFloatBuffer().put(Data.QUAD_VERTICES);
+        Data.quadIndex = ByteBuffer.allocateDirect(Data.QUAD_INDICES.length).put(Data.QUAD_INDICES);
+
+        Data.cubeBuffer = ByteBuffer.allocateDirect(Data.CUBE_VERTICES.length * Data.BYTES_PER_FLOAT)
+                .order(ByteOrder.nativeOrder()).asFloatBuffer().put(Data.CUBE_VERTICES);
+        Data.cubeIndex = ByteBuffer.allocateDirect(Data.CUBE_INDICES.length).put(Data.CUBE_INDICES);
 
         level = new Level();
         objects = new Vector<GameObject>();

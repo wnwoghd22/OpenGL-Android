@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.eternal.rolly_roll.game.model.object.shape.Shape;
 import com.eternal.rolly_roll.game.view.RenderMiddleware;
+import com.eternal.rolly_roll.util.Data;
 import com.eternal.rolly_roll.util.LoggerConfig;
 
 import java.util.HashMap;
@@ -59,7 +60,8 @@ public class Text extends Shape {
     private float textSize = 0.1f;
 
     public Text(String text) {
-        super(QUAD_VERTICES, QUAD_INDICES);
+        // super(QUAD_VERTICES, QUAD_INDICES);
+        super(Data.STATIC_MESH_QUAD);
         this.color = new float[] { 1.0f, 1.0f, 1.0f, 1.0f };
 
         setText(text);

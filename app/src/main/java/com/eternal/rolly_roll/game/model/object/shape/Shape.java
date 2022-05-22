@@ -32,16 +32,6 @@ public class Shape implements IRenderable {
     private static final float[] tempM = new float[16];
     private static final float[] it_modelM = new float[16];
 
-    public static final int STATIC_MESH_QUAD = 0;
-    private static final FloatBuffer quadBuffer = ByteBuffer.allocateDirect(Data.QUAD_VERTICES.length * BYTES_PER_FLOAT)
-            .order(ByteOrder.nativeOrder()).asFloatBuffer().put(Data.QUAD_VERTICES);
-    private static final ByteBuffer quadIndex = ByteBuffer.allocateDirect(Data.QUAD_INDICES.length).put(Data.QUAD_INDICES);
-
-    public static final int STATIC_MESH_CUBE = 1;
-    private static final FloatBuffer cubeBuffer = ByteBuffer.allocateDirect(Data.CUBE_VERTICES.length * BYTES_PER_FLOAT)
-            .order(ByteOrder.nativeOrder()).asFloatBuffer().put(Data.CUBE_VERTICES);
-    private static final ByteBuffer cubeIndex = ByteBuffer.allocateDirect(Data.CUBE_INDICES.length).put(Data.CUBE_INDICES);
-
     protected Shape(float[] vertexData, byte[] indexArray) {
         floatBuffer = ByteBuffer.allocateDirect(vertexData.length * BYTES_PER_FLOAT)
                 .order(ByteOrder.nativeOrder()).asFloatBuffer().put(vertexData);
@@ -53,14 +43,16 @@ public class Shape implements IRenderable {
     }
     protected Shape(int staticMeshCode) {
         switch(staticMeshCode) {
-            case STATIC_MESH_QUAD:
-                floatBuffer = quadBuffer;
-                indexArray = quadIndex;
+            case Data.STATIC_MESH_QUAD:
+                floatBuffer = Data.quadBuffer;
+                indexArray = Data.quadIndex;
+                this.indexArray.position(0);
                 indexLength = 6;
                 break;
-            case STATIC_MESH_CUBE:
-                floatBuffer = cubeBuffer;
-                indexArray = cubeIndex;
+            case Data.STATIC_MESH_CUBE:
+                floatBuffer = Data.cubeBuffer;
+                indexArray = Data.cubeIndex;
+                this.indexArray.position(0);
                 indexLength = 36;
                 break;
             default:

@@ -1,6 +1,18 @@
 package com.eternal.rolly_roll.util;
 
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.nio.FloatBuffer;
+
 public class Data {
+    public static final int STATIC_MESH_QUAD = 0;
+    public static FloatBuffer quadBuffer;
+    public static ByteBuffer quadIndex;
+
+    public static final int STATIC_MESH_CUBE = 1;
+    public static FloatBuffer cubeBuffer;
+    public static ByteBuffer cubeIndex;
+
     public static final float[] QUAD_VERTICES = {
         // pos              // tex      //normal
         -0.5f,  0.5f, 0.0f, 0.0f, 1.0f, 0f, 0f, 1f, // top left
