@@ -16,6 +16,7 @@
         android:theme="@style/Theme.RollyRoll">
         <activity
             android:name=".MainActivity"
+            android:exported="true"
             android:screenOrientation="portrait"
         >
             <intent-filter>
