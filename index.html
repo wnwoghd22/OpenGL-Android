@@ -348,8 +348,8 @@
     }
 
     class Level {
-      constructor(scene, boardSize, tileGeometry, tileTexture, onStateChange) {
-        this.scene = scene;
+      constructor(group, boardSize, tileGeometry, tileTexture, onStateChange) {
+        this.group = group;
         this.boardSize = boardSize;
         this.tileGeometry = tileGeometry;
         this.tileTexture = tileTexture;
@@ -371,7 +371,7 @@
           for (let col = 0; col < this.boardSize; col++) {
             const tile = new Tile(start + col, start + row, this.tileGeometry, this.tileTexture);
             this.tiles[row][col] = tile;
-            this.scene.add(tile.mesh);
+            this.group.add(tile.mesh);
           }
         }
         // bind neighbors for adjacency and bomb logic
@@ -384,6 +384,15 @@
             tile.neighbors.right = col < this.boardSize - 1 ? this.tiles[row][col + 1] : null;
           }
         }
+        // recenter board within the group
+        const box = new THREE.Box3();
+        for (const row of this.tiles) {
+          for (const tile of row) {
+            box.expandByObject(tile.mesh);
+          }
+        }
+        const center = box.getCenter(new THREE.Vector3());
+        this.group.position.set(-center.x, 0, -center.z);
       }
 
       initLevel() {
@@ -508,7 +517,7 @@
     }
 
     class Player {
-      constructor(level, geometry, texture, onStateChange) {
+      constructor(level, geometry, texture, onStateChange, parentGroup) {
         this.level = level;
         this.onStateChange = onStateChange;
         this.mesh = new THREE.Mesh(
@@ -531,6 +540,10 @@
         this.originQuat = new THREE.Quaternion();
         this.targetQuat = new THREE.Quaternion();
         this.startPos = new THREE.Vector3();
+
+        if (parentGroup) {
+          parentGroup.add(this.mesh);
+        }
       }
 
       reset() {
@@ -769,6 +782,8 @@
         this.container.appendChild(this.renderer.domElement);
 
         this.scene = new THREE.Scene();
+        this.world = new THREE.Group();
+        this.scene.add(this.world);
         this.camera = new THREE.OrthographicCamera(1, 1, 1, -1, 0.1, 100);
         this.clock = new THREE.Clock();
 
@@ -786,9 +801,9 @@
           loadTexture(`${ASSET_PATH}dice_texture.png`, { flipY: false })
         ]);
 
-        this.level = new Level(this.scene, BOARD_SIZE, this.tileGeometry, squareTex, () => this.updateHud());
-        this.player = new Player(this.level, this.cubeGeometry, diceTex, () => this.updateHud());
-        this.scene.add(this.player.mesh);
+        this.level = new Level(this.world, BOARD_SIZE, this.tileGeometry, squareTex, () => this.updateHud());
+        this.player = new Player(this.level, this.cubeGeometry, diceTex, () => this.updateHud(), this.world);
+        this.player.reset();
 
         this.setupCamera();
         this.setupLighting();
