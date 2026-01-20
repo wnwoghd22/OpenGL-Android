@@ -65,3 +65,9 @@ fastlane/Preview.html
 fastlane/screenshots
 fastlane/test_output
 fastlane/readme.md
+
+# Rust/Wasm
+match3dice_wasm/target/
+**/*.rs.bk
+
+build_log.txt
