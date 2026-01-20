@@ -865,6 +865,36 @@
           this.player.startMove(direction);
         });
 
+        window.addEventListener('keydown', (e) => {
+          let direction = null;
+          switch (e.key) {
+            case 'ArrowUp':
+            case 'w':
+            case 'W':
+              direction = 'UP';
+              break;
+            case 'ArrowDown':
+            case 's':
+            case 'S':
+              direction = 'DOWN';
+              break;
+            case 'ArrowLeft':
+            case 'a':
+            case 'A':
+              direction = 'LEFT';
+              break;
+            case 'ArrowRight':
+            case 'd':
+            case 'D':
+              direction = 'RIGHT';
+              break;
+          }
+          if (direction) {
+            e.preventDefault();
+            this.player.startMove(direction);
+          }
+        });
+
         window.addEventListener('resize', () => this.onResize());
 
         buttons.restart.addEventListener('click', () => {
